@@ -2,7 +2,7 @@ package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.user.service.UserService;
-import com.example.stayconnected.web.dto.UserEditRequest;
+import com.example.stayconnected.web.dto.user.UserEditRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

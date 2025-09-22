@@ -1,8 +1,8 @@
 package com.example.stayconnected.user.service;
 
 import com.example.stayconnected.user.model.User;
-import com.example.stayconnected.web.dto.LoginRequest;
-import com.example.stayconnected.web.dto.RegisterRequest;
+import com.example.stayconnected.web.dto.user.LoginRequest;
+import com.example.stayconnected.web.dto.user.RegisterRequest;
 
 public interface UserService {
 

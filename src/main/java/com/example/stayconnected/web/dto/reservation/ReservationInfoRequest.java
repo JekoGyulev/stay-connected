@@ -1,4 +1,4 @@
-package com.example.stayconnected.web.dto;
+package com.example.stayconnected.web.dto.reservation;
 
 import com.example.stayconnected.reservation.model.Reservation;
 
@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class ReservationInfoDTO {
+public class ReservationInfoRequest {
 
     private LocalDate startDate;
     private LocalDate endDate;
@@ -14,9 +14,9 @@ public class ReservationInfoDTO {
     private String reservationStatus;
     private LocalDateTime createdAt;
 
-    public ReservationInfoDTO() {}
+    public ReservationInfoRequest() {}
 
-    public ReservationInfoDTO(Reservation reservation) {
+    public ReservationInfoRequest(Reservation reservation) {
         this.startDate = reservation.getStartDate();
         this.endDate = reservation.getEndDate();
         this.price = reservation.getTotalPrice();

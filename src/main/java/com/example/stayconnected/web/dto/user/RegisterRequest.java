@@ -1,4 +1,4 @@
-package com.example.stayconnected.web.dto;
+package com.example.stayconnected.web.dto.user;
 
 import jakarta.validation.constraints.*;
 

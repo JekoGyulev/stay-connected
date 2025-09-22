@@ -1,7 +1,6 @@
-package com.example.stayconnected.web.dto;
+package com.example.stayconnected.web.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 public class LoginRequest {
     @NotBlank(message = "Username cannot be empty or blank.")

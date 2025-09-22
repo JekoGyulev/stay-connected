@@ -2,8 +2,8 @@ package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.review.service.ReviewService;
-import com.example.stayconnected.web.dto.CreatePropertyRequest;
-import com.example.stayconnected.web.dto.PropertyEditRequest;
+import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
+import com.example.stayconnected.web.dto.property.PropertyEditRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
