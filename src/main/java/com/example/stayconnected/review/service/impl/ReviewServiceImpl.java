@@ -29,13 +29,15 @@ public class ReviewServiceImpl implements ReviewService {
         this.propertyRepository = propertyRepository;
     }
 
-    // Have at least 1 logging message -> log.info("Successfully added review")
-    // Have at least 1 logging message -> log.info("Successfully deleted review")
 
+    @Override
+    public Review getReviewById(UUID id) {
+        return this.reviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Review not found"));
+    }
 
     @Override
     public void addReview(UUID userId, UUID propertyId, CreateReviewRequest request) {
-
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -53,6 +55,15 @@ public class ReviewServiceImpl implements ReviewService {
 
         log.info("Successfully added review with id [%s] from user with id [%s] to property with id [%s]"
                 .formatted(review.getId(), user.getId(), property.getId()));
+    }
+
+    @Override
+    public void deleteReview(Review review) {
+
+        reviewRepository.delete(review);
+
+        log.info("Successfully deleted review of property with id [%s]"
+                .formatted(review.getProperty().getId()));
     }
 
 }
