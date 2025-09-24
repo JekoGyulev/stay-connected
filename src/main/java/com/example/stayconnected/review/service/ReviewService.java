@@ -13,9 +13,7 @@ public interface ReviewService {
 
     List<ReviewResponse> getAllReviewsByPropertyWithId(UUID id);
 
-    // Add review
     void addReview(UUID userId, UUID propertyId, CreateReviewRequest request);
 
-    // Delete review
     void deleteReview(Review review);
 }
