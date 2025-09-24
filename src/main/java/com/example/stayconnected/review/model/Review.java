@@ -28,6 +28,14 @@ public class Review {
 
     public Review() {}
 
+    public Review(String comment, int rating, User createdFrom, Property property) {
+        this.comment = comment;
+        this.rating = rating;
+        this.createdFrom = createdFrom;
+        this.property = property;
+        this.createdAt = LocalDateTime.now();
+    }
+
     public int getRating() {
         return rating;
     }

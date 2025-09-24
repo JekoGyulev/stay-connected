@@ -1,12 +1,14 @@
 package com.example.stayconnected.web.controller;
 
+import com.example.stayconnected.property.model.Property;
+import com.example.stayconnected.review.model.Review;
 import com.example.stayconnected.review.service.ReviewService;
+import com.example.stayconnected.web.dto.review.CreateReviewRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.UUID;
@@ -24,19 +26,27 @@ public class ReviewController {
 
 
     @PostMapping("/{propertyId}")
-    public String addReview(@PathVariable UUID propertyId) {
+    public String addReview(@PathVariable UUID propertyId,
+                            @Valid @ModelAttribute CreateReviewRequest request,
+                            BindingResult bindingResult) {
 
-        // Call reviewService's method
+        // Check for errors
+
+        // Get user by his id (logged-in user)
+
+        // Call the addReview method
 
 
         return "redirect:/properties/" + propertyId;
     }
 
-    @DeleteMapping("/{reviewId}/{propertyId}")
-    public String deleteReview(@PathVariable UUID reviewId, @PathVariable UUID propertyId) {
+    @DeleteMapping("/{reviewId}")
+    public String deleteReview(@PathVariable UUID reviewId) {
+        Review review = this.reviewService.getReviewById(reviewId);
 
-        // Call reviewService's method
+        this.reviewService.deleteReview(review);
 
+        UUID propertyId = review.getProperty().getId();
         return "redirect:/properties/" + propertyId;
     }
 
