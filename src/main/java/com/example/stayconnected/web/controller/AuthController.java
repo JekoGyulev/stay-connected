@@ -32,14 +32,15 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String redirectToLoginPage(@Valid @ModelAttribute RegisterRequest request,
+    public ModelAndView register(@Valid @ModelAttribute RegisterRequest request,
                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "register";
+            return new ModelAndView("register");
         }
 
         this.userService.register(request);
-        return "redirect:/auth/login";
+
+        return new ModelAndView("redirect:/auth/login");
     }
 
     @GetMapping("/login")

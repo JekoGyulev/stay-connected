@@ -25,8 +25,8 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping
-    public ModelAndView modelAndView() {
+    @GetMapping()
+    public ModelAndView getReservationsByUser() {
 
         /*
             Going to use @AuthenticationPrincipal and AuthenticationMetadata

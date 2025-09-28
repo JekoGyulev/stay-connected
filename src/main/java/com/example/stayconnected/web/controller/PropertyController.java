@@ -103,7 +103,7 @@ public class PropertyController {
     public ModelAndView getPropertyEditForm(@PathVariable UUID id) {
 
         // Get Property by Id
-        // Create a DTO and set value to each field
+        // Create a DTO and set value to each field from the property
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("property/property-edit-form");
@@ -116,7 +116,7 @@ public class PropertyController {
     @PostMapping("/{id}/edit")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView submitPropertyChanges(@PathVariable UUID id,
-                                              @Valid @ModelAttribute("propertyEditRequest")
+                                              @Valid @ModelAttribute
                                               PropertyEditRequest propertyEditRequest,
                                               BindingResult bindingResult) {
 
