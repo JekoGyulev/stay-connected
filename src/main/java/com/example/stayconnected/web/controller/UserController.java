@@ -2,7 +2,7 @@ package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.user.service.UserService;
-import com.example.stayconnected.web.dto.user.UserEditRequest;
+import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +42,7 @@ public class UserController {
         modelAndView.setViewName("user/profile-edit");
 
         // Get the user by id
-        // Create an object of UserEditRequest class
+        // Create an object of ProfileEditRequest class
         // Set the dto properties to user's properties
         // Then add the dto as an object to the ModelAndView (since we will use Thymeleaf)
 
@@ -50,7 +50,7 @@ public class UserController {
     }
     @PutMapping("/{id}/profile/edit")
     public ModelAndView editProfile(@PathVariable UUID id,
-                                    @Valid @ModelAttribute UserEditRequest userEditRequest,
+                                    @Valid @ModelAttribute ProfileEditRequest profileEditRequest,
                                     BindingResult bindingResult
                                     ) {
         ModelAndView modelAndView = new ModelAndView();
