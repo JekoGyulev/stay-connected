@@ -23,12 +23,13 @@ public class ProfileEditRequest {
 
     public ProfileEditRequest() {}
 
-    public ProfileEditRequest(String firstName, String lastName, int age, String email, String username) {
+    public ProfileEditRequest(String firstName, String lastName, int age, String email, String username, String profilePicture) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.email = email;
         this.username = username;
+        this.profilePicture = profilePicture;
     }
 
     public String getFirstName() {
