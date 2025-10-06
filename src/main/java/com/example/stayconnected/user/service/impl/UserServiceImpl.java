@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -87,6 +88,10 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.save(user);
     }
 
+    @Override
+    public User getUserById(UUID id) {
+        return this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
 
     private User initUser(RegisterRequest request) {

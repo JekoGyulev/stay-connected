@@ -1,7 +1,9 @@
 package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.reservation.service.ReservationService;
+import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
+import com.example.stayconnected.web.dto.DtoMapper;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,23 +30,25 @@ public class UserController {
     @GetMapping("/{id}/profile")
     public ModelAndView getUserProfilePage(@PathVariable UUID id) {
 
+        // Get user by ID
         // Shows user profile details
+        // Will be used to show the ID, registered,lastLoggedIn of user
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("user/profile-menu");
+        modelAndView.setViewName("/user/profile-details");
 
         return modelAndView;
     }
 
     @GetMapping("/{id}/profile/edit")
     public ModelAndView getEditProfilePage(@PathVariable UUID id) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("user/profile-edit");
+        User user = this.userService.getUserById(id);
 
-        // Get the user by id
-        // Create an object of ProfileEditRequest class
-        // Set the dto properties to user's properties
-        // Then add the dto as an object to the ModelAndView (since we will use Thymeleaf)
+        ProfileEditRequest profileEditRequest = DtoMapper.fromUser(user);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/user/profile-edit-form");
+        modelAndView.addObject("profileEditRequest", profileEditRequest);
 
         return modelAndView;
     }
