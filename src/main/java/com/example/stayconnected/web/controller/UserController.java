@@ -35,7 +35,7 @@ public class UserController {
         // Will be used to show the ID, registered,lastLoggedIn of user
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/user/profile-details");
+        modelAndView.setViewName("user/profile-details");
 
         return modelAndView;
     }
@@ -47,7 +47,7 @@ public class UserController {
         ProfileEditRequest profileEditRequest = DtoMapper.fromUser(user);
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/user/profile-edit-form");
+        modelAndView.setViewName("user/profile-edit-form");
         modelAndView.addObject("profileEditRequest", profileEditRequest);
 
         return modelAndView;
@@ -57,21 +57,17 @@ public class UserController {
                                     @Valid @ModelAttribute ProfileEditRequest profileEditRequest,
                                     BindingResult bindingResult
                                     ) {
-        ModelAndView modelAndView = new ModelAndView();
 
-        // Check if there is any errors (which mean validation failed) with bindingResult.hasErrros();
+        User user = this.userService.getUserById(id);
 
-        // IF there are -> set view "user/profile-edit" and return the ModelAndView
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("user/profile-edit-form");
+        }
 
-        /* IF NOT:
-              Then call a method from userService that updates user's credentials and
-              accepts as a parameter the UserEditRequest.
+        //TODO: implement functionality updateProfile(User user, ProfileEditRequest request)
+        //this.userService.updateProfile(user, profileEditRequest);
 
-              Then redirect to "/users/{id}/profile"
-         */
-
-
-        return modelAndView;
+        return new ModelAndView("redirect:/users/" + id + "/profile");
     }
 
 
