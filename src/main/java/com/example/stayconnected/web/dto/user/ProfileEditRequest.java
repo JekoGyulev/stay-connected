@@ -15,8 +15,11 @@ public class ProfileEditRequest {
     @Min(value = 18, message = "Your age must be above 18")
     private int age;
     @Email(message = "Please enter a valid email")
+    @NotBlank(message = "Email cannot be empty or blank.")
     private String email;
-    @NotBlank(message = "Username cannot be empty or blank")
+    @NotBlank(message = "Username cannot be empty or blank.")
+    @Size(min = 5, message = "Username must be at least 5 characters long.")
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username can only consist of letters, numbers and underscores.")
     private String username;
     @URL(message = "Please enter a valid URL")
     private String profilePicture;
