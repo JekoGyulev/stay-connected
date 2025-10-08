@@ -49,6 +49,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("user/profile-edit-form");
         modelAndView.addObject("profileEditRequest", profileEditRequest);
+        modelAndView.addObject("user", user); // For displaying username, id above
 
         return modelAndView;
     }
@@ -61,11 +62,12 @@ public class UserController {
         User user = this.userService.getUserById(id);
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("user/profile-edit-form");
+            ModelAndView modelAndView = new ModelAndView("user/profile-edit-form");
+            modelAndView.addObject("user", user);
+            return modelAndView;
         }
 
-        //TODO: implement functionality updateProfile(User user, ProfileEditRequest request)
-        //this.userService.updateProfile(user, profileEditRequest);
+        this.userService.updateProfile(user, profileEditRequest);
 
         return new ModelAndView("redirect:/users/" + id + "/profile");
     }

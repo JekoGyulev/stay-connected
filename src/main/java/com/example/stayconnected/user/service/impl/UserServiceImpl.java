@@ -3,12 +3,14 @@ package com.example.stayconnected.user.service.impl;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
 import com.example.stayconnected.user.service.UserService;
+import com.example.stayconnected.utility.exception.EmailAlreadyExists;
 import com.example.stayconnected.utility.exception.LoginFailed;
 import com.example.stayconnected.utility.exception.UserInactive;
 import com.example.stayconnected.utility.exception.UsernameAlreadyExists;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.service.WalletService;
 import com.example.stayconnected.web.dto.user.LoginRequest;
+import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import com.example.stayconnected.web.dto.user.RegisterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +93,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(UUID id) {
         return this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public void updateProfile(User user, ProfileEditRequest profileEditRequest) {
+        user.setFirstName(profileEditRequest.getFirstName());
+        user.setLastName(profileEditRequest.getLastName());
+        user.setAge(profileEditRequest.getAge());
+        user.setProfilePictureUrl(profileEditRequest.getProfilePicture());
+        user.setUsername(profileEditRequest.getUsername());
+        user.setEmail(profileEditRequest.getEmail());
+
+        this.userRepository.save(user);
     }
 
 
