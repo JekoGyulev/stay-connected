@@ -1,15 +1,12 @@
 package com.example.stayconnected.web.controller;
 
-import com.example.stayconnected.property.model.Property;
+import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.review.model.Review;
 import com.example.stayconnected.review.service.ReviewService;
-import com.example.stayconnected.web.dto.review.CreateReviewRequest;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+
 
 import java.util.UUID;
 
@@ -20,24 +17,8 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @Autowired
-    public ReviewController(ReviewService reviewService) {
+    public ReviewController(ReviewService reviewService, PropertyService propertyService) {
         this.reviewService = reviewService;
-    }
-
-
-    @PostMapping("/{propertyId}")
-    public String addReview(@PathVariable UUID propertyId,
-                            @Valid @ModelAttribute CreateReviewRequest request,
-                            BindingResult bindingResult) {
-
-        // Check for errors
-
-        // Get user by his id (logged-in user)
-
-        // Call the addReview method
-
-
-        return "redirect:/properties/" + propertyId;
     }
 
     @DeleteMapping("/{reviewId}")

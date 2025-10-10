@@ -8,7 +8,6 @@ import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
-import com.example.stayconnected.web.dto.review.ReviewResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,24 +38,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewResponse> getAllReviewsByPropertyWithId(UUID id) {
-        List<ReviewResponse> reviewResponses = this.reviewRepository
-                .findAllByPropertyIdOrderByCreatedAtDesc(id)
-                .stream()
-                .map(review -> {
-                    ReviewResponse reviewResponse = new ReviewResponse();
-
-                    reviewResponse.setRating(review.getRating());
-                    reviewResponse.setComment(review.getComment());
-                    reviewResponse.setCreatedAt(review.getCreatedAt());
-                    reviewResponse.setReviewerUsername(review.getCreatedFrom().getUsername());
-
-                    return reviewResponse;
-                })
-                .toList();
-
-
-        return reviewResponses;
+    public List<Review> getAllReviewsByPropertyWithId(UUID id) {
+        return this.reviewRepository.findAllByPropertyIdOrderByCreatedAtDesc(id);
     }
 
     @Override

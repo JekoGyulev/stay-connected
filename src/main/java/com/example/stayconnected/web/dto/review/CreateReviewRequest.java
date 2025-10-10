@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 public class CreateReviewRequest {
-    @NotBlank
+    @NotBlank(message = "Please write your comment for this property")
     private String comment;
     @Min(1)
     @Max(5)

@@ -4,6 +4,7 @@ import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
 import com.example.stayconnected.web.dto.property.PropertyEditRequest;
+import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,12 +47,31 @@ public class PropertyController {
         // Get all reviews for that property (call reviewService)
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("property-details");
+        modelAndView.setViewName("property/property-details");
 
         // Add objects: property, List<Review> reviews
 
 
         return modelAndView;
+    }
+
+    @PostMapping("/{id}/review")
+    public ModelAndView addReview(@PathVariable UUID propertyId,
+                                  @Valid @ModelAttribute CreateReviewRequest request,
+                                  BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView("property/property-details");
+            modelAndView.addObject("property", this.propertyService.getById(propertyId));
+            modelAndView.addObject("reviews", this.reviewService.getAllReviewsByPropertyWithId(propertyId));
+            return modelAndView;
+        }
+
+        // Get user by his id (logged-in user)
+
+        // Call the addReview method : this.reviewService.addReview(userId, propertyId, request);
+
+        return new ModelAndView("redirect:/properties/" + propertyId);
     }
 
     @GetMapping("/create")
