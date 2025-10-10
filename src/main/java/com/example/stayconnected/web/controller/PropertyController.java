@@ -56,14 +56,14 @@ public class PropertyController {
     }
 
     @PostMapping("/{id}/review")
-    public ModelAndView addReview(@PathVariable UUID propertyId,
+    public ModelAndView addReview(@PathVariable UUID id,
                                   @Valid @ModelAttribute CreateReviewRequest request,
                                   BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("property/property-details");
-            modelAndView.addObject("property", this.propertyService.getById(propertyId));
-            modelAndView.addObject("reviews", this.reviewService.getAllReviewsByPropertyWithId(propertyId));
+            modelAndView.addObject("property", this.propertyService.getById(id));
+            modelAndView.addObject("reviews", this.reviewService.getAllReviewsByPropertyWithId(id));
             return modelAndView;
         }
 
@@ -71,7 +71,7 @@ public class PropertyController {
 
         // Call the addReview method : this.reviewService.addReview(userId, propertyId, request);
 
-        return new ModelAndView("redirect:/properties/" + propertyId);
+        return new ModelAndView("redirect:/properties/" + id);
     }
 
     @GetMapping("/create")
