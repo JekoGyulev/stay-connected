@@ -1,6 +1,7 @@
 package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.user.service.UserService;
+import com.example.stayconnected.web.dto.user.LoginRequest;
 import com.example.stayconnected.web.dto.user.RegisterRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +45,13 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String getLoginPage() {
-        return "login";
+    public ModelAndView getLoginPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        modelAndView.addObject("loginRequest", new LoginRequest());
+        return modelAndView;
     }
 
 
-    // POST /auth/logout -> Logout user
+    // GET /auth/logout -> Logout user
 }

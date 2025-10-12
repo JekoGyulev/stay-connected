@@ -17,4 +17,6 @@ public class DtoMapper {
                                         user.getProfilePictureUrl()
         );
     }
+
+    // Make a PropertyEditRequest fromProperty(Property property) -> When admin wants to edit the property
 }

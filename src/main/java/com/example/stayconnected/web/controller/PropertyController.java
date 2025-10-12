@@ -34,7 +34,7 @@ public class PropertyController {
         // Call propertyService.getAllProperties()
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("properties");
+        modelAndView.setViewName("property/properties");
 
 
         return modelAndView;
