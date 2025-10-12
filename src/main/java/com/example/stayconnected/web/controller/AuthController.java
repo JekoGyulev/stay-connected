@@ -1,8 +1,10 @@
 package com.example.stayconnected.web.controller;
 
+import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.web.dto.user.LoginRequest;
 import com.example.stayconnected.web.dto.user.RegisterRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,6 +52,22 @@ public class AuthController {
         modelAndView.setViewName("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
         return modelAndView;
+    }
+
+    @PostMapping("/login")
+    public ModelAndView login(@Valid @ModelAttribute LoginRequest loginRequest,
+                              BindingResult bindingResult,
+                              HttpSession session) {
+
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("login");
+        }
+
+        User user = this.userService.login(loginRequest);
+        session.setAttribute("userId", user.getId());
+        session.setMaxInactiveInterval(60 * 60);
+
+        return new ModelAndView("redirect:/home");
     }
 
 
