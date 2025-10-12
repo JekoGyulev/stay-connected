@@ -10,15 +10,19 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.util.Set;
 
 @Component
-public class SessionCheckInterceptor implements HandlerInterceptor {
+public class AuthInterceptor implements HandlerInterceptor {
 
-    private static final Set<String> UNAUTHENTICATED_ENDPOINTS = Set.of("/", "/register", "/login");
+    private static final Set<String> PUBLIC_ENDPOINTS = Set.of("/register", "/login");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        if (UNAUTHENTICATED_ENDPOINTS.contains(request.getPathInfo())) {
-            return true;
+        String path = request.getServletPath();
+
+        if (path.equals("/")) return true;
+
+        for (String endpoint : PUBLIC_ENDPOINTS) {
+            if (path.startsWith(endpoint)) return true;
         }
 
         HttpSession session = request.getSession(false);

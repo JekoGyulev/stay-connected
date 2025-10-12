@@ -8,10 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
-    private final SessionCheckInterceptor interceptor;
+    private final AuthInterceptor interceptor;
 
     @Autowired
-    public WebConfiguration(SessionCheckInterceptor interceptor) {
+    public WebConfiguration(AuthInterceptor interceptor) {
         this.interceptor = interceptor;
     }
 
