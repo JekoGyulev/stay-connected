@@ -70,6 +70,9 @@ public class AuthController {
         return new ModelAndView("redirect:/home");
     }
 
-
-    // GET /auth/logout -> Logout user
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
 }
