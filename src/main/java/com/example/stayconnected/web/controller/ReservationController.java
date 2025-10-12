@@ -57,7 +57,7 @@ public class ReservationController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("reservation/reservation-details");
 
-        // Add reservation as object to the ModelAndView
+        // Add reservation as object to the ModelAndView, as well as the property
 
         return modelAndView;
     }
