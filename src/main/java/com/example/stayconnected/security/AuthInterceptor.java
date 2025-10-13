@@ -44,7 +44,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        Object userId = session.getAttribute("userId");
+        UUID userId = (UUID) session.getAttribute("userId");
 
         if (userId == null) {
             session.invalidate();
@@ -52,7 +52,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        User user = this.userService.getUserById((UUID) userId);
+        User user = this.userService.getUserById(userId);
 
         if (!user.isActive()) {
             session.invalidate();
