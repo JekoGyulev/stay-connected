@@ -9,10 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -47,10 +44,13 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLoginPage() {
+    public ModelAndView getLoginPage(@RequestParam(name="loginMessageProfileInactive", required = false)
+                                         String loginMessageProfileInactive) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
+        // Add it below the "Log in" title and append alert-warning class and also include th:if since it could be nullable
+        modelAndView.addObject("loginMessageProfileInactive", loginMessageProfileInactive);
         return modelAndView;
     }
 

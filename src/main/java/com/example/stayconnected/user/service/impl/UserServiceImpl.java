@@ -75,10 +75,6 @@ public class UserServiceImpl implements UserService {
 
         User user = optionalUser.get();
 
-        if (!user.isActive()) {
-            throw new UserInactive("Your account is deactivated. Please contact support");
-        }
-
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new LoginFailed("Username or password is incorrect");
         }
