@@ -24,5 +24,9 @@ public interface UserService {
 
     void switchStatus(UUID userId);
 
+    long getTotalInactiveUsers();
+
+    long getTotalActiveUsers();
+
     // View stats
 }

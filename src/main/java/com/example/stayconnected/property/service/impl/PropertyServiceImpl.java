@@ -7,6 +7,7 @@ import com.example.stayconnected.utility.exception.PropertyDoesNotExist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,6 +24,11 @@ public class PropertyServiceImpl implements PropertyService {
     public Property getById(UUID propertyId) {
         return this.propertyRepository.findById(propertyId)
                 .orElseThrow(() -> new PropertyDoesNotExist("Property not found"));
+    }
+
+    @Override
+    public List<Property> getAllProperties() {
+        return this.propertyRepository.findAll();
     }
 
     // Have at least 1 logging message -> log.info("Successfully done {your operation}")

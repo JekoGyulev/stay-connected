@@ -139,6 +139,16 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(user);
     }
 
+    @Override
+    public long getTotalInactiveUsers() {
+        return this.userRepository.countAllByActiveFalse();
+    }
+
+    @Override
+    public long getTotalActiveUsers() {
+        return this.userRepository.countAllByActiveTrue();
+    }
+
 
     private User initUser(RegisterRequest request) {
         return new User (

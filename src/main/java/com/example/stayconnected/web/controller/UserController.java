@@ -1,5 +1,6 @@
 package com.example.stayconnected.web.controller;
 
+import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
@@ -22,11 +23,13 @@ public class UserController {
 
     private final ReservationService reservationService;
     private final UserService userService;
+    private final PropertyService propertyService;
 
     @Autowired
-    public UserController(ReservationService reservationService, UserService userService) {
+    public UserController(ReservationService reservationService, UserService userService, PropertyService propertyService) {
         this.reservationService = reservationService;
         this.userService = userService;
+        this.propertyService = propertyService;
     }
 
     @GetMapping("/{id}/profile")
@@ -37,8 +40,7 @@ public class UserController {
         modelAndView.setViewName("user/profile-details");
         modelAndView.addObject("user", user);
 
-        // Will be used to show the ID, profilePicture, username, age, first- and lastname,
-        // registered,lastLoggedIn of user, email
+        // Will be used to show the ID, profilePicture, username, age, first- and lastname, registered,lastLoggedIn of user, email
 
         return modelAndView;
     }
@@ -90,12 +92,16 @@ public class UserController {
     @GetMapping("/stats")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getStatsPage() {
-
-        // Fetch stats for : total users, total hosted properties,
-        // total bookings made (look at smart wallet's way of stats page)
+        // Fetch stats for : total bookings made (look at smart wallet's way of stats page)
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/stats");
+        modelAndView.addObject("totalUsers", this.userService.getAllUsers().size());
+        modelAndView.addObject("totalInactiveUsers", this.userService.getTotalInactiveUsers());
+        modelAndView.addObject("totalActiveUsers", this.userService.getTotalActiveUsers());
+        modelAndView.addObject("totalProperties", this.propertyService.getAllProperties().size());
+
+        // TODO: Add later total bookings
 
         return modelAndView;
     }
