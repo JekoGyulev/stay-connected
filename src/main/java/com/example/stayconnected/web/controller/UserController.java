@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -76,13 +77,11 @@ public class UserController {
     @GetMapping("/table")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getUsersTablePage() {
-
-        // Fetch all users which we put later as objects in thymeleaf and use th:each in HTML table
+        List<User> users = this.userService.getAllUsers();
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/users");
-
-        // Add the users as object to modelAndView
+        modelAndView.addObject("users", users);
 
         return modelAndView;
     }
