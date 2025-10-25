@@ -106,13 +106,11 @@ public class UserController {
         this.userService.switchRole(id);
         return "redirect:/users/table";
     }
-    @PatchMapping("/{id}/deactivate")
+    @PatchMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
-    public String deactivateUser(@PathVariable UUID id) {
-        // Get user by id
-        // Make isActive = false
-
-        return "redirect:/admin/users";
+    public String changeUserStatus(@PathVariable UUID id) {
+        this.userService.switchStatus(id);
+        return "redirect:/users/table";
     }
 
 
