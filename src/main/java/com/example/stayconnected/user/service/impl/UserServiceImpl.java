@@ -1,5 +1,6 @@
 package com.example.stayconnected.user.service.impl;
 
+import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
 import com.example.stayconnected.user.service.UserService;
@@ -111,6 +112,21 @@ public class UserServiceImpl implements UserService {
         user.setProfilePictureUrl(profileEditRequest.getProfilePicture());
         user.setUsername(profileEditRequest.getUsername());
         user.setEmail(profileEditRequest.getEmail());
+
+        this.userRepository.save(user);
+    }
+
+    @Override
+    @CacheEvict(value = "users", allEntries = true)
+    public void switchRole(UUID userId) {
+
+        User user = getUserById(userId);
+
+        if (user.getRole() == UserRole.REGULAR) {
+            user.setRole(UserRole.ADMIN);
+        } else {
+            user.setRole(UserRole.REGULAR);
+        }
 
         this.userRepository.save(user);
     }
