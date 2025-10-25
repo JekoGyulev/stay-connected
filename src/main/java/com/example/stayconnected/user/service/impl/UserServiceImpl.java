@@ -14,10 +14,13 @@ import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import com.example.stayconnected.web.dto.user.RegisterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,6 +43,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public User register(RegisterRequest request) {
 
         if (this.userRepository.findByUsername(request.getUsername()).isPresent()) {
@@ -62,6 +66,12 @@ public class UserServiceImpl implements UserService {
                 .formatted(user.getId(), user.getUsername()));
 
         return user;
+    }
+
+    @Override
+    @Cacheable(value = "users")
+    public List<User> getAllUsers() {
+        return this.userRepository.findAll();
     }
 
     @Override
@@ -88,10 +98,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(UUID id) {
-        return this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public void updateProfile(User user, ProfileEditRequest profileEditRequest) {
         user.setFirstName(profileEditRequest.getFirstName());
         user.setLastName(profileEditRequest.getLastName());

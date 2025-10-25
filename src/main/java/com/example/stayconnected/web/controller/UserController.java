@@ -63,7 +63,7 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("user/profile-edit-form");
-            modelAndView.addObject("user", user);
+            modelAndView.addObject("user", user); // Because of lastLoggedIn, and isActive
             return modelAndView;
         }
 
