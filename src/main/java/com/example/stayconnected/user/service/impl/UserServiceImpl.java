@@ -1,5 +1,6 @@
 package com.example.stayconnected.user.service.impl;
 
+import com.example.stayconnected.event.SuccessfulRegistrationEvent;
 import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
@@ -17,8 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,15 +38,19 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, WalletService walletService, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, WalletService walletService, PasswordEncoder passwordEncoder, ApplicationEventPublisher eventPublisher) {
         this.userRepository = userRepository;
         this.walletService = walletService;
         this.passwordEncoder = passwordEncoder;
+        this.eventPublisher = eventPublisher;
     }
 
 
     @Override
+    @Transactional
     @CacheEvict(value = "users", allEntries = true)
     public User register(RegisterRequest request) {
 
@@ -65,6 +72,14 @@ public class UserServiceImpl implements UserService {
 
         log.info("Successfully registered user with id [%s] and username [%s]"
                 .formatted(user.getId(), user.getUsername()));
+
+        SuccessfulRegistrationEvent event = SuccessfulRegistrationEvent
+                .builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .build();
+
+        this.eventPublisher.publishEvent(event);
 
         return user;
     }
@@ -141,12 +156,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public long getTotalInactiveUsers() {
-        return this.userRepository.countAllByActiveFalse();
+        return this.userRepository.countAllByActiveIs(false);
     }
 
     @Override
     public long getTotalActiveUsers() {
-        return this.userRepository.countAllByActiveTrue();
+        return this.userRepository.countAllByActiveIs(true);
     }
 
 
