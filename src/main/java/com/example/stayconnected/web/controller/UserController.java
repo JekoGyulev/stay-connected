@@ -7,6 +7,7 @@ import com.example.stayconnected.web.dto.DtoMapper;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -70,6 +71,48 @@ public class UserController {
         this.userService.updateProfile(user, profileEditRequest);
 
         return new ModelAndView("redirect:/users/" + id + "/profile");
+    }
+
+    @GetMapping("/table")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView getUsersTablePage() {
+
+        // Fetch all users which we put later as objects in thymeleaf and use th:each in HTML table
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/users");
+
+        // Add the users as object to modelAndView
+
+        return modelAndView;
+    }
+
+    @GetMapping("/stats")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView getStatsPage() {
+
+        // Fetch stats for : total users, total hosted properties,
+        // total bookings made (look at smart wallet's way of stats page)
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/stats");
+
+        return modelAndView;
+    }
+
+    @PatchMapping("/{id}/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String changeUserRole(@PathVariable UUID id) {
+        this.userService.switchRole(id);
+        return "redirect:/users/table";
+    }
+    @PatchMapping("/{id}/deactivate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String deactivateUser(@PathVariable UUID id) {
+        // Get user by id
+        // Make isActive = false
+
+        return "redirect:/admin/users";
     }
 
 

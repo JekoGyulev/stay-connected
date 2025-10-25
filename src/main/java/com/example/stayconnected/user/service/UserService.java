@@ -20,7 +20,6 @@ public interface UserService {
 
     void updateProfile(User user, ProfileEditRequest profileEditRequest);
 
-    // Change user's role
     void switchRole(UUID userId);
 
     // View stats
