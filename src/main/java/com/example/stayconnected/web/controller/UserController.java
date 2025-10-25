@@ -31,13 +31,14 @@ public class UserController {
 
     @GetMapping("/{id}/profile")
     public ModelAndView getUserProfilePage(@PathVariable UUID id) {
-
-        // Get user by ID
-        // Shows user profile details
-        // Will be used to show the ID, registered,lastLoggedIn of user
+        User user = this.userService.getUserById(id);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("user/profile-details");
+        modelAndView.addObject("user", user);
+
+        // Will be used to show the ID, profilePicture, username, age, first- and lastname,
+        // registered,lastLoggedIn of user, email
 
         return modelAndView;
     }
