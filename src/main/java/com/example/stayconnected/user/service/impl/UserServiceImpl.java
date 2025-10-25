@@ -131,6 +131,14 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(user);
     }
 
+    @Override
+    @CacheEvict(value = "users", allEntries = true)
+    public void switchStatus(UUID userId) {
+        User user = getUserById(userId);
+        user.setActive(!user.isActive());
+        this.userRepository.save(user);
+    }
+
 
     private User initUser(RegisterRequest request) {
         return new User (

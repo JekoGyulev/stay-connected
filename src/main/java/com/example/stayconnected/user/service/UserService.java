@@ -22,5 +22,7 @@ public interface UserService {
 
     void switchRole(UUID userId);
 
+    void switchStatus(UUID userId);
+
     // View stats
 }
