@@ -64,7 +64,7 @@ public class AuthController {
         }
 
         User user = this.userService.login(loginRequest);
-        session.setAttribute("userId", user.getId());
+        session.setAttribute("user_id", user.getId());
         session.setMaxInactiveInterval(60 * 60);
 
         return new ModelAndView("redirect:/home");
