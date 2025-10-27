@@ -143,6 +143,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return this.userRepository.countAllByActiveIs(true);
     }
 
+    @Override
+    public void saveUser(User user) {
+        this.userRepository.save(user);
+    }
+
 
     private User initUser(RegisterRequest request) {
         return new User (

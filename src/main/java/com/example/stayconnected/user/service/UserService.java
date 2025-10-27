@@ -26,5 +26,7 @@ public interface UserService {
 
     long getTotalActiveUsers();
 
+    void saveUser(User user);
+
     // View stats
 }
