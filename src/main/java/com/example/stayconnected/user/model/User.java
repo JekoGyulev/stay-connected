@@ -56,7 +56,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.isActive = true;
-        this.role = UserRole.REGULAR;
+        this.role = UserRole.USER;
         this.registeredAt = LocalDateTime.now();
     }
 

@@ -1,6 +1,7 @@
 package com.example.stayconnected.user.service.impl;
 
 import com.example.stayconnected.event.SuccessfulRegistrationEvent;
+import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
@@ -19,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +34,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -59,13 +63,10 @@ public class UserServiceImpl implements UserService {
                     .formatted(request.getUsername()));
         }
 
-        // Create an account
         User user = initUser(request);
 
-        // Save user so that the id is generated (which we will need for setting the wallet)
         this.userRepository.save(user);
 
-        // Assign a wallet to the user
         Wallet wallet = this.walletService.createWallet(user);
 
         user.setWallet(wallet);
@@ -137,10 +138,10 @@ public class UserServiceImpl implements UserService {
 
         User user = getUserById(userId);
 
-        if (user.getRole() == UserRole.REGULAR) {
+        if (user.getRole() == UserRole.USER) {
             user.setRole(UserRole.ADMIN);
         } else {
-            user.setRole(UserRole.REGULAR);
+            user.setRole(UserRole.USER);
         }
 
         this.userRepository.save(user);
@@ -173,6 +174,22 @@ public class UserServiceImpl implements UserService {
                 request.getUsername(),
                 passwordEncoder.encode(request.getPassword()),
                 request.getEmail()
+        );
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        User user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+
+
+        return new UserPrincipal(
+                                    user.getId(),
+                                    user.getUsername(),
+                                    user.getPassword(),
+                                    user.isActive(),
+                                    user.getRole()
         );
     }
 }

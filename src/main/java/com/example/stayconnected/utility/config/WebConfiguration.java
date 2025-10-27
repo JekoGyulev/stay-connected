@@ -1,4 +1,4 @@
-package com.example.stayconnected.security;
+package com.example.stayconnected.utility.config;
 
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
-   @Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity
