@@ -44,8 +44,8 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLoginPage(@RequestParam(name="error", required = false)
-                                         String errorParam) {
+    public ModelAndView getLoginPage(@RequestParam(name="error", required = false) String errorParam,
+                                     @RequestParam(name="inactive", required = false) String inactiveParam) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
@@ -53,6 +53,10 @@ public class AuthController {
         // FIXME: I am not sure about this!
         if (errorParam != null) {
             modelAndView.addObject("errorMessage", "Username or password incorrect");
+        }
+
+        if (inactiveParam != null) {
+            modelAndView.addObject("errorMessage", "Your account has been deactivated");
         }
 
         return modelAndView;

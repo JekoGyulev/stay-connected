@@ -1,6 +1,7 @@
 package com.example.stayconnected.utility.config;
 
 
+import com.example.stayconnected.security.handler.CustomAuthenticationFailureHandler;
 import com.example.stayconnected.security.handler.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -16,10 +17,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfiguration implements WebMvcConfigurer {
 
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
     @Autowired
-    public WebConfiguration(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
+    public WebConfiguration(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler, CustomAuthenticationFailureHandler customAuthenticationFailureHandler) {
         this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
+        this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
     }
 
     @Bean
@@ -37,7 +40,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .formLogin( form -> form
                         .loginPage("/login")
                         .successHandler(customAuthenticationSuccessHandler)
-                        .failureUrl("/login?error")
+                        .failureHandler(customAuthenticationFailureHandler)
                         .permitAll()
                 )
                 .logout( logout -> logout
