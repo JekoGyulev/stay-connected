@@ -44,35 +44,18 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLoginPage(@RequestParam(name="loginMessageProfileInactive", required = false)
-                                         String loginMessageProfileInactive) {
+    public ModelAndView getLoginPage(@RequestParam(name="error", required = false)
+                                         String errorParam) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
-        // Add it below the "Log in" title and append alert-warning class and also include th:if since it could be nullable
-        modelAndView.addObject("loginMessageProfileInactive", loginMessageProfileInactive);
+
+        // FIXME: I am not sure about this!
+        if (errorParam != null) {
+            modelAndView.addObject("errorMessage", "Username or password incorrect");
+        }
+
         return modelAndView;
     }
 
-    @PostMapping("/login")
-    public ModelAndView login(@Valid @ModelAttribute LoginRequest loginRequest,
-                              BindingResult bindingResult,
-                              HttpSession session) {
-
-        if (bindingResult.hasErrors()) {
-            return new ModelAndView("login");
-        }
-
-        User user = this.userService.login(loginRequest);
-        session.setAttribute("user_id", user.getId());
-        session.setMaxInactiveInterval(60 * 60);
-
-        return new ModelAndView("redirect:/home");
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
-    }
 }

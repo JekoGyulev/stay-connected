@@ -92,28 +92,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User login(LoginRequest request) {
-
-        Optional<User> optionalUser = this.userRepository.findByUsername(request.getUsername());
-
-        if (optionalUser.isEmpty()) {
-            throw new LoginFailed("Username or password is incorrect");
-        }
-
-        User user = optionalUser.get();
-
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new LoginFailed("Username or password is incorrect");
-        }
-
-        user.setLastLoggedIn(LocalDateTime.now());
-
-        log.info("Successfully logged user in with id [%s] and username [%s]".formatted(user.getId(), user.getUsername()));
-
-        return this.userRepository.save(user);
-    }
-
-    @Override
     public User getUserById(UUID id) {
         return this.userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
