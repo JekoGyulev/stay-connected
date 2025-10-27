@@ -27,18 +27,15 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-
-        // TODO: ADD CUSTOM FAILURE HANDLER FOR LOGIN (SEE DISCORD AND CHATGPT)
-
         httpSecurity
 
                 .authorizeHttpRequests( matcher -> matcher
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/register").permitAll()
+                        .requestMatchers("/", "/auth/register").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin( form -> form
-                        .loginPage("/login")
+                        .loginPage("/auth/login")
                         .successHandler(customAuthenticationSuccessHandler)
                         .failureHandler(customAuthenticationFailureHandler)
                         .permitAll()
