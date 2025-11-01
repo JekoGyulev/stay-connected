@@ -14,8 +14,6 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    User login(LoginRequest request);
-
     User getUserById(UUID id);
 
     void updateProfile(User user, ProfileEditRequest profileEditRequest);
@@ -27,6 +25,8 @@ public interface UserService {
     long getTotalInactiveUsers();
 
     long getTotalActiveUsers();
+
+    void saveUser(User user);
 
     // View stats
 }
