@@ -102,7 +102,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void updateProfile(User user, ProfileEditRequest profileEditRequest) {
         user.setFirstName(profileEditRequest.getFirstName());
         user.setLastName(profileEditRequest.getLastName());
-        user.setAge(profileEditRequest.getAge());
         user.setProfilePictureUrl(profileEditRequest.getProfilePicture());
         user.setUsername(profileEditRequest.getUsername());
         user.setEmail(profileEditRequest.getEmail());
@@ -153,7 +152,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return new User (
                 request.getFirstName(),
                 request.getLastName(),
-                request.getAge(),
                 request.getUsername(),
                 passwordEncoder.encode(request.getPassword()),
                 request.getEmail()

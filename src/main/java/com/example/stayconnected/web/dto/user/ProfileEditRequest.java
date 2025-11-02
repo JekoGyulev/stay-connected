@@ -10,10 +10,6 @@ public class ProfileEditRequest {
     @NotBlank(message = "Last name cannot be empty or blank")
     @Size(min = 2, message = "Last name must be at least 2 characters long.")
     private String lastName;
-    @NotNull
-    @Positive(message = "Please enter age greater than 0")
-    @Min(value = 18, message = "Your age must be above 18")
-    private int age;
     @Email(message = "Please enter a valid email")
     @NotBlank(message = "Email cannot be empty or blank.")
     private String email;
@@ -26,10 +22,9 @@ public class ProfileEditRequest {
 
     public ProfileEditRequest() {}
 
-    public ProfileEditRequest(String firstName, String lastName, int age, String email, String username, String profilePicture) {
+    public ProfileEditRequest(String firstName, String lastName, String email, String username, String profilePicture) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
         this.email = email;
         this.username = username;
         this.profilePicture = profilePicture;
@@ -57,14 +52,6 @@ public class ProfileEditRequest {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public String getEmail() {

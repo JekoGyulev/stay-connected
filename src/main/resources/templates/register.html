@@ -4,8 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | StayConnected</title>
+    <meta name="description" content="Create your StayConnected account and start connecting with people around the world.">
+    <link rel="stylesheet" href="/css/register.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
+<!-- Header -->
+<header class="header header-centered">
+    <nav class="nav-container">
+        <div class="nav-content-centered">
+            <!-- Decorative Element Left -->
+            <div class="header-decoration"></div>
 
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <h1 class="logo-title">StayConnected</h1>
+            </div>
+
+            <!-- Decorative Element Right -->
+            <div class="header-decoration"></div>
+        </div>
+    </nav>
+</header>
+
+<!-- Register Section -->
+<main class="main-content">
+    <div class="container">
+        <div class="register-wrapper">
+            <div class="register-card">
+
+                <a th:href="@{/}"><i class="fa-solid fa-arrow-left"></i></a>
+
+
+                <div class="register-header">
+                    <h2 class="register-title">Create Your Account</h2>
+                    <p class="register-subtitle">Join StayConnected and start your journey</p>
+                </div>
+
+                <!--TODO: COMPLETE THIS FORM !-->
+                <form class="register-form" th:action="@{/auth/register}" th:method="POST" th:object="${registerRequest}">
+                    <div class="form-group">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input
+                                th:field="*{firstName}"
+                                type="text"
+                                id="firstName"
+                                class="form-input"
+                                placeholder="Enter your first name"
+                        >
+                        <p class="alert-warning" th:if="${#fields.hasErrors('firstName')}"
+                            th:errors="*{firstName}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input
+                                th:field="*{lastName}"
+                                type="text"
+                                id="lastName"
+                                class="form-input"
+                                placeholder="Enter your last name"
+                        >
+                        <p class="alert-warning" th:if="${#fields.hasErrors('lastName')}"
+                           th:errors="*{lastName}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input
+                                th:field="*{email}"
+                                type="text"
+                                id="email"
+                                class="form-input"
+                                placeholder="Enter your email"
+                        >
+                        <p class="alert-warning" th:if="${#fields.hasErrors('email')}"
+                           th:errors="*{email}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username</label>
+                        <input
+                                th:field="*{username}"
+                                type="text"
+                                id="username"
+                                class="form-input"
+                                placeholder="Enter your username"
+                        >
+                        <p class="alert-warning" th:if="${#fields.hasErrors('username')}"
+                           th:errors="*{username}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input
+                                th:field="*{password}"
+                                type="password"
+                                id="password"
+                                class="form-input"
+                                placeholder="Create a password"
+                        >
+                        <p class="alert-warning" th:if="${#fields.hasErrors('password')}"
+                           th:errors="*{password}"></p>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary btn-lg btn-full">
+                        Create Account
+                    </button>
+                </form>
+
+                <div class="register-footer">
+                    <p class="register-link-text">
+                        Already have an account?
+                        <a th:href="@{/auth/login}" class="register-link">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>

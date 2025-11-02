@@ -11,7 +11,6 @@ public class DtoMapper {
         return new ProfileEditRequest(
                                         user.getFirstName(),
                                         user.getLastName(),
-                                        user.getAge(),
                                         user.getEmail(),
                                         user.getUsername(),
                                         user.getProfilePictureUrl()

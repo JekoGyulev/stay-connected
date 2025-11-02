@@ -1,0 +1,66 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--gradient-hero);
+    color: var(--foreground);
+    line-height: 1.6;
+}
+
+:root {
+    /* Colors - Airbnb Pink Theme */
+    --primary: #FF385C;
+    --primary-hover: #E31C5F;
+    --primary-glow: #FF5A7D;
+
+    --background: #FFFFFF;
+    --foreground: #222222;
+
+    --card-bg: #FFFFFF;
+    --card-border: #EBEBEB;
+
+    --muted: #717171;
+    --accent-bg: #FFF5F7;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #FF385C, #FF5A7D);
+    --gradient-hero: linear-gradient(180deg, #FFFFFF, #FFF9FA);
+
+    /* Shadows */
+    --shadow-soft: 0 10px 40px -10px rgba(255, 56, 92, 0.15);
+    --shadow-hover: 0 20px 50px -15px rgba(255, 56, 92, 0.25);
+
+    /* Spacing */
+    --radius: 12px;
+}
+
+
+.alert-warning {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(to left, #f88e8e, #f56767, #f53b3b);
+    background-size: 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+p.alert-warning {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(to left, #f88e8e, #f56767, #f53b3b);
+    background-size: 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 5px 0 0;
+}

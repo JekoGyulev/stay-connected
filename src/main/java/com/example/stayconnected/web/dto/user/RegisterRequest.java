@@ -9,8 +9,6 @@ public class RegisterRequest {
     @NotBlank(message = "Last name cannot be empty or blank.")
     @Size(min = 2, message = "Last name must be at least 2 characters long.")
     private String lastName;
-    @Min(value = 18, message = "Age must be at least 18.")
-    private int age;
     @NotBlank(message = "Email cannot be empty or blank.")
     @Email(message = "Please enter a valid email.")
     private String email;
@@ -25,10 +23,9 @@ public class RegisterRequest {
 
     public RegisterRequest() {}
 
-    public RegisterRequest(String firstName, String lastName, int age, String email, String username, String password) {
+    public RegisterRequest(String firstName, String lastName, String email, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
         this.email = email;
         this.username = username;
         this.password = password;
@@ -48,15 +45,6 @@ public class RegisterRequest {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public String getUsername() {

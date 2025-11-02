@@ -19,8 +19,6 @@ public class User {
     private String firstName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
-    @Column(nullable = false)
-    private int age;
     @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
@@ -40,7 +38,7 @@ public class User {
     private List<Reservation> reservations = new ArrayList<>();
     @OneToOne(mappedBy = "owner")
     private Wallet wallet;
-    @Column(nullable = false)
+    @Column
     private LocalDateTime lastLoggedIn;
 
 
@@ -48,10 +46,9 @@ public class User {
 
 
     // User REGISTER  constructor
-    public User(String firstName, String lastName, int age, String username, String password, String email) {
+    public User(String firstName, String lastName, String username, String password, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -75,14 +72,6 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public String getUsername() {
