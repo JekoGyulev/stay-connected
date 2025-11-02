@@ -4,8 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | StayConnected</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/auth-form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
+
+<header class="header header-centered">
+    <nav class="nav-container">
+        <div class="nav-content-centered">
+            <!-- Decorative Element Left -->
+            <div class="header-decoration"></div>
+
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <h1 class="logo-title">StayConnected</h1>
+            </div>
+
+            <!-- Decorative Element Right -->
+            <div class="header-decoration"></div>
+        </div>
+    </nav>
+</header>
+
+<main class="main-content">
+    <div class="container">
+        <div class="wrapper">
+            <div class="card">
+
+                <a th:href="@{/}"><i class="fa-solid fa-arrow-left"></i></a>
+
+
+                <div class="form-header">
+                    <h2 class="title">Log in your account</h2>
+                </div>
+
+                <form class="form" th:action="@{/auth/login}" th:method="POST" th:object="${loginRequest}">
+
+                    <p th:if="${errorMessage}" th:text="${errorMessage}" class="alert-warning"></p>
+
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username</label>
+                        <input
+                                th:field="*{username}"
+                                type="text"
+                                id="username"
+                                class="form-input"
+                                placeholder="Enter your username"
+                        >
+
+                        <p class="alert-warning" th:if="${#fields.hasErrors('username')}"
+                           th:errors="*{username}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input
+                                th:field="*{password}"
+                                type="password"
+                                id="password"
+                                class="form-input"
+                                placeholder="Enter your password"
+                        >
+
+                        <p class="alert-warning" th:if="${#fields.hasErrors('password')}"
+                           th:errors="*{password}"></p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg btn-full">
+                        Log in
+                    </button>
+                </form>
+
+                <div class="footer">
+                    <p class="link-text">
+                        Don't have an account?
+                        <a th:href="@{/auth/register}" class="link">Register</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 
 
 </body>

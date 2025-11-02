@@ -49,31 +49,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.625rem 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border-radius: var(--radius);
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
-
-.btn-primary {
-    background: var(--primary);
-    color: white;
-    box-shadow: var(--shadow-soft);
-}
-
-.btn-primary:hover {
-    background: var(--primary-hover);
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
-}
 
 .auth-buttons {
     display: flex;
@@ -81,7 +56,7 @@
     gap: 0.75rem;
 }
 
-.register-wrapper {
+.wrapper {
     position: relative;
     display: flex;
     justify-content: center;
@@ -91,7 +66,7 @@
     overflow: hidden;
 }
 
-.register-wrapper::before {
+.wrapper::before {
     content: '';
     position: absolute;
     top: -10%;
@@ -105,7 +80,7 @@
     pointer-events: none;
 }
 
-.register-wrapper::after {
+.wrapper::after {
     content: '';
     position: absolute;
     bottom: -15%;
@@ -119,7 +94,7 @@
     pointer-events: none;
 }
 
-.register-card {
+.card {
     margin-top: 100px;
     background: var(--card-bg);
     border-radius: calc(var(--radius) + 4px);
@@ -130,25 +105,25 @@
     max-width: 480px;
 }
 
-.register-header {
+.form-header {
     text-align: center;
     margin-bottom: 2rem;
 }
 
-.register-title {
+.title {
     font-size: 2rem;
     font-weight: 700;
     color: var(--foreground);
     margin-bottom: 0.5rem;
 }
 
-.register-subtitle {
+.subtitle {
     font-size: 1rem;
     color: var(--muted);
 }
 
 /* Form Styles */
-.register-form {
+.form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -187,52 +162,31 @@
     color: var(--muted);
 }
 
-.form-checkbox {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-}
-
-.checkbox-input {
-    margin-top: 0.25rem;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: var(--primary);
-}
-
-.checkbox-label {
-    font-size: 0.875rem;
-    color: var(--muted);
-    line-height: 1.5;
-    cursor: pointer;
-}
-
 .btn-full {
     width: 100%;
     margin-top: 0.5rem;
 }
 
-.register-footer {
+.footer {
     margin-top: 2rem;
     text-align: center;
     padding-top: 2rem;
     border-top: 1px solid var(--card-border);
 }
 
-.register-link-text {
+.link-text {
     font-size: 0.875rem;
     color: var(--muted);
 }
 
-.register-link {
+.link {
     color: var(--primary);
     font-weight: 600;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.register-link:hover {
+.link:hover {
     color: var(--primary-hover);
     text-decoration: underline;
 }

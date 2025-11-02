@@ -1,8 +1,9 @@
-package com.example.stayconnected.security.handler;
+package com.example.stayconnected.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -15,10 +16,12 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
+        System.out.println("Failure handler triggered Exception: " + exception.getClass().getSimpleName());
+
         if (exception instanceof DisabledException) {
-            response.sendRedirect("/login?inactive=true");
-        } else {
-            response.sendRedirect("/login?error=true");
+            response.sendRedirect("/auth/login?inactive=true");
+        } else if (exception instanceof BadCredentialsException) {
+            response.sendRedirect("/auth/login?error=true");
         }
     }
 }

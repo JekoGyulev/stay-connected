@@ -1,4 +1,4 @@
-package com.example.stayconnected.utility.config;
+package com.example.stayconnected.config;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;

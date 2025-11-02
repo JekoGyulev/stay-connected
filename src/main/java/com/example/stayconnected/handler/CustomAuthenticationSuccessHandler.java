@@ -1,4 +1,4 @@
-package com.example.stayconnected.security.handler;
+package com.example.stayconnected.handler;
 
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.model.User;

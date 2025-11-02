@@ -50,13 +50,10 @@ public class AuthController {
         modelAndView.setViewName("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
 
-        // FIXME: I am not sure about this!
         if (errorParam != null) {
-            modelAndView.addObject("errorMessage", "Username or password incorrect");
-        }
-
-        if (inactiveParam != null) {
-            modelAndView.addObject("errorMessage", "Your account has been deactivated");
+            modelAndView.addObject("errorMessage", "Username or password incorrect.");
+        } else if (inactiveParam != null) {
+            modelAndView.addObject("errorMessage", "Your account has been deactivated.");
         }
 
         return modelAndView;

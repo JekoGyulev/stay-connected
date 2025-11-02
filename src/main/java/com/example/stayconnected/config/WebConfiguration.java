@@ -1,8 +1,8 @@
-package com.example.stayconnected.utility.config;
+package com.example.stayconnected.config;
 
 
-import com.example.stayconnected.security.handler.CustomAuthenticationFailureHandler;
-import com.example.stayconnected.security.handler.CustomAuthenticationSuccessHandler;
+import com.example.stayconnected.handler.CustomAuthenticationFailureHandler;
+import com.example.stayconnected.handler.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +36,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                 )
                 .formLogin( form -> form
                         .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login")
                         .successHandler(customAuthenticationSuccessHandler)
                         .failureHandler(customAuthenticationFailureHandler)
                         .permitAll()
