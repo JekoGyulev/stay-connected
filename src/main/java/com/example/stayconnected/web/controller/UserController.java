@@ -54,7 +54,6 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("user/profile-edit-form");
         modelAndView.addObject("profileEditRequest", profileEditRequest);
-        modelAndView.addObject("user", user); // For displaying username, id above
 
         return modelAndView;
     }
