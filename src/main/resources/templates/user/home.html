@@ -1,11 +1,277 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - StayConnected</title>
+    <meta name="description" content="Find and book amazing properties around the world with StayConnected.">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Momo+Signature&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
 <body>
+<!-- Header -->
+<header class="header">
 
+    <nav class="nav-container">
+
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <h1 class="logo-title">StayConnected</h1>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link">Properties</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">Profile</a></li>
+                            <li><a th:href="@{'/wallets/user/' + ${user.id}}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a></li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{'/wallets/user/' + ${user.id}}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(user.wallet.balance, 1,2)}"></span>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<section class="welcome-section">
+    <div class="container">
+        <h2 class="welcome-message" th:text="'Welcome back, ' + ${user.username} + '! ' + 'Ready for your next stay? '"></h2>
+        <span>✈️🧳</span>
+    </div>
+
+</section>
+
+<!-- Main Content -->
+<main class="main-content">
+    <!-- Properties Slider Section -->
+    <section class="slider-section">
+
+        <div class="container">
+
+            <h2 class="section-title">Featured Properties</h2>
+
+            <div class="slider-wrapper">
+                <div class="slider">
+
+                    <div class="property-card">
+
+                        <div class="property-image" style="background: linear-gradient(135deg, #FF385C, #FF5A7D);"></div>
+
+                        <div class="property-info">
+                            <h3 class="property-title">Modern Beach House</h3>
+                            <p class="property-location">Malibu, California</p>
+                            <p class="property-price">$450 / night</p>
+                        </div>
+
+                    </div>
+
+                    <div class="property-card">
+
+                        <div class="property-image" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+
+                        <div class="property-info">
+                            <h3 class="property-title">Mountain Retreat</h3>
+                            <p class="property-location">Aspen, Colorado</p>
+                            <p class="property-price">$380 / night</p>
+                        </div>
+
+                    </div>
+
+                    <div class="property-card">
+
+                        <div class="property-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
+
+                        <div class="property-info">
+                            <h3 class="property-title">City Loft</h3>
+                            <p class="property-location">New York, NY</p>
+                            <p class="property-price">$320 / night</p>
+                        </div>
+
+                    </div>
+
+                    <div class="property-card">
+
+                        <div class="property-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
+
+                        <div class="property-info">
+                            <h3 class="property-title">City Loft</h3>
+                            <p class="property-location">New York, NY</p>
+                            <p class="property-price">$320 / night</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Destinations Slider Section -->
+    <section class="slider-section">
+
+        <div class="container">
+
+            <h2 class="section-title">Popular Destinations</h2>
+
+            <div class="slider-wrapper">
+
+                <div class="slider">
+
+                    <div class="destination-card">
+                        <div class="destination-image" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+
+                        <div class="destination-info">
+                            <h3 class="destination-name">Paris</h3>
+                            <p class="destination-count">1,234 properties</p>
+                        </div>
+                    </div>
+
+                    <div class="destination-card">
+                        <div class="destination-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
+
+                        <div class="destination-info">
+                            <h3 class="destination-name">Tokyo</h3>
+                            <p class="destination-count">2,456 properties</p>
+                        </div>
+                    </div>
+
+                    <div class="destination-card">
+                        <div class="destination-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
+
+                        <div class="destination-info">
+                            <h3 class="destination-name">London</h3>
+                            <p class="destination-count">1,890 properties</p>
+                        </div>
+                    </div>
+
+                    <div class="destination-card">
+                        <div class="destination-image" style="background: linear-gradient(135deg, #fa709a, #fee140);"></div>
+
+                        <div class="destination-info">
+                            <h3 class="destination-name">Barcelona</h3>
+                            <p class="destination-count">987 properties</p>
+                        </div>
+                    </div>
+
+                    <div class="destination-card">
+                        <div class="destination-image" style="background: linear-gradient(135deg, #30cfd0, #330867);"></div>
+
+                        <div class="destination-info">
+                            <h3 class="destination-name">Dubai</h3>
+                            <p class="destination-count">1,567 properties</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+
+        <div class="container">
+
+            <h2 class="section-title">How It Works</h2>
+
+            <div class="steps-grid">
+
+                <div class="step-card">
+
+                    <div class="step-number">1</div>
+
+                    <div class="step-icon">
+                        <svg class="icon-large" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="step-title">Search for a property</h3>
+
+                    <p class="step-description">Browse through thousands of verified properties in your desired location.</p>
+                </div>
+
+                <div class="step-card">
+
+                    <div class="step-number">2</div>
+
+                    <div class="step-icon">
+                        <svg class="icon-large" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="step-title">Book it securely</h3>
+
+                    <p class="step-description">Complete your booking with our secure payment system and instant confirmation.</p>
+                </div>
+
+                <div class="step-card">
+
+                    <div class="step-number">3</div>
+
+                    <div class="step-icon">
+                        <svg class="icon-large" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="step-title">Enjoy your stay</h3>
+
+                    <p class="step-description">Check in and enjoy your perfect accommodation with 24/7 support available.</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <footer th:insert="fragments/footer :: footer"></footer>
+
+</main>
 </body>
 </html>

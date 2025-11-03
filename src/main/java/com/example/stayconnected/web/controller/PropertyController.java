@@ -76,7 +76,7 @@ public class PropertyController {
 
     @GetMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView createPropertyForm() {
+    public ModelAndView showPropertyCreateForm() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("property/create-property-form");
         modelAndView.addObject("createPropertyRequest", new CreatePropertyRequest());
@@ -84,7 +84,7 @@ public class PropertyController {
     }
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView createPropertyPost(@Valid @ModelAttribute CreatePropertyRequest createPropertyRequest,
+    public ModelAndView createProperty(@Valid @ModelAttribute CreatePropertyRequest createPropertyRequest,
                                            BindingResult bindingResult) {
 
 

@@ -1,23 +1,30 @@
 package com.example.stayconnected.web.controller;
 
+import com.example.stayconnected.property.model.Property;
+import com.example.stayconnected.property.service.PropertyService;
+import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
 public class IndexController {
 
     private final UserService userService;
+    private final PropertyService propertyService;
 
     @Autowired
-    public IndexController(UserService userService) {
+    public IndexController(UserService userService, PropertyService propertyService) {
         this.userService = userService;
+        this.propertyService = propertyService;
     }
 
     @GetMapping("/")
@@ -26,18 +33,23 @@ public class IndexController {
     }
 
     @GetMapping("/home")
-    public ModelAndView modelAndView(HttpSession session) {
+    public ModelAndView modelAndView(@AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        UUID userId = (UUID) session.getAttribute("user_id");
-        User user = this.userService.getUserById(userId);
+        User user = this.userService.getUserById(userPrincipal.getId());
+
+        // Get 4 best properties and add it to the modelAndView
+        // Get all locations from LocationService
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("user/home");
         modelAndView.addObject("user", user);
 
-        // Later : add appropriate objects (e.g user....)
-
         return modelAndView;
+    }
+
+    @GetMapping("/terms-and-condition")
+    public String showTermsAndConditionsPage() {
+        return "terms-and-condition";
     }
 
 

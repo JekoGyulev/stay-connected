@@ -89,7 +89,7 @@ public class UserController {
         return modelAndView;
     }
 
-    @GetMapping("/stats")
+    @GetMapping("/app-stats")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getStatsPage() {
         // Fetch stats for : total bookings made (look at smart wallet's way of stats page)

@@ -25,11 +25,11 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping()
+    @GetMapping("/user/table")
     public ModelAndView getReservationsByUser() {
 
         /*
-            Going to use @AuthenticationPrincipal and AuthenticationMetadata
+            Going to use @AuthenticationPrincipal and UserPrincipal
             to get the logged in user id which we will put in the getAllReservationsByUser
 
          */
