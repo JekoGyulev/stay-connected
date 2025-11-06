@@ -28,5 +28,7 @@ public interface UserService {
 
     void saveUser(User user);
 
+    void updatePhoto(String username, String photoUrl);
+
     // View stats
 }

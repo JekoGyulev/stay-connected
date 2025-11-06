@@ -134,6 +134,18 @@ p.alert-warning {
     margin-bottom: 2rem;
 }
 
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+}
+
+.footer-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+}
+
 .footer-section {
     display: flex;
     flex-direction: column;

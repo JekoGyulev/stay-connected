@@ -3,31 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <title>StayConnected</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+    <link rel="stylesheet" href="/css/edit-profile.css">
+    <link rel="stylesheet" href="/css/profile-details.css">
 </head>
 <body>
+<header class="header">
 
+    <nav class="nav-container">
 
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <a th:href="@{/home}" style="text-decoration: none">
+                    <h1 class="logo-title">StayConnected</h1>
+                </a>
+            </div>
 
-<!--    <form th:action="@{'/users/' + ${editProfileDTO.id} + '/profile/edit'}"-->
-<!--          th:object="${editProfileDTO}" method="post">-->
-<!--    -->
-<!--        <label>First Name:</label>-->
-<!--        <input type="text" th:field="*{firstName}"/>-->
-<!--        <span th:if="${#fields.hasErrors('firstName')}"-->
-<!--              th:errors="*{firstName}">First name error</span>-->
-<!--    -->
-<!--        <label>Last Name:</label>-->
-<!--        <input type="text" th:field="*{lastName}"/>-->
-<!--        <span th:if="${#fields.hasErrors('lastName')}"-->
-<!--              th:errors="*{lastName}">Last name error</span>-->
-<!--    -->
-<!--        <label>Email:</label>-->
-<!--        <input type="text" th:field="*{email}"/>-->
-<!--        <span th:if="${#fields.hasErrors('email')}"-->
-<!--              th:errors="*{email}">Email error</span>-->
-<!--    -->
-<!--        <button type="submit">Save</button>-->
-<!--    </form>-->
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
 
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link">Properties</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link active">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">Profile</a>
+                            </li>
+                            <li><a th:href="@{'/wallets/user/' + ${user.id}}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a>
+                            </li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{'/wallets/user/' + ${user.id}}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(user.wallet.balance, 1,2)}"></span>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="main-content">
+    <!-- Profile Header -->
+    <section class="profile-header">
+        <div class="container">
+            <h1 class="profile-title">Edit Profile</h1>
+            <p class="profile-subtitle">Update your personal information</p>
+        </div>
+    </section>
+
+    <!-- Edit Profile Form -->
+    <section class="profile-section">
+        <div class="container">
+            <form class="edit-profile-form" th:action="@{/users/profile/edit}" th:method="PUT" th:object="${profileEditRequest}">
+                <div class="profile-container">
+                    <!-- Profile Picture Section -->
+
+                    <!-- Personal Information -->
+                    <div class="profile-card">
+                        <div class="profile-card-header">
+                            <h2 class="profile-card-title">Personal Information</h2>
+                        </div>
+                        <div class="profile-card-content">
+                            <div class="edit-form-grid">
+                                <div class="form-group">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" id="firstName" class="form-input" value="John" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" id="lastName" class="form-input" value="Doe" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" id="email" class="form-input" value="john.doe@example.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="tel" id="phone" class="form-input" value="+1 234 567 8900">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" id="address" class="form-input" value="123 Main Street, New York, NY 10001">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                                    <input type="date" id="dateOfBirth" class="form-input" value="1990-01-15">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nationality" class="form-label">Nationality</label>
+                                    <input type="text" id="nationality" class="form-input" value="United States">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="profile-card">
+                        <div class="profile-card-content">
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary btn-large">Save Changes</button>
+                                <a th:href="@{'/users/' + ${user.id} + '/profile'}" class="btn-secondary btn-large" style="text-decoration: none">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<footer class="footer" th:fragment="footer">
+    <div class="footer-container">
+        <div class="footer-content">
+            <!-- Description -->
+            <div class="footer-section">
+                <h3 class="footer-title">StayConnected</h3>
+                <p class="footer-description">Helping travellers find cozy and affordable stays worldwide.</p>
+            </div>
+
+            <!-- Social Media -->
+            <div class="footer-section">
+                <h3 class="footer-title">Follow Us</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link">Instagram</a>
+                    <a href="#" class="social-link">GitHub</a>
+                </div>
+            </div>
+
+            <!-- Legal Information -->
+            <div class="footer-section">
+                <h3 class="footer-title">Legal</h3>
+                <div class="footer-links">
+                    <a th:href="@{/terms-and-condition}" class="footer-link">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-bottom">
+            <p class="footer-copyright">© 2025 StayConnected</p>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

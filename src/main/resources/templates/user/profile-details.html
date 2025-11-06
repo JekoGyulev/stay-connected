@@ -1,10 +1,228 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">>
 <head>
     <meta charset="UTF-8">
     <title>StayConnected</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/profile-details.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
 </head>
+
 <body>
+
+<header class="header">
+
+    <nav class="nav-container">
+
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <a th:href="@{/home}" style="text-decoration: none">
+                    <h1 class="logo-title">StayConnected</h1>
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link">Properties</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link active">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">Profile</a>
+                            </li>
+                            <li><a th:href="@{'/wallets/user/' + ${user.id}}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a>
+                            </li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{'/wallets/user/' + ${user.id}}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(user.wallet.balance, 1,2)}"></span>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="main-content">
+    <!-- Profile Header -->
+    <section class="profile-header">
+        <div class="container">
+            <h1 class="profile-title">My Profile</h1>
+            <p class="profile-subtitle">Manage your personal information and preferences</p>
+        </div>
+    </section>
+
+    <!-- Profile Content -->
+    <section class="profile-section">
+        <div class="container">
+            <div class="profile-container">
+                <!-- Profile Picture Section -->
+                <div class="profile-container">
+                    <!-- Profile Picture Section -->
+                    <div class="profile-card">
+                        <div class="profile-card-header">
+                            <h2 class="profile-card-title">Profile Picture</h2>
+                        </div>
+                        <div class="profile-card-content">
+                            <div class="profile-picture-section">
+
+                                <div class="profile-avatar">
+                                    <!-- FIX HERE USE TH:IF -->
+                                    <img th:src="${#strings.isEmpty(user.profilePictureUrl) ?
+                                    'https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png' : user.profilePictureUrl}"
+                                         alt="Profile Picture" class="avatar-img">
+                                </div>
+
+                                <div class="profile-picture-controls">
+
+                                        <div class="photo-url-input-group">
+                                            <label for="photoUrl" class="photo-url-label">Photo URL</label>
+                                            <input
+                                                    type="url"
+                                                    id="photoUrl"
+                                                    class="photo-url-input"
+                                                    placeholder="Paste image URL here"
+                                            >
+                                        </div>
+
+                                    <div class="profile-picture-actions">
+                                        <button class="btn-primary">Update Photo</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Information -->
+                    <div class="profile-card">
+                        <div class="profile-card-header">
+                            <h2 class="profile-card-title">Personal Information</h2>
+                            <a th:href="@{'/users/' + ${user.id} + '/profile/edit'}" class="btn-edit">Edit</a>
+                        </div>
+                        <div class="profile-card-content">
+                            <div class="profile-info-grid">
+                                <div class="profile-info-item">
+                                    <label class="profile-label">First Name</label>
+                                    <p th:text="${user.firstName}" class="profile-value"></p>
+                                </div>
+                                <div class="profile-info-item">
+                                    <label class="profile-label">Last Name</label>
+                                    <p th:text="${user.lastName}" class="profile-value"></p>
+                                </div>
+                                <div class="profile-info-item">
+                                    <label class="profile-label">Email</label>
+                                    <p th:text="${user.email}" class="profile-value"></p>
+                                </div>
+                                <div class="profile-info-item">
+                                    <label class="profile-label">Username</label>
+                                    <p th:text="${user.username}" class="profile-value"></p>
+                                </div>
+                                <div class="profile-info-item full-width">
+                                    <label class="profile-label">Registered at</label>
+                                    <p th:text="${#temporals.format(user.registeredAt, 'dd MMM yyyy')}"
+                                       class="profile-value"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security -->
+                    <div class="profile-card">
+                        <div class="profile-card-header">
+                            <h2 class="profile-card-title">Security</h2>
+                        </div>
+                        <div class="profile-card-content">
+
+                            <div class="security-actions">
+                                <button class="security-btn">
+                                    <span class="security-btn-text">Change Password</span>
+                                    <span class="security-btn-arrow">→</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+
+
+
+<footer class="footer" th:fragment="footer">
+    <div class="footer-container">
+        <div class="footer-content">
+            <!-- Description -->
+            <div class="footer-section">
+                <h3 class="footer-title">StayConnected</h3>
+                <p class="footer-description">Helping travellers find cozy and affordable stays worldwide.</p>
+            </div>
+
+            <!-- Social Media -->
+            <div class="footer-section">
+                <h3 class="footer-title">Follow Us</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link">Instagram</a>
+                    <a href="#" class="social-link">GitHub</a>
+                </div>
+            </div>
+
+            <!-- Legal Information -->
+            <div class="footer-section">
+                <h3 class="footer-title">Legal</h3>
+                <div class="footer-links">
+                    <a th:href="@{/terms-and-condition}" class="footer-link">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-bottom">
+            <p class="footer-copyright">© 2025 StayConnected</p>
+        </div>
+    </div>
+</footer>
 
 </body>
 </html>
+
+

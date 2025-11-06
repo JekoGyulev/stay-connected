@@ -2,6 +2,7 @@ package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.reservation.service.ReservationService;
+import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.web.dto.DtoMapper;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,10 +42,18 @@ public class UserController {
         modelAndView.setViewName("user/profile-details");
         modelAndView.addObject("user", user);
 
-        // Will be used to show the ID, profilePicture, username, age, first- and lastname, registered,lastLoggedIn of user, email
-
         return modelAndView;
     }
+//    @PatchMapping("/update-photo")
+//    public String updatePhoto(@RequestParam("photoUrl")  String photoUrl, UserPrincipal userPrincipal) {
+//
+//        String username = userPrincipal.getUsername();
+//
+//        this.userService.updatePhoto(username, photoUrl);
+//        return "redirect:/users/" + userPrincipal.getId() + "/profile";
+//    }
+//
+//
 
     @GetMapping("/{id}/profile/edit")
     public ModelAndView getEditProfilePage(@PathVariable UUID id) {
@@ -54,6 +64,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("user/profile-edit-form");
         modelAndView.addObject("profileEditRequest", profileEditRequest);
+        modelAndView.addObject("user", user);
 
         return modelAndView;
     }
@@ -73,7 +84,7 @@ public class UserController {
 
         this.userService.updateProfile(user, profileEditRequest);
 
-        return new ModelAndView("redirect:/users/" + id + "/profile");
+        return new ModelAndView("redirect:/users/" + user.getId() + "/profile");
     }
 
     @GetMapping("/table")

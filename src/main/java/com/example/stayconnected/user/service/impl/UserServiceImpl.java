@@ -147,6 +147,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.userRepository.save(user);
     }
 
+    @Override
+    public void updatePhoto(String username, String photoUrl) {
+
+        // TODO: FIX THIS
+
+
+        User user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User does not exist"));
+
+        user.setProfilePictureUrl(photoUrl);
+
+        this.userRepository.save(user);
+    }
+
 
     private User initUser(RegisterRequest request) {
         return new User (
