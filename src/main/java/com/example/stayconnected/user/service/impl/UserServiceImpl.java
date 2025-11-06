@@ -12,10 +12,7 @@ import com.example.stayconnected.utility.exception.UserInactive;
 import com.example.stayconnected.utility.exception.UsernameAlreadyExists;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.service.WalletService;
-import com.example.stayconnected.web.dto.user.LoginRequest;
-import com.example.stayconnected.web.dto.user.ProfileEditRequest;
-import com.example.stayconnected.web.dto.user.RegisterRequest;
-import com.example.stayconnected.web.dto.user.UpdatePhotoRequest;
+import com.example.stayconnected.web.dto.user.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -150,6 +147,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void updatePhoto(User user, UpdatePhotoRequest updatePhotoRequest) {
         user.setProfilePictureUrl(updatePhotoRequest.getPhotoURL());
+        this.userRepository.save(user);
+    }
+
+    @Override
+    public void changePassword(User user, ChangePasswordRequest changePasswordRequest) {
+
+        if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
+            throw new RuntimeException("Passwords do not match");
+        }
+
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+
         this.userRepository.save(user);
     }
 

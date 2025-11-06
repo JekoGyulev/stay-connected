@@ -6,6 +6,7 @@ import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.web.dto.DtoMapper;
+import com.example.stayconnected.web.dto.user.ChangePasswordRequest;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import com.example.stayconnected.web.dto.user.UpdatePhotoRequest;
 import jakarta.validation.Valid;
@@ -101,6 +102,36 @@ public class UserController {
 
         return new ModelAndView("redirect:/users/" + user.getId() + "/profile");
     }
+
+    @GetMapping("/change-password")
+    public ModelAndView showChangePasswordPage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        User user = this.userService.getUserById(userPrincipal.getId());
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("user/change-password-form");
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("changePasswordRequest", new ChangePasswordRequest());
+
+        return modelAndView;
+    }
+
+    @PatchMapping("/change-password")
+    public ModelAndView changePassword(@Valid @ModelAttribute ChangePasswordRequest changePasswordRequest,
+                                       BindingResult bindingResult,
+                                       @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        User user = this.userService.getUserById(userPrincipal.getId());
+
+        if (bindingResult.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("user/change-password-form");
+            modelAndView.addObject("user", user);
+            return modelAndView;
+        }
+
+        this.userService.changePassword(user, changePasswordRequest);
+
+        return new ModelAndView("redirect:/users/" + user.getId() + "/profile");
+    }
+
 
     @GetMapping("/table")
     @PreAuthorize("hasRole('ADMIN')")

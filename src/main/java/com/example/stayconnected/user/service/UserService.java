@@ -1,10 +1,8 @@
 package com.example.stayconnected.user.service;
 
 import com.example.stayconnected.user.model.User;
-import com.example.stayconnected.web.dto.user.LoginRequest;
-import com.example.stayconnected.web.dto.user.ProfileEditRequest;
-import com.example.stayconnected.web.dto.user.RegisterRequest;
-import com.example.stayconnected.web.dto.user.UpdatePhotoRequest;
+import com.example.stayconnected.web.dto.user.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +28,8 @@ public interface UserService {
     void saveUser(User user);
 
     void updatePhoto(User user, UpdatePhotoRequest updatePhotoRequest);
+
+    void changePassword(User user, ChangePasswordRequest changePasswordRequest);
 
     // View stats
 }
