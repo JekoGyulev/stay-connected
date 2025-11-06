@@ -7,9 +7,11 @@ import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.web.dto.DtoMapper;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
+import com.example.stayconnected.web.dto.user.UpdatePhotoRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -41,23 +43,36 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("user/profile-details");
         modelAndView.addObject("user", user);
+        modelAndView.addObject("updatePhotoRequest", new UpdatePhotoRequest());
 
         return modelAndView;
     }
-//    @PatchMapping("/update-photo")
-//    public String updatePhoto(@RequestParam("photoUrl")  String photoUrl, UserPrincipal userPrincipal) {
-//
-//        String username = userPrincipal.getUsername();
-//
-//        this.userService.updatePhoto(username, photoUrl);
-//        return "redirect:/users/" + userPrincipal.getId() + "/profile";
-//    }
-//
-//
+    @PatchMapping("/update-photo")
+    public ModelAndView updatePhoto(@Valid UpdatePhotoRequest updatePhotoRequest,
+                              BindingResult bindingResult,
+                              @AuthenticationPrincipal UserPrincipal principal) {
 
-    @GetMapping("/{id}/profile/edit")
-    public ModelAndView getEditProfilePage(@PathVariable UUID id) {
-        User user = this.userService.getUserById(id);
+        // TODO: FIX HERE the PRINCIPAL
+
+        User user = this.userService.getUserById(principal.getId());
+
+        if (bindingResult.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("user/profile-details");
+            modelAndView.addObject("user", user);
+            return modelAndView;
+        }
+
+
+        this.userService.updatePhoto(user, updatePhotoRequest);
+        return new ModelAndView("redirect:/users/" + user.getId() + "/profile");
+    }
+
+
+
+    @GetMapping("/profile/edit")
+    public ModelAndView getEditProfilePage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        User user = this.userService.getUserById(userPrincipal.getId());
 
         ProfileEditRequest profileEditRequest = DtoMapper.fromUser(user);
 
@@ -68,17 +83,17 @@ public class UserController {
 
         return modelAndView;
     }
-    @PutMapping("/{id}/profile/edit")
-    public ModelAndView editProfile(@PathVariable UUID id,
+    @PutMapping("/profile/edit")
+    public ModelAndView editProfile(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                     @Valid @ModelAttribute ProfileEditRequest profileEditRequest,
                                     BindingResult bindingResult
                                     ) {
 
-        User user = this.userService.getUserById(id);
+        User user = this.userService.getUserById(userPrincipal.getId());
 
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("user/profile-edit-form");
-            modelAndView.addObject("user", user); // Because of lastLoggedIn, and isActive
+            modelAndView.addObject("user", user);
             return modelAndView;
         }
 

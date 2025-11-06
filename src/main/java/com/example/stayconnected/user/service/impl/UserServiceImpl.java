@@ -15,6 +15,7 @@ import com.example.stayconnected.wallet.service.WalletService;
 import com.example.stayconnected.web.dto.user.LoginRequest;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import com.example.stayconnected.web.dto.user.RegisterRequest;
+import com.example.stayconnected.web.dto.user.UpdatePhotoRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -102,7 +103,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void updateProfile(User user, ProfileEditRequest profileEditRequest) {
         user.setFirstName(profileEditRequest.getFirstName());
         user.setLastName(profileEditRequest.getLastName());
-        user.setProfilePictureUrl(profileEditRequest.getProfilePicture());
         user.setUsername(profileEditRequest.getUsername());
         user.setEmail(profileEditRequest.getEmail());
 
@@ -148,16 +148,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void updatePhoto(String username, String photoUrl) {
-
-        // TODO: FIX THIS
-
-
-        User user = this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User does not exist"));
-
-        user.setProfilePictureUrl(photoUrl);
-
+    public void updatePhoto(User user, UpdatePhotoRequest updatePhotoRequest) {
+        user.setProfilePictureUrl(updatePhotoRequest.getPhotoURL());
         this.userRepository.save(user);
     }
 

@@ -110,19 +110,26 @@
 
                                 <div class="profile-picture-controls">
 
+                                    <form class="profile-picture-controls" th:action="@{/users/update-photo}"
+                                        th:method="PATCH" th:object="${updatePhotoRequest}">
+
                                         <div class="photo-url-input-group">
                                             <label for="photoUrl" class="photo-url-label">Photo URL</label>
                                             <input
+                                                    th:field="*{photoURL}"
                                                     type="url"
                                                     id="photoUrl"
                                                     class="photo-url-input"
                                                     placeholder="Paste image URL here"
                                             >
+                                            <p th:if="${#fields.hasErrors('photoURL')}" th:errors="*{photoURL}"
+                                             class="alert-warning"></p>
                                         </div>
 
-                                    <div class="profile-picture-actions">
-                                        <button class="btn-primary">Update Photo</button>
-                                    </div>
+                                        <div class="profile-picture-actions">
+                                            <button type="submit" class="btn-primary">Update Photo</button>
+                                        </div>
+                                    </form>
 
                                 </div>
                             </div>
@@ -133,7 +140,7 @@
                     <div class="profile-card">
                         <div class="profile-card-header">
                             <h2 class="profile-card-title">Personal Information</h2>
-                            <a th:href="@{'/users/' + ${user.id} + '/profile/edit'}" class="btn-edit">Edit</a>
+                            <a th:href="@{/users/profile/edit}" class="btn-edit">Edit</a>
                         </div>
                         <div class="profile-card-content">
                             <div class="profile-info-grid">

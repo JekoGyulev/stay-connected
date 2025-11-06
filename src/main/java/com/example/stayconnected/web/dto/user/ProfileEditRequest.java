@@ -1,8 +1,14 @@
 package com.example.stayconnected.web.dto.user;
 
 import jakarta.validation.constraints.*;
+import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProfileEditRequest {
     @NotBlank(message = "First name cannot be empty or blank")
     @Size(min = 2, message = "First name must be at least 2 characters long.")
@@ -17,56 +23,4 @@ public class ProfileEditRequest {
     @Size(min = 5, message = "Username must be at least 5 characters long.")
     @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username can only consist of letters, numbers and underscores.")
     private String username;
-    @URL(message = "Please enter a valid URL")
-    private String profilePicture;
-
-    public ProfileEditRequest() {}
-
-    public ProfileEditRequest(String firstName, String lastName, String email, String username, String profilePicture) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.profilePicture = profilePicture;
-    }
-
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 }

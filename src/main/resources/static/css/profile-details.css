@@ -120,6 +120,7 @@
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
+    text-decoration: none;
 }
 
 .btn-edit:hover {

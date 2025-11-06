@@ -4,6 +4,7 @@ import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.web.dto.user.LoginRequest;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import com.example.stayconnected.web.dto.user.RegisterRequest;
+import com.example.stayconnected.web.dto.user.UpdatePhotoRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +29,7 @@ public interface UserService {
 
     void saveUser(User user);
 
-    void updatePhoto(String username, String photoUrl);
+    void updatePhoto(User user, UpdatePhotoRequest updatePhotoRequest);
 
     // View stats
 }
