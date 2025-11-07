@@ -38,7 +38,7 @@
                         <ul class="dropdown-menu">
                             <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">Profile</a>
                             </li>
-                            <li><a th:href="@{'/wallets/user/' + ${user.id}}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{'/users/wallet'}" class="dropdown-link">Wallet</a></li>
                             <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
                         </ul>
 
@@ -60,7 +60,7 @@
                     </li>
 
                     <li class="nav-item wallet-item">
-                        <a th:href="@{'/wallets/user/' + ${user.id}}">
+                        <a th:href="@{'/users/wallet'}">
                             <i class="fa-solid fa-wallet"></i>
                             <!--User's current balance-->
                             <span th:text="' : ' + '€' + ${#numbers.formatDecimal(user.wallet.balance, 1,2)}"></span>

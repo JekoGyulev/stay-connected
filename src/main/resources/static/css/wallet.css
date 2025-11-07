@@ -1,0 +1,219 @@
+/* Wallet Styles */
+.wallet-balance-card {
+    background: var(--gradient-primary);
+    border-radius: calc(var(--radius) + 4px);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-hover);
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.wallet-balance-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 25px 60px -15px rgba(255, 56, 92, 0.35);
+}
+
+
+
+.wallet-balance-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wallet-balance-info {
+    flex: 1;
+}
+
+.wallet-balance-label {
+    font-size: 0.9375rem;
+    opacity: 0.9;
+    margin: 0 0 0.5rem;
+}
+
+.wallet-balance-amount {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.wallet-balance-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-wallet {
+    width: 40px;
+    height: 40px;
+    color: white;
+}
+
+.wallet-topup-description {
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    font-size: 0.9375rem;
+}
+
+.wallet-topup-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    margin-bottom: 2rem;
+}
+
+.wallet-topup-buttons form {
+    max-width: fit-content;
+}
+
+.wallet-topup-btn {
+    padding: 1rem 1.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    background: transparent;
+    color: var(--foreground);
+    border: 2px solid var(--card-border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wallet-topup-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+}
+
+
+/* Transaction History */
+.wallet-transactions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.wallet-transaction-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--background);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+}
+
+.wallet-transaction-item:hover {
+    background: var(--accent-bg);
+}
+
+.wallet-transaction-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.wallet-transaction-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.wallet-transaction-icon.success {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+.wallet-transaction-icon.expense {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.wallet-transaction-details {
+    flex: 1;
+}
+
+.wallet-transaction-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--foreground);
+    margin: 0 0 0.25rem;
+}
+
+.wallet-transaction-date {
+    font-size: 0.875rem;
+    color: var(--muted);
+    margin: 0;
+}
+
+.wallet-transaction-amount {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.wallet-transaction-amount.success {
+    color: #22c55e;
+}
+
+.wallet-transaction-amount.expense {
+    color: #ef4444;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-title {
+        font-size: 2rem;
+    }
+
+    .profile-picture-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .wallet-balance-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .wallet-balance-amount {
+        font-size: 2.5rem;
+    }
+
+    .wallet-topup-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .wallet-custom-input-group {
+        flex-direction: column;
+    }
+
+    .wallet-transaction-item {
+        gap: 0.75rem;
+    }
+
+    .wallet-transaction-icon {
+        width: 36px;
+        height: 36px;
+    }
+}

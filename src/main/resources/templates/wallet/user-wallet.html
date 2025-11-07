@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wallet - StayConnected</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/wallet.css">
+    <link rel="stylesheet" href="/css/profile-details.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+
+    <nav class="nav-container">
+
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <a th:href="@{/home}" style="text-decoration: none">
+                    <h1 class="logo-title">StayConnected</h1>
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link">Properties</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link active">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">Profile</a>
+                            </li>
+                            <li><a th:href="@{'/users/wallet'}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a>
+                            </li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{'/users/wallet'}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(user.wallet.balance, 1,2)}"></span>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="main-content">
+    <!-- Wallet Header -->
+    <section class="profile-header">
+        <div class="container">
+            <h1 class="profile-title">My Wallet</h1>
+            <p class="profile-subtitle">Manage your balance and transactions</p>
+        </div>
+    </section>
+
+    <!-- Wallet Content -->
+    <section class="profile-section">
+        <div class="container">
+            <div class="profile-container">
+                <!-- Balance Card -->
+                <div class="wallet-balance-card">
+                    <div class="wallet-balance-content">
+                        <div class="wallet-balance-info">
+                            <p class="wallet-balance-label">Available Balance</p>
+                            <h2 th:text="'€' + ${#numbers.formatDecimal(wallet.balance, 1, 2)}" class="wallet-balance-amount"></h2>
+                        </div>
+                        <div class="wallet-balance-icon">
+                            <svg class="icon-wallet" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+
+                    <div class="profile-card-header">
+                        <h2 class="profile-card-title">Wallet Information</h2>
+                    </div>
+
+                    <div class="profile-card-content">
+                        <div class="profile-info-grid" style="grid-template-columns: 1fr;">
+                            <div class="profile-info-item">
+                                <label class="profile-label">Wallet ID</label>
+                                <p th:text="${wallet.id}" class="profile-value"></p>
+                            </div>
+                            <div class="profile-info-item">
+                                <label class="profile-label">Created At</label>
+                                <p th:text="${#temporals.format(wallet.createdAt, 'dd MMM yyyy HH:mm')}" class="profile-value"></p>
+                            </div>
+                            <div class="profile-info-item">
+                                <label class="profile-label">Updated At</label>
+                                <p th:text="${#temporals.format(wallet.updatedAt, 'dd MMM yyyy HH:mm')}" class="profile-value"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Up Card -->
+                <div class="profile-card">
+                    <div class="profile-card-header">
+                        <h2 class="profile-card-title">Top Up Balance</h2>
+                    </div>
+                    <div class="profile-card-content">
+                        <p class="wallet-topup-description">Choose an amount to add to your wallet</p>
+                        <div class="wallet-topup-buttons">
+                            <form th:action="@{'/wallet/top-up?amount=20'}" th:method="PATCH">
+                                <button class="wallet-topup-btn">€20</button>
+                            </form>
+
+                            <form th:action="@{'/wallet/top-up?amount=50'}" th:method="PATCH">
+                                <button class="wallet-topup-btn">€50</button>
+                            </form>
+
+                            <form th:action="@{'/wallet/top-up?amount=100'}" th:method="PATCH">
+                                <button class="wallet-topup-btn">€100</button>
+                            </form>
+
+                            <form th:action="@{'/wallet/top-up?amount=200'}" th:method="PATCH">
+                                <button class="wallet-topup-btn">€200</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction History -->
+                <div class="profile-card">
+                    <div class="profile-card-header">
+                        <h2 class="profile-card-title">Transaction History</h2>
+                    </div>
+                    <div class="profile-card-content">
+                        <div class="wallet-transactions">
+                            <div class="wallet-transaction-item">
+                                <div class="wallet-transaction-icon success">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                                    </svg>
+                                </div>
+                                <div class="wallet-transaction-details">
+                                    <h3 class="wallet-transaction-title">Top Up</h3>
+                                    <p class="wallet-transaction-date">Dec 20, 2024 - 10:30 AM</p>
+                                </div>
+                                <div class="wallet-transaction-amount success">+€100.00</div>
+                            </div>
+
+                            <div class="wallet-transaction-item">
+                                <div class="wallet-transaction-icon expense">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                                    </svg>
+                                </div>
+                                <div class="wallet-transaction-details">
+                                    <h3 class="wallet-transaction-title">Booking Payment</h3>
+                                    <p class="wallet-transaction-date">Dec 18, 2024 - 3:45 PM</p>
+                                </div>
+                                <div class="wallet-transaction-amount expense">-€450.00</div>
+                            </div>
+
+                            <div class="wallet-transaction-item">
+                                <div class="wallet-transaction-icon success">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                                    </svg>
+                                </div>
+                                <div class="wallet-transaction-details">
+                                    <h3 class="wallet-transaction-title">Top Up</h3>
+                                    <p class="wallet-transaction-date">Dec 15, 2024 - 9:15 AM</p>
+                                </div>
+                                <div class="wallet-transaction-amount success">+€500.00</div>
+                            </div>
+
+                            <div class="wallet-transaction-item">
+                                <div class="wallet-transaction-icon expense">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                                    </svg>
+                                </div>
+                                <div class="wallet-transaction-details">
+                                    <h3 class="wallet-transaction-title">Booking Payment</h3>
+                                    <p class="wallet-transaction-date">Dec 10, 2024 - 2:20 PM</p>
+                                </div>
+                                <div class="wallet-transaction-amount expense">-€380.00</div>
+                            </div>
+
+                            <div class="wallet-transaction-item">
+                                <div class="wallet-transaction-icon success">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                                    </svg>
+                                </div>
+                                <div class="wallet-transaction-details">
+                                    <h3 class="wallet-transaction-title">Refund</h3>
+                                    <p class="wallet-transaction-date">Dec 5, 2024 - 11:00 AM</p>
+                                </div>
+                                <div class="wallet-transaction-amount success">+€320.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-content">
+            <!-- Description -->
+            <div class="footer-section">
+                <h3 class="footer-title">StayConnected</h3>
+                <p class="footer-description">Helping travellers find cozy and affordable stays worldwide.</p>
+            </div>
+
+            <!-- Social Media -->
+            <div class="footer-section">
+                <h3 class="footer-title">Follow Us</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link">Instagram</a>
+                    <a href="#" class="social-link">GitHub</a>
+                </div>
+            </div>
+
+            <!-- Legal Information -->
+            <div class="footer-section">
+                <h3 class="footer-title">Legal</h3>
+                <div class="footer-links">
+                    <a th:href="@{/terms-and-condition}" class="footer-link">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-bottom">
+            <p class="footer-copyright">© 2025 StayConnected</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

@@ -5,6 +5,7 @@ import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
+import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.web.dto.DtoMapper;
 import com.example.stayconnected.web.dto.user.ChangePasswordRequest;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
@@ -130,6 +131,19 @@ public class UserController {
         this.userService.changePassword(user, changePasswordRequest);
 
         return new ModelAndView("redirect:/users/" + user.getId() + "/profile");
+    }
+
+    @GetMapping("/wallet")
+    public ModelAndView getWalletPage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        User user = this.userService.getUserById(userPrincipal.getId());
+        Wallet wallet = user.getWallet();
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("wallet/user-wallet");
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("wallet", wallet);
+
+        return modelAndView;
     }
 
 
