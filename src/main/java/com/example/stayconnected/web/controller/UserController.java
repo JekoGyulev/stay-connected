@@ -179,7 +179,7 @@ public class UserController {
         modelAndView.addObject("totalActiveUsers", this.userService.getTotalActiveUsers());
         modelAndView.addObject("totalProperties", this.propertyService.getAllProperties().size());
 
-        // TODO: Add later total bookings
+        // TODO: Add later total bookings, total transactions, total succeeded transactions, total failed....
 
         return modelAndView;
     }
