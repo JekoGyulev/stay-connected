@@ -1,5 +1,6 @@
 package com.example.stayconnected.wallet.service.impl;
 
+import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.utility.exception.WalletDoesNotExist;
 import com.example.stayconnected.wallet.model.Wallet;
@@ -20,6 +21,8 @@ public class WalletServiceImpl implements WalletService {
 
     private final WalletRepository walletRepository;
 
+
+
     @Autowired
     public WalletServiceImpl(WalletRepository walletRepository) {
         this.walletRepository = walletRepository;
@@ -27,7 +30,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    public void topUp(UUID walletId, BigDecimal amount) {
+    public Transaction topUp(UUID walletId, BigDecimal amount) {
         Wallet wallet = this.walletRepository.findById(walletId)
                 .orElseThrow(
                         () -> new WalletDoesNotExist("Wallet with such id [%s] does not exist"
