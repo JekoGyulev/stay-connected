@@ -84,6 +84,17 @@
     border-radius: 2px;
 }
 
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+}
+
 .nav-link:hover {
     color: var(--primary);
 }

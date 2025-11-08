@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -28,8 +29,19 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ModelAndView getTransactionsPage() {
-        return null;
+    public ModelAndView getTransactionsPage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        User user = this.userService.getUserById(userPrincipal.getId());
+
+        List<Transaction> transactions = this.transactionService.getTransactionsByUserId(user.getId());
+
+        ModelAndView modelAndView = new ModelAndView("/transaction/transactions");
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("transactions", transactions);
+
+
+
+        return modelAndView;
     }
 
     @GetMapping("/{id}")

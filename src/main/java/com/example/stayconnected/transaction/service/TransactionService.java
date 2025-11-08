@@ -20,4 +20,6 @@ public interface TransactionService {
     Transaction getTransactionById(UUID id);
 
     List<Transaction> getLastThreeTransactions(Wallet wallet);
+
+    List<Transaction> getTransactionsByUserId(UUID userId);
 }

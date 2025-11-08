@@ -1,10 +1,212 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Transactions</title>
+    <!--Add main css for this page-->
+    <link rel="stylesheet" href="/css/transactions-table.css">
+    <link rel="stylesheet" href="/css/transaction-details.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+    <link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
+
+<header class="header">
+
+    <nav class="nav-container">
+
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <a th:href="@{/home}" style="text-decoration: none">
+                    <h1 class="logo-title">StayConnected</h1>
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link">Properties</a>
+                    </li>
+
+                    <li class="nav-item active">
+                        <a th:href="@{/transactions}" class="nav-link">Transactions</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">Profile</a>
+                            </li>
+                            <li><a th:href="@{'/users/wallet'}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a>
+                            </li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{'/users/wallet'}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(user.wallet.balance, 1,2)}"></span>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+<!-- Transactions Content -->
+<main class="main-content">
+    <div class="transactions-container">
+        <div class="transactions-header">
+            <h1>Transaction History</h1>
+            <p style="margin: 10px 0 20px 0">View all your past transactions and activities</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="transactions-filters">
+            <select class="filter-select">
+                <option value="all">All Types</option>
+                <option value="topup">Top Up</option>
+                <option value="booking">Property Booking</option>
+                <option value="refund">Refund</option>
+            </select>
+            <select class="filter-select">
+                <option value="all">All Status</option>
+                <option value="completed">Completed</option>
+                <option value="failed">Failed</option>
+            </select>
+
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="transactions-table-wrapper">
+            <table class="transactions-table">
+                <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Date & Time</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="transaction : ${transactions}">
+
+                    <td th:text="${transaction.id}" class="transaction-id"></td>
+
+                    <td th:text="${#temporals.format(transaction.createdOn, 'dd MMM yyyy HH:mm')}"></td>
+
+                    <td th:if="${transaction.type.name() == 'DEPOSIT'}"
+                        th:text="'+' + '€' + ${#numbers.formatDecimal(transaction.amount,1,2)}"
+                        class="amount-cell positive"
+                        th:classappend="${transaction.status.name() == 'FAILED'} ? ' crossed' : ''">
+                    </td>
+
+                    <td th:if="${transaction.type.name() == 'REFUND'}"
+                        th:text="'+' + '€' + ${#numbers.formatDecimal(transaction.amount,1,2)}"
+                        class="amount-cell positive"
+                        th:classappend="${transaction.status.name() == 'FAILED'} ? ' crossed' : ''">
+                    </td>
+
+                    <td th:if="${transaction.type.name() == 'BOOKING_PAYMENT'}"
+                        th:text="'-' + '€' + ${#numbers.formatDecimal(transaction.amount,1,2)}"
+                        class="amount-cell negative"
+                        th:classappend="${transaction.status.name() == 'FAILED'} ? ' crossed' : ''">
+                    </td>
+
+                    <td th:unless="${#strings.isEmpty(transaction.description)}"
+                        th:text="${transaction.description}"
+                    ></td>
+
+                    <td th:if="${#strings.isEmpty(transaction.description)}"
+                        th:text="${transaction.reasonForFailure}"
+                    ></td>
+
+                    <td th:if="${transaction.type.name() == 'DEPOSIT'}">
+                        <div th:text="${transaction.type.displayName}" class="transaction-type"></div>
+                    </td>
+
+                    <td th:if="${transaction.type.name() == 'BOOKING_PAYMENT'}">
+                        <div th:text="${transaction.type.displayName}" class="transaction-type"></div>
+                    </td>
+
+                    <td th:if="${transaction.type.name() == 'REFUND'}">
+                        <div th:text="${transaction.type.displayName}" class="transaction-type" ></div>
+                    </td>
+
+                    <td th:if="${transaction.status.name() == 'SUCCEEDED'}">
+                        <span th:text="${transaction.status.displayName}" class="status-badge success"></span>
+                    </td>
+
+                    <td th:if="${transaction.status.name() == 'FAILED'}">
+                        <span th:text="${transaction.status.displayName}" class="status-badge failed"></span>
+                    </td>
+
+                    <td>
+                        <a th:href="@{'/transactions/' + ${transaction.id}}" class="btn-view-details">View</a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="transactions-pagination">
+            <button class="pagination-btn" disabled>Previous</button>
+            <div class="pagination-pages">
+                <button class="pagination-page active">1</button>
+                <button class="pagination-page">2</button>
+                <button class="pagination-page">3</button>
+                <span class="pagination-dots">...</span>
+                <button class="pagination-page">10</button>
+            </div>
+            <button class="pagination-btn">Next</button>
+        </div>
+    </div>
+</main>
+
+
+<footer th:insert="fragments/footer :: footer"></footer>
+
+
+
+
+
+
+
 
 </body>
 </html>

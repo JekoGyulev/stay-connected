@@ -55,4 +55,9 @@ public class TransactionServiceImpl implements TransactionService {
 
         return lastThreeTransactions;
     }
+
+    @Override
+    public List<Transaction> getTransactionsByUserId(UUID userId) {
+        return this.transactionRepository.findAllByOwner_IdOrderByCreatedOnDesc(userId);
+    }
 }

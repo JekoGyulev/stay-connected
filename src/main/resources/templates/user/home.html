@@ -32,6 +32,10 @@
                         <a th:href="@{/properties}" class="nav-link">Properties</a>
                     </li>
 
+                    <li class="nav-item">
+                        <a th:href="@{/transactions}" class="nav-link">Transactions</a>
+                    </li>
+
                     <li class="nav-item dropdown">
 
                         <a class="nav-link">Account</a>
@@ -39,7 +43,6 @@
                         <ul class="dropdown-menu">
                             <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">Profile</a></li>
                             <li><a th:href="@{'/users/wallet'}" class="dropdown-link">Wallet</a></li>
-                            <!--Add Transactions Link -->
                             <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
                         </ul>
 
