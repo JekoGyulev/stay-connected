@@ -45,7 +45,7 @@ public class Transaction {
 
     public Transaction() {}
 
-    public Transaction(User owner, String sender, String receiver, BigDecimal amount, BigDecimal balanceLeft, TransactionType type, TransactionStatus status, String description, String reasonForFailure, LocalDateTime createdOn) {
+    public Transaction(User owner, String sender, String receiver, BigDecimal amount, BigDecimal balanceLeft, TransactionType type, TransactionStatus status, String description, String reasonForFailure) {
         this.owner = owner;
         this.sender = sender;
         this.receiver = receiver;
@@ -55,7 +55,6 @@ public class Transaction {
         this.status = status;
         this.description = description;
         this.reasonForFailure = reasonForFailure;
-        this.createdOn = createdOn;
     }
 
     public BigDecimal getAmount() {

@@ -1,6 +1,7 @@
 package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.security.UserPrincipal;
+import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.wallet.service.WalletService;
@@ -35,7 +36,9 @@ public class WalletController {
         User user = this.userService.getUserById(userPrincipal.getId());
         UUID walletID = user.getWallet().getId();
 
-        this.walletService.topUp(walletID, amount);
+        Transaction transaction = this.walletService.topUp(walletID, amount);
+
+        // TODO: Make it redirect to a transaction details page and the "go back" button will go back to the current page
 
         return "redirect:/users/wallet";
     }

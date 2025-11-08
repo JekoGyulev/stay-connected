@@ -1,6 +1,9 @@
 package com.example.stayconnected.wallet.service.impl;
 
+import com.example.stayconnected.transaction.enums.TransactionStatus;
+import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.transaction.model.Transaction;
+import com.example.stayconnected.transaction.service.TransactionService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.utility.exception.WalletDoesNotExist;
 import com.example.stayconnected.wallet.model.Wallet;
@@ -19,13 +22,19 @@ import java.util.UUID;
 @Slf4j
 public class WalletServiceImpl implements WalletService {
 
+    private static final String STAY_CONNECTED = "STAY_CONNECTED";
+    private static final String TOP_UP_FORMAT_DESCRIPTION = "Top up %.2f";
+    private static final String BOOKING_PAYMENT_FORMAT_DESCRIPTION = "Booking Payment %.2f";
+    private static final String REFUND_FORMAT_DESCRIPTION = "Refund %.2f";;
+
     private final WalletRepository walletRepository;
 
-
+    private final TransactionService transactionService;
 
     @Autowired
-    public WalletServiceImpl(WalletRepository walletRepository) {
+    public WalletServiceImpl(WalletRepository walletRepository, TransactionService transactionService) {
         this.walletRepository = walletRepository;
+        this.transactionService = transactionService;
     }
 
     @Override
@@ -44,7 +53,19 @@ public class WalletServiceImpl implements WalletService {
 
         this.walletRepository.save(wallet);
 
-        // MAKE IT RETURN TRANSACTION
+        Transaction transaction = this.transactionService.persistTransaction(
+                wallet.getOwner(),
+                STAY_CONNECTED,
+                wallet.getId().toString(),
+                amount,
+                wallet.getBalance(),
+                TransactionType.DEPOSIT,
+                TransactionStatus.SUCCEEDED,
+                TOP_UP_FORMAT_DESCRIPTION.formatted(amount),
+                null
+        );
+
+        return transaction;
     }
 
     @Override
