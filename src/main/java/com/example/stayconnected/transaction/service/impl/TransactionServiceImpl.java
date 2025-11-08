@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -32,5 +33,11 @@ public class TransactionServiceImpl implements TransactionService {
         );
 
         return this.transactionRepository.save(transaction);
+    }
+
+    @Override
+    public Transaction getTransactionById(UUID id) {
+        return this.transactionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction with id " + id + " not found"));
     }
 }

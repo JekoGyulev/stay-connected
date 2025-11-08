@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction Details</title>
+    <link rel="stylesheet" href="/css/transaction-details.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+
+        <nav class="nav-container">
+
+            <div class="nav-content">
+                <!-- Logo and Title -->
+                <div class="logo-section">
+                    <a th:href="@{/home}" style="text-decoration: none">
+                        <h1 class="logo-title">StayConnected</h1>
+                    </a>
+                </div>
+
+                <!-- Navigation Menu -->
+                <nav class="main-nav">
+                    <ul class="nav-list">
+
+                        <li class="nav-item">
+                            <a th:href="@{/properties}" class="nav-link">Properties</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link">Account</a>
+
+                            <ul class="dropdown-menu">
+                                <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">Profile</a>
+                                </li>
+                                <li><a th:href="@{'/users/wallet'}" class="dropdown-link">Wallet</a></li>
+                                <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                            </ul>
+
+                        </li>
+
+                        <!--Authorize this-->
+                        <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                            <a class="nav-link">Admin</a>
+
+                            <ul class="dropdown-menu">
+                                <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                                <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                                <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a>
+                                </li>
+                                <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li class="nav-item wallet-item">
+                            <a th:href="@{'/users/wallet'}">
+                                <i class="fa-solid fa-wallet"></i>
+                                <!--User's current balance-->
+                                <span th:text="' : ' + '€' + ${#numbers.formatDecimal(user.wallet.balance, 1,2)}"></span>
+                            </a>
+
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Logout Button -->
+                <div class="auth-buttons">
+                    <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Transaction Details Content -->
+    <main class="main-content">
+        <div class="transaction-details-container">
+            <!-- Back Button -->
+            <div class="transaction-back">
+                <a th:href="@{/users/wallet}" class="back-link">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to Wallet
+                </a>
+            </div>
+
+            <!-- Status Icon -->
+            <div th:if="${transaction.status.name() == 'SUCCEEDED'}" class="transaction-status-icon success">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+
+            <div th:if="${transaction.status.name() == 'FAILED'}" class="transaction-status-icon failed">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </div>
+
+
+            <!-- Transaction Status -->
+            <div class="transaction-status-text">
+                <h1 th:if="${transaction.status.name() == 'SUCCEEDED'}">Transaction Successful</h1>
+                <h1 th:if="${transaction.status.name() == 'FAILED'}">Transaction Failed</h1>
+                <p th:if="${transaction.status.name() == 'SUCCEEDED'}">Your transaction has been completed successfully</p>
+                <p th:if="${transaction.status.name() == 'FAILED'}">Your transaction has unfortunately failed</p>
+            </div>
+
+            <!-- Amount -->
+            <div class="transaction-amount-display">
+                <span th:if="${transaction.type.name() == 'DEPOSIT'}" class="amount-prefix">+</span>
+                <span th:if="${transaction.type.name() == 'REFUND'}" class="amount-prefix">+</span>
+                <span th:if="${transaction.type.name() == 'BOOKING_PAYMENT'}" class="amount-prefix">-</span>
+                <span th:text="${'€' + #numbers.formatDecimal(transaction.amount, 1,2)}" class="amount-value"></span>
+            </div>
+
+            <!-- Transaction Details Card -->
+            <div class="transaction-details-card">
+                <h2>Transaction Details</h2>
+
+                <div class="detail-row">
+                    <span class="detail-label">Transaction ID</span>
+                    <span th:text="${transaction.id}" class="detail-value"></span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Transaction Description</span>
+                    <span th:text="${transaction.description}" class="detail-value"></span>
+                </div>
+
+
+                <div class="detail-row">
+                    <span class="detail-label">Date & Time</span>
+                    <span th:text="${#temporals.format(transaction.createdOn, 'dd MMM yyyy HH:mm')}" class="detail-value"></span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Transaction Status</span>
+                    <span th:if="${transaction.status.name() == 'SUCCEEDED'}" th:text="${transaction.status.displayName}" class="status-badge success"></span>
+                    <span th:if="${transaction.status.name() == 'FAILED'}" th:text="${transaction.status.displayName}" class="status-badge failed"></span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Transaction Type</span>
+                    <span th:text="${transaction.type.displayName}" class="detail-value"></span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Balance After</span>
+                    <span th:text="${'€' + #numbers.formatDecimal(transaction.balanceLeft, 1,2)}" class="detail-value">€285.50</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="transaction-actions">
+
+                <button id="download-pdf" class="btn btn-primary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                    </svg>
+                    Download PDF
+                </button>
+
+            </div>
+
+        </div>
+    </main>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="/js/exportToPDF.js"></script>
+</body>
+</html>

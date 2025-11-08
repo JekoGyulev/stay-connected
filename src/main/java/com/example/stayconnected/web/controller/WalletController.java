@@ -32,14 +32,11 @@ public class WalletController {
     public String topUpWallet(  @RequestParam(name = "amount") BigDecimal amount,
                                 @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-
         User user = this.userService.getUserById(userPrincipal.getId());
         UUID walletID = user.getWallet().getId();
 
         Transaction transaction = this.walletService.topUp(walletID, amount);
 
-        // TODO: Make it redirect to a transaction details page and the "go back" button will go back to the current page
-
-        return "redirect:/users/wallet";
+        return "redirect:/transactions/" + transaction.getId();
     }
 }

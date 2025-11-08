@@ -23,7 +23,7 @@ import java.util.UUID;
 public class WalletServiceImpl implements WalletService {
 
     private static final String STAY_CONNECTED = "STAY_CONNECTED";
-    private static final String TOP_UP_FORMAT_DESCRIPTION = "Top up %.2f";
+    private static final String TOP_UP_FORMAT_DESCRIPTION = "Top up €%.2f";
     private static final String BOOKING_PAYMENT_FORMAT_DESCRIPTION = "Booking Payment %.2f";
     private static final String REFUND_FORMAT_DESCRIPTION = "Refund %.2f";;
 

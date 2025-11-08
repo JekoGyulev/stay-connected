@@ -1,0 +1,196 @@
+/* Transaction Details Page Styles */
+.transaction-details-container {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.transaction-back {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: var(--primary);
+}
+
+.back-link svg {
+    width: 20px;
+    height: 20px;
+}
+
+.transaction-status-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    animation: scaleIn 0.5s ease;
+}
+
+.transaction-status-icon.success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+}
+
+.transaction-status-icon.failed {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+}
+
+.transaction-status-icon svg {
+    width: 40px;
+    height: 40px;
+    color: white;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.transaction-status-text h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--foreground);
+}
+
+.transaction-status-text p {
+    color: var(--muted);
+    font-size: 1rem;
+}
+
+.transaction-amount-display {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 2rem 0;
+}
+
+.transaction-amount-display .amount-prefix {
+    font-size: 2.5rem;
+    margin-right: 0.25rem;
+}
+
+.transaction-details-card {
+    background: white;
+    border-radius: calc(12px + 4px);
+    padding: 2rem;
+    box-shadow: 0 10px 40px -10px rgba(255, 56, 92, 0.15);
+    border: 1px solid #d9d6d6;
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.transaction-details-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: #222222;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    color: #717171;
+    font-size: 0.95rem;
+}
+
+.detail-value {
+    color: #222222;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.status-badge {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-badge.success {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-badge.failed {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
+.transaction-actions {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.transaction-actions .btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: calc(var(--radius) + 2px);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.95rem;
+}
+
+.transaction-actions .btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.transaction-actions .btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-soft);
+}
+
+.transaction-actions .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.transaction-actions .btn-secondary {
+    background: white;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.transaction-actions .btn-secondary:hover {
+    background: var(--accent-bg);
+}

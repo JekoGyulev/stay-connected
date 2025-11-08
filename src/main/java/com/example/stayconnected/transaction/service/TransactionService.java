@@ -6,6 +6,7 @@ import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.user.model.User;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public interface TransactionService {
     Transaction persistTransaction(User owner, String sender,
@@ -13,4 +14,6 @@ public interface TransactionService {
                                    BigDecimal balanceLeft, TransactionType transactionType,
                                    TransactionStatus transactionStatus,
                                    String description, String reasonForFailure);
+
+    Transaction getTransactionById(UUID id);
 }
