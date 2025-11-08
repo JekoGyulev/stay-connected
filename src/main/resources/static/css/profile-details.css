@@ -75,6 +75,12 @@
     margin: 0;
 }
 
+.no-transactions-message {
+    color: var(--muted);
+    margin: 0;
+    font-size: 1rem;
+}
+
 .profile-section {
     padding: 3rem 0;
 }

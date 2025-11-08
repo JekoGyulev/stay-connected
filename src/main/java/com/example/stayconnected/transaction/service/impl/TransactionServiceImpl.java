@@ -6,10 +6,12 @@ import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.transaction.repository.TransactionRepository;
 import com.example.stayconnected.transaction.service.TransactionService;
 import com.example.stayconnected.user.model.User;
+import com.example.stayconnected.wallet.model.Wallet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -39,5 +41,18 @@ public class TransactionServiceImpl implements TransactionService {
     public Transaction getTransactionById(UUID id) {
         return this.transactionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transaction with id " + id + " not found"));
+    }
+
+    @Override
+    public List<Transaction> getLastThreeTransactions(Wallet wallet) {
+
+        List<Transaction> lastThreeTransactions =
+                this.transactionRepository.findAllBySenderOrReceiverOrderByCreatedOnDesc(wallet.getId().toString(), wallet.getId().toString())
+                .stream()
+                .filter(transaction -> transaction.getStatus() == TransactionStatus.SUCCEEDED)
+                .limit(3)
+                .toList();
+
+        return lastThreeTransactions;
     }
 }

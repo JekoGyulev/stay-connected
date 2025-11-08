@@ -3,9 +3,11 @@ package com.example.stayconnected.web.controller;
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.security.UserPrincipal;
+import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.wallet.model.Wallet;
+import com.example.stayconnected.wallet.service.WalletService;
 import com.example.stayconnected.web.dto.DtoMapper;
 import com.example.stayconnected.web.dto.user.ChangePasswordRequest;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
@@ -30,12 +32,14 @@ public class UserController {
     private final ReservationService reservationService;
     private final UserService userService;
     private final PropertyService propertyService;
+    private final WalletService walletService;
 
     @Autowired
-    public UserController(ReservationService reservationService, UserService userService, PropertyService propertyService) {
+    public UserController(ReservationService reservationService, UserService userService, PropertyService propertyService, WalletService walletService) {
         this.reservationService = reservationService;
         this.userService = userService;
         this.propertyService = propertyService;
+        this.walletService = walletService;
     }
 
     @GetMapping("/{id}/profile")
@@ -136,12 +140,16 @@ public class UserController {
     @GetMapping("/wallet")
     public ModelAndView getWalletPage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         User user = this.userService.getUserById(userPrincipal.getId());
+
         Wallet wallet = user.getWallet();
+
+        List<Transaction> transactions = this.walletService.getLastThreeTransactions(wallet);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("wallet/user-wallet");
         modelAndView.addObject("user", user);
         modelAndView.addObject("wallet", wallet);
+        modelAndView.addObject("transactions", transactions);
 
         return modelAndView;
     }

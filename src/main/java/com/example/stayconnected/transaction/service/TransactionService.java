@@ -4,8 +4,10 @@ import com.example.stayconnected.transaction.enums.TransactionStatus;
 import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.user.model.User;
+import com.example.stayconnected.wallet.model.Wallet;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 public interface TransactionService {
@@ -16,4 +18,6 @@ public interface TransactionService {
                                    String description, String reasonForFailure);
 
     Transaction getTransactionById(UUID id);
+
+    List<Transaction> getLastThreeTransactions(Wallet wallet);
 }
