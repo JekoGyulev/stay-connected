@@ -5,6 +5,7 @@ import com.example.stayconnected.utility.exception.WalletDoesNotExist;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.repository.WalletRepository;
 import com.example.stayconnected.wallet.service.WalletService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
+    @Transactional
     public void topUp(UUID walletId, BigDecimal amount) {
         Wallet wallet = this.walletRepository.findById(walletId)
                 .orElseThrow(
@@ -38,6 +40,8 @@ public class WalletServiceImpl implements WalletService {
                 .formatted(amount, wallet.getId(), wallet.getBalance()));
 
         this.walletRepository.save(wallet);
+
+        // MAKE IT RETURN TRANSACTION
     }
 
     @Override
