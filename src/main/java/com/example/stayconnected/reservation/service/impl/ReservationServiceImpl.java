@@ -1,5 +1,6 @@
 package com.example.stayconnected.reservation.service.impl;
 
+import com.example.stayconnected.reservation.enums.ReservationStatus;
 import com.example.stayconnected.reservation.model.Reservation;
 import com.example.stayconnected.reservation.repository.ReservationRepository;
 import com.example.stayconnected.reservation.service.ReservationService;
@@ -30,6 +31,16 @@ public class ReservationServiceImpl implements ReservationService {
                 .toList();
 
         return reservationRequests;
+    }
+
+    @Override
+    public List<Reservation> getAllReservations() {
+        return this.reservationRepository.findAll();
+    }
+
+    @Override
+    public long getTotalCompletedReservations() {
+        return this.reservationRepository.countAllByStatus(ReservationStatus.PAID);
     }
 
     // Have at least 1 logging message -> log.info("Successfully done {your operation}")

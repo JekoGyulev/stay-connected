@@ -1,10 +1,328 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>StayConnected</title>
+    <title>Statistics - Dashboard</title>
+    <link rel="stylesheet" href="/css/app-stats.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
+
+<header class="header">
+
+    <nav class="nav-container">
+
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <h1 class="logo-title">StayConnected</h1>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link">Properties</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a th:href="@{/transactions}" class="nav-link">Transactions</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">Profile</a></li>
+                            <li><a th:href="@{'/users/wallet'}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link active">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a></li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{'/users/wallet'}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(user.wallet.balance, 1,2)}"></span>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+
+
+<main class="statistics-container">
+    <div class="statistics-header">
+        <h1 class="statistics-title">Analytics & Statistics</h1>
+        <p class="statistics-subtitle">Overview of your platform performance</p>
+    </div>
+
+    <!-- Main Stats Grid -->
+    <div class="stats-grid">
+
+        <div class="stat-card stat-card-primary">
+
+            <div class="stat-icon-wrapper stat-icon-primary">
+                <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+            </div>
+
+            <div class="stat-content">
+
+                <p class="stat-label">Total Users</p>
+
+                <h2 th:text="${totalUsers}" class="stat-value"></h2>
+
+                <div class="stat-change stat-positive">
+
+                    <svg class="stat-change-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                    </svg>
+
+                    <!--TODO: IMPLEMENT THIS-->
+                    <span>+12.5% from last month</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card stat-card-success">
+
+            <div class="stat-icon-wrapper stat-icon-success">
+                <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+            </div>
+
+            <div class="stat-content">
+
+                <p class="stat-label">Total Bookings</p>
+
+                <h2 th:text="${totalBookings}" class="stat-value"></h2>
+
+                <div class="stat-change stat-positive">
+
+                    <svg class="stat-change-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                    </svg>
+
+                    <!--TODO: IMPLEMENT THIS-->
+                    <span>+8.2% from last month</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card stat-card-warning">
+
+            <div class="stat-icon-wrapper stat-icon-warning">
+                <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+            </div>
+
+            <div class="stat-content">
+
+                <p class="stat-label">Total Transactions</p>
+
+                <h2 th:text="${totalTransactions}" class="stat-value"></h2>
+
+                <div class="stat-change stat-positive">
+
+                    <svg class="stat-change-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                    </svg>
+
+                    <!--TODO: IMPLEMENT THIS-->
+                    <span>+15.3% from last month</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card stat-card-purple">
+            <div class="stat-icon-wrapper stat-icon-purple">
+                <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <p class="stat-label">Total Properties</p>
+                <h2 th:text="${totalProperties}" class="stat-value"></h2>
+                <div class="stat-change stat-positive">
+
+                    <svg class="stat-change-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                    </svg>
+
+                    <!--TODO: IMPLEMENT THIS-->
+                    <span>+6.8% from last month</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="stat-card stat-card-info">
+            <div class="stat-icon-wrapper stat-icon-info">
+                <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <p class="stat-label">Total Revenue</p>
+                <h2 th:text="${totalRevenue}"></h2>
+                <div class="stat-change stat-positive">
+
+                    <svg class="stat-change-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                    </svg>
+
+                    <!--TODO: IMPLEMENT THIS-->
+                    <span>+23.1% from last month</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card-danger">
+            <div class="stat-icon-wrapper stat-icon-danger">
+                <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <p class="stat-label">Failed Transactions</p>
+                <h2 th:text="${totalFailedTransactions}" class="stat-value"></h2>
+                <div class="stat-change stat-negative">
+
+                    <svg class="stat-change-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                    </svg>
+
+                    <!--TODO: IMPLEMENT THIS-->
+                    <span>-2.3% from last month</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Secondary Stats -->
+    <div class="secondary-stats-grid">
+        <div class="secondary-stat-card">
+            <div class="secondary-stat-header">
+                <h3 class="secondary-stat-title">Active Users</h3>
+                <svg class="secondary-stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </div>
+            <p th:text="${totalActiveUsers}" class="secondary-stat-value"></p>
+            <div class="secondary-stat-bar">
+                <div class="secondary-stat-bar-fill" style="width: 73.6%"></div>
+            </div>
+
+            <!--TODO: IMPLEMENT THIS-->
+            <p class="secondary-stat-description">73.6% of total users</p>
+        </div>
+
+
+        <div class="secondary-stat-card">
+
+            <div class="secondary-stat-header">
+                <h3 class="secondary-stat-title">Completed Bookings</h3>
+                <svg class="secondary-stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+
+            <p th:text="${totalCompletedReservations}" class="secondary-stat-value"></p>
+
+            <div class="secondary-stat-bar">
+                <div class="secondary-stat-bar-fill secondary-stat-bar-success" style="width: 82.8%"></div>
+            </div>
+
+            <!--TODO: IMPLEMENT THIS-->
+            <p class="secondary-stat-description">82.8% of total bookings</p>
+        </div>
+
+        <div class="secondary-stat-card">
+
+            <div class="secondary-stat-header">
+                <h3 class="secondary-stat-title">Average Transaction</h3>
+                <svg class="secondary-stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+            </div>
+
+            <p th:text="'€' + ${averageTransactionAmount}" class="secondary-stat-value"></p>
+
+            <div class="secondary-stat-bar">
+                <div class="secondary-stat-bar-fill secondary-stat-bar-warning" style="width: 65%"></div>
+            </div>
+
+            <!--TODO: IMPLEMENT THIS-->
+            <p class="secondary-stat-description">+$4.20 from last month</p>
+        </div>
+
+    </div>
+
+    <!-- Quick Stats Row -->
+    <div class="quick-stats-row">
+        <div class="quick-stat-item">
+            <span class="quick-stat-label">New Users Today</span>
+            <span class="quick-stat-value">+234</span>
+        </div>
+        <div class="quick-stat-item">
+            <span class="quick-stat-label">Today's Bookings</span>
+            <span class="quick-stat-value">+89</span>
+        </div>
+        <div class="quick-stat-item">
+            <span class="quick-stat-label">Today's Transactions</span>
+            <span class="quick-stat-value">+$12.4K</span>
+        </div>
+        <div class="quick-stat-item">
+            <span class="quick-stat-label">Today's Properties</span>
+            <span class="quick-stat-value">+3</span>
+        </div>
+    </div>
+</main>
+
+
+<footer th:insert="fragments/footer :: footer"></footer>
 
 </body>
 </html>

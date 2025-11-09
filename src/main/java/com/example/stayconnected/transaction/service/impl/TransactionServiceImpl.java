@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,6 +91,49 @@ public class TransactionServiceImpl implements TransactionService {
 
         TransactionStatus transactionStatus = TransactionStatus.valueOf(statusStr);
         return this.transactionRepository.findAllByStatusAndOwner_IdOrderByCreatedOnDesc(transactionStatus, userId);
+    }
+
+    @Override
+    public List<Transaction> getAllTransactions() {
+        return this.transactionRepository.findAll();
+    }
+
+
+    @Override
+    public BigDecimal getTotalRevenue() {
+
+        BigDecimal totalRevenue = this.getAllTransactions()
+                .stream()
+                .filter(transaction -> transaction.getStatus() == TransactionStatus.SUCCEEDED)
+                .filter(transaction -> transaction.getType() == TransactionType.DEPOSIT
+                        ||  transaction.getType() == TransactionType.BOOKING_PAYMENT)
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return totalRevenue;
+    }
+
+    @Override
+    public List<Transaction> getAllFailedTransactions() {
+        return this.transactionRepository.findAllByStatus(TransactionStatus.FAILED);
+    }
+
+    @Override
+    public BigDecimal getAverageTransactionAmount() {
+
+        BigDecimal totalRevenue = this.getTotalRevenue();
+
+        long transactionsCount = this.transactionRepository.countAllByStatusAndTypeIn(
+                TransactionStatus.SUCCEEDED,
+                List.of(TransactionType.DEPOSIT,
+                        TransactionType.BOOKING_PAYMENT)
+        );
+
+        if (transactionsCount == 0) {
+            return BigDecimal.ZERO;
+        }
+
+        return totalRevenue.divide(BigDecimal.valueOf(transactionsCount), 2, RoundingMode.HALF_UP);
     }
 
 }

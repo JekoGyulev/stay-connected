@@ -8,6 +8,7 @@ import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.web.dto.transaction.FilterTransactionRequest;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,4 +26,12 @@ public interface TransactionService {
     List<Transaction> getTransactionsByUserId(UUID userId);
 
     List<Transaction> getFilteredTransactions(UUID userId, FilterTransactionRequest request);
+
+    List<Transaction> getAllTransactions();
+
+    BigDecimal getTotalRevenue();
+
+    List<Transaction> getAllFailedTransactions();
+
+    BigDecimal getAverageTransactionAmount();
 }

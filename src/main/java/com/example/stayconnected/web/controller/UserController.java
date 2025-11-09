@@ -4,6 +4,7 @@ import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.transaction.model.Transaction;
+import com.example.stayconnected.transaction.service.TransactionService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.wallet.model.Wallet;
@@ -21,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
@@ -33,13 +35,15 @@ public class UserController {
     private final UserService userService;
     private final PropertyService propertyService;
     private final WalletService walletService;
+    private final TransactionService transactionService;
 
     @Autowired
-    public UserController(ReservationService reservationService, UserService userService, PropertyService propertyService, WalletService walletService) {
+    public UserController(ReservationService reservationService, UserService userService, PropertyService propertyService, WalletService walletService, TransactionService transactionService) {
         this.reservationService = reservationService;
         this.userService = userService;
         this.propertyService = propertyService;
         this.walletService = walletService;
+        this.transactionService = transactionService;
     }
 
     @GetMapping("/{id}/profile")
@@ -169,17 +173,25 @@ public class UserController {
 
     @GetMapping("/app-stats")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView getStatsPage() {
-        // Fetch stats for : total bookings made (look at smart wallet's way of stats page)
+    public ModelAndView getStatsPage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        User user = this.userService.getUserById(userPrincipal.getId());
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/stats");
+        modelAndView.addObject("user", user);
         modelAndView.addObject("totalUsers", this.userService.getAllUsers().size());
-        modelAndView.addObject("totalInactiveUsers", this.userService.getTotalInactiveUsers());
-        modelAndView.addObject("totalActiveUsers", this.userService.getTotalActiveUsers());
         modelAndView.addObject("totalProperties", this.propertyService.getAllProperties().size());
+        modelAndView.addObject("totalBookings", this.reservationService.getAllReservations().size());
+        modelAndView.addObject("totalTransactions", this.transactionService.getAllTransactions().size());
+        modelAndView.addObject("totalRevenue", formatRevenue(this.transactionService.getTotalRevenue()));
+        modelAndView.addObject("totalFailedTransactions", this.transactionService.getAllFailedTransactions().size());
+        modelAndView.addObject("totalActiveUsers",  this.userService.getTotalActiveUsers());
+        modelAndView.addObject("totalCompletedReservations", this.reservationService.getTotalCompletedReservations());
+        modelAndView.addObject("averageTransactionAmount", this.transactionService.getAverageTransactionAmount());
 
-        // TODO: Add later total bookings, total transactions, total succeeded transactions, total failed....
+
+        // TODO: Implement methods to calculate the percentage growth for each metric ...
 
         return modelAndView;
     }
@@ -197,6 +209,16 @@ public class UserController {
         return "redirect:/users/table";
     }
 
+
+    private String formatRevenue(BigDecimal revenue) {
+        if (revenue.compareTo(BigDecimal.valueOf(1_000_000)) >= 0) {
+            return String.format("€%.1fM", revenue.doubleValue() / 1_000_000);
+        } else if (revenue.compareTo(BigDecimal.valueOf(1_000)) >= 0) {
+            return String.format("€%.1fK", revenue.doubleValue() / 1_000);
+        } else {
+            return String.format("€%.2f", revenue);
+        }
+    }
 
 
 
