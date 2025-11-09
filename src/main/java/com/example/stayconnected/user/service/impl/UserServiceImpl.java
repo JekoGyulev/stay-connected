@@ -6,9 +6,6 @@ import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
 import com.example.stayconnected.user.service.UserService;
-import com.example.stayconnected.utility.exception.EmailAlreadyExists;
-import com.example.stayconnected.utility.exception.LoginFailed;
-import com.example.stayconnected.utility.exception.UserInactive;
 import com.example.stayconnected.utility.exception.UsernameAlreadyExists;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.service.WalletService;
@@ -25,9 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

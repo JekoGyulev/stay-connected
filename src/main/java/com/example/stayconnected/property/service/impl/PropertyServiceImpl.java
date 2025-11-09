@@ -23,7 +23,8 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public Property getById(UUID propertyId) {
         return this.propertyRepository.findById(propertyId)
-                .orElseThrow(() -> new PropertyDoesNotExist("Property not found"));
+                .orElseThrow(() -> new PropertyDoesNotExist("Property with such id [%s] does not exist"
+                        .formatted(propertyId)));
     }
 
     @Override
