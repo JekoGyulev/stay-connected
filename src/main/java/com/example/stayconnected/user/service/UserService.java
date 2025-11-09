@@ -4,6 +4,7 @@ import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.web.dto.user.*;
 import jakarta.validation.Valid;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,8 +22,6 @@ public interface UserService {
 
     void switchStatus(UUID userId);
 
-    long getTotalInactiveUsers();
-
     long getTotalActiveUsers();
 
     void saveUser(User user);
@@ -31,5 +30,4 @@ public interface UserService {
 
     void changePassword(User user, ChangePasswordRequest changePasswordRequest);
 
-    // View stats
 }

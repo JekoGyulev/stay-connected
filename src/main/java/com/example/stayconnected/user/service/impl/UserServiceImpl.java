@@ -124,10 +124,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.userRepository.save(user);
     }
 
-    @Override
-    public long getTotalInactiveUsers() {
-        return this.userRepository.countAllByActiveIs(false);
-    }
 
     @Override
     public long getTotalActiveUsers() {
@@ -156,6 +152,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         this.userRepository.save(user);
     }
+
 
 
     private User initUser(RegisterRequest request) {
