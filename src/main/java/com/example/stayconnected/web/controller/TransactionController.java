@@ -5,6 +5,7 @@ import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.transaction.service.TransactionService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
+import com.example.stayconnected.web.dto.transaction.FilterTransactionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -38,8 +39,7 @@ public class TransactionController {
         ModelAndView modelAndView = new ModelAndView("/transaction/transactions");
         modelAndView.addObject("user", user);
         modelAndView.addObject("transactions", transactions);
-
-
+        modelAndView.addObject("filterTransaction", new FilterTransactionRequest());
 
         return modelAndView;
     }
@@ -55,6 +55,22 @@ public class TransactionController {
         ModelAndView modelAndView = new ModelAndView("transaction/transaction-details");
         modelAndView.addObject("user", user);
         modelAndView.addObject("transaction", transaction);
+
+        return modelAndView;
+    }
+
+    @GetMapping("/filter")
+    public ModelAndView showFilteredPage(@AuthenticationPrincipal UserPrincipal userPrincipal
+                                            ,FilterTransactionRequest request) {
+
+        User user = this.userService.getUserById(userPrincipal.getId());
+
+        List<Transaction> filteredTransactions = this.transactionService.getFilteredTransactions(user.getId(), request);
+
+        ModelAndView modelAndView = new ModelAndView("transaction/transactions");
+        modelAndView.addObject("transactions", filteredTransactions);
+        modelAndView.addObject("filterTransaction", request);
+        modelAndView.addObject("user", user);
 
         return modelAndView;
     }

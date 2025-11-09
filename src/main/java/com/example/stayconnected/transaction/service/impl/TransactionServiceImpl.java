@@ -7,6 +7,7 @@ import com.example.stayconnected.transaction.repository.TransactionRepository;
 import com.example.stayconnected.transaction.service.TransactionService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.wallet.model.Wallet;
+import com.example.stayconnected.web.dto.transaction.FilterTransactionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,4 +61,35 @@ public class TransactionServiceImpl implements TransactionService {
     public List<Transaction> getTransactionsByUserId(UUID userId) {
         return this.transactionRepository.findAllByOwner_IdOrderByCreatedOnDesc(userId);
     }
+
+    @Override
+    public List<Transaction> getFilteredTransactions(UUID userId, FilterTransactionRequest request) {
+
+        String typeStr = request.getTransactionType();
+        String statusStr = request.getTransactionStatus();
+
+        boolean typeFilter = typeStr != null && !typeStr.equals("ALL");
+        boolean statusFilter = statusStr != null && !statusStr.equals("ALL");
+
+        if (!typeFilter && !statusFilter) {
+            return this.transactionRepository.findAllByOwner_IdOrderByCreatedOnDesc(userId);
+        }
+
+        if (typeFilter && statusFilter) {
+            TransactionType transactionType = TransactionType.valueOf(typeStr);
+            TransactionStatus transactionStatus = TransactionStatus.valueOf(statusStr);
+            return this.transactionRepository.findAllByStatusAndTypeAndOwner_IdOrderByCreatedOnDesc(
+                    transactionStatus, transactionType, userId
+            );
+        }
+
+        if (typeFilter) {
+            TransactionType transactionType = TransactionType.valueOf(typeStr);
+            return this.transactionRepository.findAllByTypeAndOwner_IdOrderByCreatedOnDesc(transactionType, userId);
+        }
+
+        TransactionStatus transactionStatus = TransactionStatus.valueOf(statusStr);
+        return this.transactionRepository.findAllByStatusAndOwner_IdOrderByCreatedOnDesc(transactionStatus, userId);
+    }
+
 }

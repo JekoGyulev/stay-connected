@@ -173,7 +173,8 @@
 
                             <p th:if="${transactions.isEmpty()}" class="no-transactions-message">No transactions made yet.</p>
 
-                            <div th:unless="${transactions.isEmpty()}" class="wallet-transaction-item" th:each="transaction : ${transactions}">
+                            <div th:unless="${transactions.isEmpty()}" class="wallet-transaction-item"
+                                 th:each="transaction : ${transactions}">
 
                                 <div th:if="${transaction.type.name() == 'DEPOSIT'}" class="wallet-transaction-icon success">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">

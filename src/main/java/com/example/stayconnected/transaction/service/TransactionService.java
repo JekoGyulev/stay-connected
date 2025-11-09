@@ -5,6 +5,7 @@ import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.wallet.model.Wallet;
+import com.example.stayconnected.web.dto.transaction.FilterTransactionRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,4 +23,6 @@ public interface TransactionService {
     List<Transaction> getLastThreeTransactions(Wallet wallet);
 
     List<Transaction> getTransactionsByUserId(UUID userId);
+
+    List<Transaction> getFilteredTransactions(UUID userId, FilterTransactionRequest request);
 }

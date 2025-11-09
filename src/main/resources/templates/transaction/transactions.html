@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Transactions</title>
-    <!--Add main css for this page-->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="/css/transactions-table.css">
     <link rel="stylesheet" href="/css/transaction-details.css">
     <link rel="stylesheet" href="/css/header-post-authentication.css">
@@ -92,20 +93,36 @@
         </div>
 
         <!-- Filters -->
-        <div class="transactions-filters">
-            <select class="filter-select">
-                <option value="all">All Types</option>
-                <option value="topup">Top Up</option>
-                <option value="booking">Property Booking</option>
-                <option value="refund">Refund</option>
-            </select>
-            <select class="filter-select">
-                <option value="all">All Status</option>
-                <option value="completed">Completed</option>
-                <option value="failed">Failed</option>
-            </select>
+        <form th:action="@{/transactions/filter}" th:method="GET" th:object="${filterTransaction}">
 
-        </div>
+            <div class="transactions-filters">
+                <select th:field="*{transactionType}" class="filter-select">
+
+                    <option value="ALL">All Types</option>
+
+                    <option th:each="type : ${T(com.example.stayconnected.transaction.enums.TransactionType).values()}"
+                            th:text="${type.displayName}"
+                            th:value="${type.name()}"></option>
+                </select>
+
+                <select th:field="*{transactionStatus}" class="filter-select">
+
+                    <option value="ALL">All Status</option>
+
+                    <option th:each="status: ${T(com.example.stayconnected.transaction.enums.TransactionStatus).values()}"
+                            th:text="${status.displayName}"
+                            th:value="${status.name()}"></option>
+                </select>
+
+                <button type="submit" class="filter-button">
+                    <svg class="filter-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                    </svg>
+                    Filter
+                </button>
+            </div>
+
+        </form>
 
         <!-- Transactions Table -->
         <div class="transactions-table-wrapper">
