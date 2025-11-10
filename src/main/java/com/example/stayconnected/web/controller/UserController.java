@@ -198,7 +198,7 @@ public class UserController {
         modelAndView.addObject("newPropertiesToday", this.dashboardStatsService.getCountNewPropertiesToday());
         modelAndView.addObject("percentageActiveUsers", this.userService.getPercentageActiveUsers());
         modelAndView.addObject("percentageCompletedReservations", this.reservationService.getPercentageCompletedReservations());
-        modelAndView.addObject("averageTransactionGrowth", this.dashboardStatsService.getAverageMonthlyTransactionAmount());
+        modelAndView.addObject("averageTransactionGrowth", this.dashboardStatsService.getAverageMonthlyTransactionGrowth());
 
         return modelAndView;
     }
