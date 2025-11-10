@@ -22,6 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -153,7 +156,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.userRepository.save(user);
     }
 
+    @Override
+    public BigDecimal getPercentageActiveUsers() {
 
+        long totalUsers = getAllUsers().size();
+
+        if (totalUsers == 0) {
+            return BigDecimal.ZERO;
+        }
+
+        long totalActiveUsers = getTotalActiveUsers();
+
+        return BigDecimal.valueOf((totalActiveUsers * 100.0) / totalUsers)
+                .setScale(2, RoundingMode.HALF_UP);
+    }
 
     private User initUser(RegisterRequest request) {
         return new User (

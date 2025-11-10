@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -134,6 +136,21 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         return totalRevenue.divide(BigDecimal.valueOf(transactionsCount), 2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public BigDecimal calculateAverageTransactionAmountByMonth(LocalDateTime createdAfter, LocalDateTime createdBefore) {
+
+        BigDecimal averageTransaction = this.transactionRepository.getAverageTransactionAmountByStatusAndTypeInAndCreatedOnBetween(
+                TransactionStatus.SUCCEEDED,
+                List.of(TransactionType.DEPOSIT, TransactionType.BOOKING_PAYMENT),
+                createdAfter,
+                createdBefore
+        );
+
+        if (averageTransaction == null) return BigDecimal.ZERO;
+
+        return averageTransaction;
     }
 
 }

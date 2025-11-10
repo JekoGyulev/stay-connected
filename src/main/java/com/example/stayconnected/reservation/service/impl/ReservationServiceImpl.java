@@ -8,6 +8,7 @@ import com.example.stayconnected.web.dto.reservation.ReservationInfoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +42,19 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public long getTotalCompletedReservations() {
         return this.reservationRepository.countAllByStatus(ReservationStatus.PAID);
+    }
+
+    @Override
+    public BigDecimal getPercentageCompletedReservations() {
+
+        long totalCompletedReservations = getTotalCompletedReservations();
+        long totalReservations = getAllReservations().size();
+
+        if (totalReservations == 0) {
+            return BigDecimal.ZERO;
+        }
+
+        return BigDecimal.valueOf((totalCompletedReservations * 100.00) / totalReservations);
     }
 
     // Have at least 1 logging message -> log.info("Successfully done {your operation}")

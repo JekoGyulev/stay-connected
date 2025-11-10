@@ -1,5 +1,6 @@
 package com.example.stayconnected.web.controller;
 
+import com.example.stayconnected.dashboard.DashboardStatsService;
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.security.UserPrincipal;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
-import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,14 +36,16 @@ public class UserController {
     private final PropertyService propertyService;
     private final WalletService walletService;
     private final TransactionService transactionService;
+    private final DashboardStatsService dashboardStatsService;
 
     @Autowired
-    public UserController(ReservationService reservationService, UserService userService, PropertyService propertyService, WalletService walletService, TransactionService transactionService) {
+    public UserController(ReservationService reservationService, UserService userService, PropertyService propertyService, WalletService walletService, TransactionService transactionService, DashboardStatsService dashboardStatsService) {
         this.reservationService = reservationService;
         this.userService = userService;
         this.propertyService = propertyService;
         this.walletService = walletService;
         this.transactionService = transactionService;
+        this.dashboardStatsService = dashboardStatsService;
     }
 
     @GetMapping("/{id}/profile")
@@ -190,8 +192,13 @@ public class UserController {
         modelAndView.addObject("totalCompletedReservations", this.reservationService.getTotalCompletedReservations());
         modelAndView.addObject("averageTransactionAmount", this.transactionService.getAverageTransactionAmount());
 
-
-        // TODO: Implement methods to calculate the percentage growth for each metric ...
+        modelAndView.addObject("newUsersToday", this.dashboardStatsService.getCountNewUsersToday());
+        modelAndView.addObject("newBookingsToday", this.dashboardStatsService.getCountNewReservationsToday());
+        modelAndView.addObject("totalRevenueToday", formatRevenue(this.dashboardStatsService.getCountTotalRevenueToday()));
+        modelAndView.addObject("newPropertiesToday", this.dashboardStatsService.getCountNewPropertiesToday());
+        modelAndView.addObject("percentageActiveUsers", this.userService.getPercentageActiveUsers());
+        modelAndView.addObject("percentageCompletedReservations", this.reservationService.getPercentageCompletedReservations());
+        modelAndView.addObject("averageTransactionGrowth", this.dashboardStatsService.getAverageMonthlyTransactionAmount());
 
         return modelAndView;
     }
