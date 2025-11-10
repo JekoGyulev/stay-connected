@@ -41,7 +41,7 @@ public class DashboardStatsService {
     @Getter
     private BigDecimal countTotalRevenueToday;
     @Getter
-    private BigDecimal averageMonthlyTransactionAmount;
+    private BigDecimal averageMonthlyTransactionGrowth;
 
 
     @Autowired
@@ -53,7 +53,7 @@ public class DashboardStatsService {
         this.transactionService = transactionService1;
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 30 22 * * *")
     public void calculateDailyStats() {
 
         LocalDate today = LocalDate.now();
@@ -94,7 +94,7 @@ public class DashboardStatsService {
         );
 
         if (lastMonthAverageTransaction.compareTo(BigDecimal.ZERO) == 0) {
-            averageMonthlyTransactionAmount = BigDecimal.ZERO;
+            averageMonthlyTransactionGrowth = BigDecimal.ZERO;
             return;
         }
 
@@ -105,7 +105,7 @@ public class DashboardStatsService {
                         .multiply(BigDecimal.valueOf(100));
 
 
-        this.averageMonthlyTransactionAmount = averageGrowth.setScale(2, RoundingMode.HALF_UP);
+        this.averageMonthlyTransactionGrowth = averageGrowth.setScale(2, RoundingMode.HALF_UP);
     }
 
 }
