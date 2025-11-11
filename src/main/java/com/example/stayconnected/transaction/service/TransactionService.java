@@ -36,5 +36,5 @@ public interface TransactionService {
 
     BigDecimal getAverageTransactionAmount();
 
-    BigDecimal calculateAverageTransactionAmountByMonth(LocalDateTime createdAfter, LocalDateTime createdBefore);
+    BigDecimal calculateWeeklyAverageTransactionAmount(LocalDateTime createdAfter, LocalDateTime createdBefore);
 }

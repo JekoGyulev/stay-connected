@@ -139,7 +139,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public BigDecimal calculateAverageTransactionAmountByMonth(LocalDateTime createdAfter, LocalDateTime createdBefore) {
+    public BigDecimal calculateWeeklyAverageTransactionAmount(LocalDateTime createdAfter, LocalDateTime createdBefore) {
 
         BigDecimal averageTransaction = this.transactionRepository.getAverageTransactionAmountByStatusAndTypeInAndCreatedOnBetween(
                 TransactionStatus.SUCCEEDED,

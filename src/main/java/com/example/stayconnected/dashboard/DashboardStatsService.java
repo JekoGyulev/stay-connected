@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,7 +42,7 @@ public class DashboardStatsService {
     @Getter
     private BigDecimal countTotalRevenueToday;
     @Getter
-    private BigDecimal averageMonthlyTransactionGrowth;
+    private BigDecimal averageWeeklyTransactionGrowth;
 
 
     @Autowired
@@ -58,12 +59,15 @@ public class DashboardStatsService {
 
         LocalDate today = LocalDate.now();
 
-        this.countNewUsersToday = this.userRepository.countAllByRegisteredAtBetween(today.atStartOfDay(), today.plusDays(1).atStartOfDay());
+        this.countNewUsersToday = this.userRepository.countAllByRegisteredAtBetween(today.atStartOfDay(),
+                today.plusDays(1).atStartOfDay());
 
         this.countNewReservationsToday = this.reservationRepository.countAllByStatusAndCreatedAtBetween(
-                ReservationStatus.PAID,today.atStartOfDay(), today.plusDays(1).atStartOfDay());
+                ReservationStatus.PAID,today.atStartOfDay(),
+                today.plusDays(1).atStartOfDay());
 
-        this.countNewPropertiesToday = this.propertyRepository.countAllByCreateDateBetween(today.atStartOfDay(), today.plusDays(1).atStartOfDay());
+        this.countNewPropertiesToday = this.propertyRepository.countAllByCreateDateBetween(today.atStartOfDay(),
+                today.plusDays(1).atStartOfDay());
 
         this.countTotalRevenueToday = this.transactionRepository.sumAmountByStatusAndTypeInAndCreatedOnBetween(
                 TransactionStatus.SUCCEEDED,
@@ -74,38 +78,39 @@ public class DashboardStatsService {
     }
 
 
-    @Scheduled(cron = "0 0 0 1 * ?")
-    public void calculateMonthlyAverageTransactionGrowth() {
+    @Scheduled(cron = "0 0 0 * * MON")
+    public void calculateAverageWeeklyTransactionGrowth() {
         LocalDate today = LocalDate.now();
 
-        LocalDateTime startOfCurrentMonth = today.withDayOfMonth(1).atStartOfDay();
-        LocalDateTime startOfLastMonth = startOfCurrentMonth.minusMonths(1);
-        LocalDateTime endOfLastMonth = startOfCurrentMonth;
+        LocalDate lastWeekStart = today.minusWeeks(1).with(DayOfWeek.MONDAY);
+        LocalDate lastWeekEnd = lastWeekStart.plusWeeks(1);
 
+        LocalDate weekBeforeLastStart = lastWeekStart.minusWeeks(1);
+        LocalDate weekBeforeLastEnd = lastWeekStart;
 
-        BigDecimal lastMonthAverageTransaction = this.transactionService.calculateAverageTransactionAmountByMonth(
-                startOfLastMonth,
-                endOfLastMonth
+        BigDecimal lastWeekAverage = this.transactionService.calculateWeeklyAverageTransactionAmount(
+                lastWeekStart.atStartOfDay(),
+                lastWeekEnd.atStartOfDay()
         );
 
-        BigDecimal currentMonthAverageTransaction = this.transactionService.calculateAverageTransactionAmountByMonth(
-                startOfCurrentMonth,
-                LocalDateTime.now()
+        BigDecimal weekBeforeLastAverage = this.transactionService.calculateWeeklyAverageTransactionAmount(
+                weekBeforeLastStart.atStartOfDay(),
+                weekBeforeLastEnd.atStartOfDay()
         );
 
-        if (lastMonthAverageTransaction.compareTo(BigDecimal.ZERO) == 0) {
-            averageMonthlyTransactionGrowth = BigDecimal.ZERO;
+        if (weekBeforeLastAverage.compareTo(BigDecimal.ZERO) == 0) {
+            averageWeeklyTransactionGrowth = BigDecimal.ZERO;
             return;
         }
 
         BigDecimal averageGrowth =
-                currentMonthAverageTransaction
-                        .subtract(lastMonthAverageTransaction)
-                        .divide(lastMonthAverageTransaction, 2, RoundingMode.HALF_UP)
-                        .multiply(BigDecimal.valueOf(100));
+                lastWeekAverage
+                        .subtract(weekBeforeLastAverage)
+                        .divide(weekBeforeLastAverage, 2, RoundingMode.HALF_UP)
+                        .multiply(BigDecimal.valueOf(100))
+                        .setScale(2, RoundingMode.HALF_UP);
 
 
-        this.averageMonthlyTransactionGrowth = averageGrowth.setScale(2, RoundingMode.HALF_UP);
+        this.averageWeeklyTransactionGrowth = averageGrowth;
     }
-
 }

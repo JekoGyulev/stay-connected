@@ -237,14 +237,16 @@
             <p th:if="${averageTransactionGrowth == null}"
                class="secondary-stat-description">No previous data</p>
 
-            <div th:if="${averageTransactionGrowth != null}" class="secondary-stat-bar">
-                <div class="secondary-stat-bar-fill secondary-stat-bar-warning"
-                     th:style="'width:' + ${averageTransactionGrowth} + '%'"></div>
-            </div>
+            <p      th:if="${averageTransactionGrowth != null} and ${averageTransactionAmount < 0}"
+                    th:text="${#numbers.formatDecimal(averageTransactionGrowth, 1, 2)} + '%' + ' from last week'"
+                    class="secondary-stat-description" style="color : #f11717">
+            </p>
 
-            <p      th:if="${averageTransactionGrowth != null}"
-                    th:text="${averageTransactionGrowth > 0 ? '+' : ''} + ${#numbers.formatDecimal(averageTransactionGrowth, 1, 2)} + '%' + ' from last month'"
-                    class="secondary-stat-description"></p>
+            <p      th:if="${averageTransactionGrowth != null} and ${averageTransactionAmount > 0}"
+                    th:text="'+' + ${#numbers.formatDecimal(averageTransactionGrowth, 1, 2)} + '%' + ' from last week'"
+                    class="secondary-stat-description" style="color : #12b212">
+            </p>
+
         </div>
 
     </div>
