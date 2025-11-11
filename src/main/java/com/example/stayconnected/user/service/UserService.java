@@ -13,7 +13,7 @@ public interface UserService {
 
     User register(RegisterRequest request);
 
-    List<User> getAllUsers();
+    List<User> getAllUsersOrderedByDateAndUsername();
 
     User getUserById(UUID id);
 

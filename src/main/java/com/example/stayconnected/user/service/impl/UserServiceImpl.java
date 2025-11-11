@@ -83,8 +83,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Cacheable(value = "users")
-    public List<User> getAllUsers() {
-        return this.userRepository.findAll();
+    public List<User> getAllUsersOrderedByDateAndUsername() {
+        return this.userRepository.findAllByOrderByRegisteredAtDescUsernameAsc();
     }
 
     @Override
@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public BigDecimal getPercentageActiveUsers() {
 
-        long totalUsers = getAllUsers().size();
+        long totalUsers = getAllUsersOrderedByDateAndUsername().size();
 
         if (totalUsers == 0) {
             return BigDecimal.ZERO;

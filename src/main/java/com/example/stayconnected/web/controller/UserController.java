@@ -163,12 +163,14 @@ public class UserController {
 
     @GetMapping("/table")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView getUsersTablePage() {
-        List<User> users = this.userService.getAllUsers();
+    public ModelAndView getUsersTablePage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        List<User> users = this.userService.getAllUsersOrderedByDateAndUsername();
+        User authUser = this.userService.getUserById(userPrincipal.getId());
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/users");
         modelAndView.addObject("users", users);
+        modelAndView.addObject("authUser", authUser);
 
         return modelAndView;
     }
@@ -182,7 +184,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/stats");
         modelAndView.addObject("user", user);
-        modelAndView.addObject("totalUsers", this.userService.getAllUsers().size());
+        modelAndView.addObject("totalUsers", this.userService.getAllUsersOrderedByDateAndUsername().size());
         modelAndView.addObject("totalProperties", this.propertyService.getAllProperties().size());
         modelAndView.addObject("totalBookings", this.reservationService.getAllReservations().size());
         modelAndView.addObject("totalTransactions", this.transactionService.getAllTransactions().size());

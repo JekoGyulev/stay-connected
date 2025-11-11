@@ -1,10 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>Users | StayConnected</title>
+    <title>Users - Table</title>
+    <link rel="stylesheet" href="/css/transactions-table.css">
+    <link rel="stylesheet" href="/css/transaction-details.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
+<header class="header">
+
+    <nav class="nav-container">
+
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <a th:href="@{/home}" style="text-decoration: none">
+                    <h1 class="logo-title">StayConnected</h1>
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link">Properties</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a th:href="@{/transactions}" class="nav-link">Transactions</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${authUser.id} + '/profile'}" class="dropdown-link">Profile</a></li>
+                            <li><a th:href="@{'/users/wallet'}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link active">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a></li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{'/users/wallet'}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(authUser.wallet.balance, 1,2)}"></span>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Users Content -->
+<main class="main-content">
+    <div class="transactions-container">
+        <div class="transactions-header">
+            <h1>Users Table</h1>
+            <p style="margin: 10px 0 20px 0">View all users and their information</p>
+        </div>
+
+        <!-- Filters -->
+        <form>
+            <div class="transactions-filters">
+
+                <select class="filter-select">
+                    <option value="ALL">Role</option>
+                    <option>Admin</option>
+                    <option>User</option>
+                </select>
+
+                <select class="filter-select">
+                    <option value="ALL">Status</option>
+                    <option>Active</option>
+                    <option>Inactive</option>
+                </select>
+
+                <button type="submit" class="filter-button">
+                    <svg class="filter-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                    </svg>
+                    Filter
+                </button>
+            </div>
+        </form>
+
+        <!-- Transactions Table -->
+        <div class="transactions-table-wrapper">
+            <table class="transactions-table">
+                <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Registered</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}" >
+
+                    <td th:text="${user.id}" class="transaction-id"></td>
+
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${#strings.capitalize(#strings.toLowerCase(user.role))}" class="transaction-type"></td>
+
+                    <td th:if="${user.active == false}">
+                        <span class="status-badge failed">Inactive</span>
+                    </td>
+                    <td th:if="${user.active == true}">
+                        <span  class="status-badge success">Active</span>
+                    </td>
+
+                    <td th:text="${#temporals.format(user.registeredAt, 'dd MMM yyyy HH:mm')}"></td>
+
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="transactions-pagination">
+            <button class="pagination-btn" disabled>Previous</button>
+            <div class="pagination-pages">
+                <button class="pagination-page active">1</button>
+                <button class="pagination-page">2</button>
+                <button class="pagination-page">3</button>
+                <span class="pagination-dots">...</span>
+                <button class="pagination-page">10</button>
+            </div>
+            <button class="pagination-btn">Next</button>
+        </div>
+    </div>
+</main>
+
+
+
+
+<footer th:insert="fragments/footer :: footer"></footer>
 
 </body>
 </html>

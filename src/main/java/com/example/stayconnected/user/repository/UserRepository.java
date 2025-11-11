@@ -16,6 +16,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByUsername(String username);
 
+    List<User> findAllByOrderByRegisteredAtDescUsernameAsc();
+
     @Query("SELECT COUNT(u) FROM User u WHERE u.isActive = :active")
     long countAllByActiveIs(@Param(value = "active") boolean active);
 
