@@ -1,5 +1,6 @@
 package com.example.stayconnected.user.repository;
 
+import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +23,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     long countAllByActiveIs(@Param(value = "active") boolean active);
 
     long countAllByRegisteredAtBetween(LocalDateTime registeredAtAfter, LocalDateTime registeredAtBefore);
+
+    List<User> findAllByRoleAndIsActiveOrderByRegisteredAtDescUsernameAsc(UserRole role, boolean isActive);
+
+    List<User> findAllByRoleOrderByRegisteredAtDescUsernameAsc(UserRole role);
+
+    List<User> findAllByIsActiveOrderByRegisteredAtDescUsernameAsc(boolean isActive);
 }

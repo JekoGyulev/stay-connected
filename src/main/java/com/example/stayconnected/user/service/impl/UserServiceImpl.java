@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -169,6 +168,43 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         return BigDecimal.valueOf((totalActiveUsers * 100.0) / totalUsers)
                 .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public List<User> getFilteredUsers(FilterUserRequest filterUserRequest) {
+
+        String strRole = filterUserRequest.getUserRole();
+        String strStatus = filterUserRequest.getUserStatus();
+
+        boolean roleFilter = strRole != null && !strRole.equals("ALL");
+        boolean statusFilter = strStatus != null && !strStatus.equals("ALL");
+
+        if (!roleFilter && !statusFilter) {
+            return this.getAllUsersOrderedByDateAndUsername();
+        }
+
+        if (roleFilter &&  statusFilter) {
+            UserRole userRole = UserRole.valueOf(strRole);
+
+            boolean isActive = strStatus.equals("true");
+
+            return this.userRepository.findAllByRoleAndIsActiveOrderByRegisteredAtDescUsernameAsc(
+                    userRole,
+                    isActive
+            );
+        }
+
+        if (roleFilter) {
+            UserRole userRole = UserRole.valueOf(strRole);
+            return this.userRepository.findAllByRoleOrderByRegisteredAtDescUsernameAsc(userRole);
+        }
+
+
+        boolean isActive = strStatus.equals("true");
+
+        return this.userRepository.findAllByIsActiveOrderByRegisteredAtDescUsernameAsc(
+            isActive
+        );
     }
 
     private User initUser(RegisterRequest request) {

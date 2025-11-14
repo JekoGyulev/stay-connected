@@ -88,19 +88,27 @@
         </div>
 
         <!-- Filters -->
-        <form>
+        <form th:action="@{/users/table/filter}" th:method="GET" th:object="${filterUsersRequest}">
             <div class="transactions-filters">
 
-                <select class="filter-select">
-                    <option value="ALL">Role</option>
-                    <option>Admin</option>
-                    <option>User</option>
+                <select class="filter-select" th:field="*{userRole}">
+
+                    <option th:value="ALL">Role</option>
+
+                    <option th:each="role : ${T(com.example.stayconnected.user.enums.UserRole).values()}"
+                            th:value="${role.name()}"
+                            th:text="${#strings.capitalize(#strings.toLowerCase(role))}"
+                    ></option>
+
                 </select>
 
-                <select class="filter-select">
-                    <option value="ALL">Status</option>
-                    <option>Active</option>
-                    <option>Inactive</option>
+                <select class="filter-select" th:field="*{userStatus}">
+
+                    <option th:value="ALL">Status</option>
+
+                    <option th:value="true">Active</option>
+                    <option th:value="false">Inactive</option>
+
                 </select>
 
                 <button type="submit" class="filter-button">

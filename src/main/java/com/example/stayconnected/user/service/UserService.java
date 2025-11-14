@@ -32,4 +32,6 @@ public interface UserService {
     void changePassword(User user, ChangePasswordRequest changePasswordRequest);
 
     BigDecimal getPercentageActiveUsers();
+
+    List<User> getFilteredUsers(FilterUserRequest filterUserRequest);
 }

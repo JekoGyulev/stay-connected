@@ -12,6 +12,7 @@ import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.service.WalletService;
 import com.example.stayconnected.web.dto.DtoMapper;
 import com.example.stayconnected.web.dto.user.ChangePasswordRequest;
+import com.example.stayconnected.web.dto.user.FilterUserRequest;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import com.example.stayconnected.web.dto.user.UpdatePhotoRequest;
 import jakarta.validation.Valid;
@@ -171,8 +172,25 @@ public class UserController {
         modelAndView.setViewName("admin/users");
         modelAndView.addObject("users", users);
         modelAndView.addObject("authUser", authUser);
+        modelAndView.addObject("filterUsersRequest", new FilterUserRequest());
 
         return modelAndView;
+    }
+
+    @GetMapping("/table/filter")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView getStatsFilterPage(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                           FilterUserRequest filterUserRequest) {
+
+        List<User> filteredUsers = this.userService.getFilteredUsers(filterUserRequest);
+
+        ModelAndView modelAndView = new ModelAndView("/admin/users");
+        modelAndView.addObject("authUser", userService.getUserById(userPrincipal.getId()));
+        modelAndView.addObject("filterUsersRequest", filterUserRequest);
+        modelAndView.addObject("users", filteredUsers);
+
+        return modelAndView;
+
     }
 
     @GetMapping("/app-stats")
@@ -204,6 +222,8 @@ public class UserController {
 
         return modelAndView;
     }
+
+
 
     @PatchMapping("/{id}/role")
     @PreAuthorize("hasRole('ADMIN')")
