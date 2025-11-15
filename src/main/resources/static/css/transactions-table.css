@@ -33,6 +33,43 @@
     font-family: inherit;
 }
 
+
+.profile-actions-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+.profile-actions-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 56, 92, 0.5);
+    background: #E31C5F;
+}
+
+.profile-actions-button:active {
+    transform: translateY(0);
+}
+
+.profile-actions-button p {
+    margin: 0;
+}
+
+.profile-actions-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+
 .filter-select:hover,
 .filter-date:hover {
     border-color: var(--primary);

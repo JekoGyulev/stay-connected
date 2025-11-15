@@ -131,6 +131,8 @@
                     <th>Role</th>
                     <th>Status</th>
                     <th>Registered</th>
+                    <th>Switch Role</th>
+                    <th>Switch Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -140,7 +142,7 @@
 
                     <td th:text="${user.username}"></td>
                     <td th:text="${user.email}"></td>
-                    <td th:text="${#strings.capitalize(#strings.toLowerCase(user.role))}" class="transaction-type"></td>
+                    <td th:text="${#strings.capitalize(#strings.toLowerCase(user.role))}"></td>
 
                     <td th:if="${user.active == false}">
                         <span class="status-badge failed">Inactive</span>
@@ -150,6 +152,30 @@
                     </td>
 
                     <td th:text="${#temporals.format(user.registeredAt, 'dd MMM yyyy HH:mm')}"></td>
+
+                    <td>
+                        <form th:action="@{'/users/' + ${user.id} + '/role'}" th:method="patch">
+                            <button class="profile-actions-button">
+                                <p>Switch</p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                     class="bi bi-toggle-on" viewBox="0 0 16 16">
+                                    <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"></path>
+                                </svg>
+                            </button>
+                        </form>
+                    </td>
+
+                    <td>
+                        <form th:action="@{'/users/' + ${user.id} + '/status'}" th:method="patch">
+                            <button class="profile-actions-button">
+                                <p>Switch</p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                     class="bi bi-toggle-on" viewBox="0 0 16 16">
+                                    <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"></path>
+                                </svg>
+                            </button>
+                        </form>
+                    </td>
 
                 </tr>
 
