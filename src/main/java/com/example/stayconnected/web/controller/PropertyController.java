@@ -2,12 +2,16 @@ package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.review.service.ReviewService;
+import com.example.stayconnected.security.UserPrincipal;
+import com.example.stayconnected.user.model.User;
+import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
 import com.example.stayconnected.web.dto.property.PropertyEditRequest;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +25,13 @@ public class PropertyController {
 
     private final PropertyService propertyService;
     private final ReviewService reviewService;
+    private final UserService userService;
 
     @Autowired
-    public PropertyController(PropertyService propertyService, ReviewService reviewService) {
+    public PropertyController(PropertyService propertyService, ReviewService reviewService, UserService userService) {
         this.propertyService = propertyService;
         this.reviewService = reviewService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -76,12 +82,17 @@ public class PropertyController {
 
     @GetMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView showPropertyCreateForm() {
+    public ModelAndView showPropertyCreateForm(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        User authUser = this.userService.getUserById(userPrincipal.getId());
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("property/create-property-form");
+        modelAndView.addObject("authUser", authUser);
         modelAndView.addObject("createPropertyRequest", new CreatePropertyRequest());
         return modelAndView;
     }
+
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView createProperty(@Valid @ModelAttribute CreatePropertyRequest createPropertyRequest,
