@@ -54,7 +54,7 @@ public class DashboardStatsService {
         this.transactionService = transactionService1;
     }
 
-    @Scheduled(cron = "0 30 22 * * *")
+    @Scheduled(cron = "0 59 23 * * *")
     public void calculateDailyStats() {
 
         LocalDate today = LocalDate.now();
