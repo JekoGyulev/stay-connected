@@ -169,7 +169,7 @@
     transition: all 0.3s ease;
 }
 
-.checkbox-card input[type="checkbox"]:checked + span {
+.checkbox-card input[type="checkbox"]:checked ~ span {
     border-color: var(--primary);
     background: var(--accent-bg);
     color: var(--primary);
