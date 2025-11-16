@@ -14,10 +14,18 @@ public class Location {
     private String country;
     @Column(nullable = false)
     private String city;
+    @Column(nullable = false)
+    private String address;
 
-    public Location(String country, String city) {
+
+    public String getFullName() {
+        return address + ", " + city +  ", " + country;
+    }
+
+    public Location(String country, String city, String address) {
         this.country = country;
         this.city = city;
+        this.address = address;
     }
 
     public Location() {}
@@ -44,5 +52,13 @@ public class Location {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

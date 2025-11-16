@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.UUID;
@@ -95,15 +96,27 @@ public class PropertyController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView createProperty(@Valid @ModelAttribute CreatePropertyRequest createPropertyRequest,
-                                           BindingResult bindingResult) {
+    public ModelAndView createProperty(@Valid CreatePropertyRequest createPropertyRequest,
+                                       BindingResult bindingResult,
+                                       @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
+        if (createPropertyRequest.getImages() == null
+                || createPropertyRequest.getImages().isEmpty()
+                || createPropertyRequest.getImages().stream().allMatch(MultipartFile::isEmpty)) {
 
-        // Do validation on the request from the form (by calling bindingResult.hasErrors())
+            bindingResult.rejectValue("images", "images.empty", "Please upload at least one image");
+        }
 
-        // If it has errors , then set the view of modelAndView = "create-property-form" and return the modelAndView
+        if (bindingResult.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("property/create-property-form");
+            modelAndView.addObject("authUser", this.userService.getUserById(userPrincipal.getId()));
+            return modelAndView;
+        }
 
         // Call a method from propertyService that will save the property(PropertyRequest -> Property)
+
+        // Loop through request.getImages()
 
 
         return new ModelAndView("redirect:/properties/my-properties");

@@ -37,8 +37,10 @@ public class Property {
     @OneToMany(mappedBy = "property")
     private List<PropertyImage> images;
 
+
     public Property() {
         this.images = new ArrayList<>();
+
     }
 
     public String getTitle() {
