@@ -2,6 +2,7 @@ package com.example.stayconnected.wallet.model;
 
 import com.example.stayconnected.user.model.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 

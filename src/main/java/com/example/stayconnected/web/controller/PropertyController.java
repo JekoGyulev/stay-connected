@@ -1,5 +1,6 @@
 package com.example.stayconnected.web.controller;
 
+import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.security.UserPrincipal;
@@ -100,6 +101,8 @@ public class PropertyController {
                                        BindingResult bindingResult,
                                        @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
+        User user = this.userService.getUserById(userPrincipal.getId());
+
         if (createPropertyRequest.getImages() == null
                 || createPropertyRequest.getImages().isEmpty()
                 || createPropertyRequest.getImages().stream().allMatch(MultipartFile::isEmpty)) {
@@ -110,16 +113,16 @@ public class PropertyController {
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("property/create-property-form");
-            modelAndView.addObject("authUser", this.userService.getUserById(userPrincipal.getId()));
+            modelAndView.addObject("authUser", user);
             return modelAndView;
         }
 
-        // Call a method from propertyService that will save the property(PropertyRequest -> Property)
+        Property property = this.propertyService.createProperty(createPropertyRequest, user);
 
-        // Loop through request.getImages()
+        // Loop through request.getImages() and save them to the db
 
 
-        return new ModelAndView("redirect:/properties/my-properties");
+        return new ModelAndView("redirect:/properties/" + property.getId());
     }
 
     @GetMapping("/my-properties")

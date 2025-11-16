@@ -5,6 +5,7 @@ import com.example.stayconnected.user.enums.UserRole;
 
 import com.example.stayconnected.wallet.model.Wallet;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.*;

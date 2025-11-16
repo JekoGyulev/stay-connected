@@ -1,6 +1,7 @@
 package com.example.stayconnected.property.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.UUID;
 

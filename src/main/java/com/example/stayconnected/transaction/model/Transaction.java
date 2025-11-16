@@ -5,6 +5,7 @@ import com.example.stayconnected.transaction.enums.TransactionStatus;
 import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.user.model.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "transactions")
+
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

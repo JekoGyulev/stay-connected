@@ -3,6 +3,7 @@ package com.example.stayconnected.review.model;
 import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.user.model.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

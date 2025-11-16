@@ -4,6 +4,9 @@ import com.example.stayconnected.location.model.Location;
 import com.example.stayconnected.property.enums.CategoryType;
 import com.example.stayconnected.user.model.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,6 +16,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "properties")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,13 +41,11 @@ public class Property {
     @Column(name = "create_date", nullable = false)
     private LocalDateTime createDate;
     @OneToMany(mappedBy = "property")
-    private List<PropertyImage> images;
+    private List<PropertyImage> images = new ArrayList<>();
 
+    @Transient
+    private List<String> amenities = new ArrayList<>();
 
-    public Property() {
-        this.images = new ArrayList<>();
-
-    }
 
     public String getTitle() {
         return title;
@@ -113,5 +117,13 @@ public class Property {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public List<String> getAmenities() {
+        return amenities;
+    }
+
+    public void setAmenities(List<String> amenities) {
+        this.amenities = amenities;
     }
 }

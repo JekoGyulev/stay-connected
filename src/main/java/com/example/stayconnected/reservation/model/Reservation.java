@@ -4,6 +4,7 @@ import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.reservation.enums.ReservationStatus;
 import com.example.stayconnected.user.model.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
