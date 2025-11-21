@@ -15,4 +15,6 @@ public interface ReviewService {
     void addReview(UUID userId, UUID propertyId, CreateReviewRequest request);
 
     void deleteReview(Review review);
+
+    List<Object[]> getAverageRatingsForProperties(List<UUID> propertyIds);
 }

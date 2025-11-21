@@ -1,5 +1,6 @@
 package com.example.stayconnected.web.controller;
 
+import com.example.stayconnected.location.service.LocationService;
 import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.review.service.ReviewService;
@@ -7,6 +8,7 @@ import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
+import com.example.stayconnected.web.dto.property.FilterPropertyRequest;
 import com.example.stayconnected.web.dto.property.PropertyEditRequest;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 import jakarta.validation.Valid;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -28,22 +32,49 @@ public class PropertyController {
     private final PropertyService propertyService;
     private final ReviewService reviewService;
     private final UserService userService;
+    private final LocationService locationService;
 
     @Autowired
-    public PropertyController(PropertyService propertyService, ReviewService reviewService, UserService userService) {
+    public PropertyController(PropertyService propertyService, ReviewService reviewService, UserService userService, LocationService locationService) {
         this.propertyService = propertyService;
         this.reviewService = reviewService;
         this.userService = userService;
+        this.locationService = locationService;
     }
 
     @GetMapping
-    public ModelAndView getPropertiesPage() {
+    public ModelAndView getPropertiesPage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        User user = this.userService.getUserById(userPrincipal.getId());
 
-        // Call propertyService.getAllProperties()
+        List<Property> properties = this.propertyService.getAllProperties();
+
+        List<String> allCountries = this.locationService.getAllDistinctCountries();
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("property/properties");
+        modelAndView.addObject("authUser", user);
+        modelAndView.addObject("properties", properties);
+        modelAndView.addObject("countries", allCountries);
+        modelAndView.addObject("filterPropertyRequest", new FilterPropertyRequest());
 
+        return modelAndView;
+    }
+
+    @GetMapping("/filter")
+    public ModelAndView getFilteredProperties(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                              FilterPropertyRequest filterPropertyRequest) {
+        User user = this.userService.getUserById(userPrincipal.getId());
+
+        List<String> allCountries = this.locationService.getAllDistinctCountries();
+
+        List<Property> filteredProperties = this.propertyService.getFilteredProperties(filterPropertyRequest);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("property/properties");
+        modelAndView.addObject("authUser", user);
+        modelAndView.addObject("properties", filteredProperties);
+        modelAndView.addObject("countries", allCountries);
+        modelAndView.addObject("filterPropertyRequest", filterPropertyRequest);
 
         return modelAndView;
     }
@@ -118,9 +149,6 @@ public class PropertyController {
         }
 
         Property property = this.propertyService.createProperty(createPropertyRequest, user);
-
-        // Loop through request.getImages() and save them to the db
-
 
         return new ModelAndView("redirect:/properties/" + property.getId());
     }

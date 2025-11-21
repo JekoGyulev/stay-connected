@@ -1,10 +1,170 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>StayConnected</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Properties - Find Your Perfect Stay</title>
+    <meta name="description" content="Browse our collection of beautiful properties available for rent. Find your perfect vacation home or long-term rental.">
+    <link rel="stylesheet" href="/css/properties.css">
+    <link rel="stylesheet" href="/css/create-property-form.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/transactions-table.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
 
+<header class="header">
+
+    <nav class="nav-container">
+
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <a th:href="@{/home}" style="text-decoration: none">
+                    <h1 class="logo-title">StayConnected</h1>
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link active">Properties</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a th:href="@{/transactions}" class="nav-link">Transactions</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${authUser.id} + '/profile'}" class="dropdown-link">Profile</a></li>
+                            <li><a th:href="@{'/users/wallet'}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a></li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{'/users/wallet'}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(authUser.wallet.balance, 1,2)}"></span>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+<div class="container">
+    <div class="transactions-header">
+        <h1>Explore Properties</h1>
+        <p style="margin: 10px 0 20px 0" class="subtitle">Discover unique stays for your next adventure</p>
+    </div>
+
+    <!-- Filters -->
+    <form th:action="@{/properties/filter}" th:method="GET" th:object="${filterPropertyRequest}" >
+        <div class="transactions-filters">
+
+            <select class="filter-select" th:field="*{category}" >
+
+                <option th:value="ALL">All Categories</option>
+
+                <option th:each="category: ${T(com.example.stayconnected.property.enums.CategoryType).values()}"
+                        th:text="${category.displayName}"
+                        th:value="${category.name()}"
+                ></option>
+
+            </select>
+
+            <select class="filter-select" th:field="*{country}">
+
+                <option th:value="ALL">All Countries</option>
+
+                <option th:each="country : ${countries}"
+                        th:text="${country}"
+                        th:value="${country}"
+                ></option>
+
+            </select>
+
+            <button type="submit" class="filter-button">
+                <svg class="filter-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                </svg>
+                Filter
+            </button>
+        </div>
+    </form>
+
+    <div th:if="${!properties.isEmpty()}" class="properties-grid">
+
+        <article class="property-card" th:each="property : ${properties}">
+
+            <div class="property-image">
+                <img th:src="${property.images[0].imageURL}" alt="Modern beachfront villa with ocean views">
+            </div>
+
+            <div class="property-content">
+
+                <div class="property-header">
+
+                    <h2 th:text="${property.title}" class="property-title"></h2>
+
+                    <div class="property-rating">
+                        <span class="rating-star" th:each="i : ${#numbers.sequence(1, 5)}"
+                              th:text="${i <= (property.averageRating.doubleValue()) ? '★' : '☆'}">
+                        </span>
+                    </div>
+
+                </div>
+
+                <p th:text="${property.location.city} + ', ' + ${property.location.country}" class="property-location"></p>
+
+                <div class="property-footer">
+                    <div class="property-price">
+                        <span th:text="'€' + ${property.pricePerNight}" class="price-amount"></span>
+                        <span class="price-period">/ night</span>
+                    </div>
+                    <a th:href="@{'/properties/' + ${property.id}}" class="btn btn-primary">View</a>
+                </div>
+
+            </div>
+
+        </article>
+    </div>
+
+    <p style="text-align: center" th:if="${properties.isEmpty()}">No available properties found.</p>
+</div>
+
+<footer th:insert="/fragments/footer :: footer"></footer>
 </body>
 </html>

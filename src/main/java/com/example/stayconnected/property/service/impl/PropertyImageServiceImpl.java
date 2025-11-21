@@ -49,7 +49,7 @@ public class PropertyImageServiceImpl implements PropertyImageService {
             propertyImage.setImageURL(imageUrl);
             propertyImage.setProperty(property);
 
-            propertyImageRepository.save(propertyImage);
+            this.propertyImageRepository.save(propertyImage);
 
             log.info("Successfully created image with id [%s] for property with id [%s]"
                     .formatted(propertyImage.getId(), property.getId()));

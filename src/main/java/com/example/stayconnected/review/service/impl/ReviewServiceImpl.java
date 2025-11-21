@@ -72,4 +72,10 @@ public class ReviewServiceImpl implements ReviewService {
                 .formatted(review.getProperty().getId()));
     }
 
+
+    @Override
+    public List<Object[]> getAverageRatingsForProperties(List<UUID> propertyIds) {
+        return this.reviewRepository.findAverageRatingsForProperties(propertyIds);
+    }
+
 }

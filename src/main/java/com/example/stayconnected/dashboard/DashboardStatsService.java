@@ -114,4 +114,10 @@ public class DashboardStatsService {
         this.averageWeeklyTransactionGrowth = averageGrowth;
     }
 
+    @PostConstruct
+    public void init() {
+        calculateDailyStats();
+        calculateAverageWeeklyTransactionGrowth();
+    }
+
 }

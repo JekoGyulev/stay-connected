@@ -1,0 +1,130 @@
+.properties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.property-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+}
+
+.property-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.property-image {
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+    background: var(--accent-bg);
+}
+
+.property-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.property-card:hover .property-image img {
+    transform: scale(1.05);
+}
+
+.property-content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.property-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.property-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin: 0;
+    flex: 1;
+    word-break: break-word;
+}
+
+.property-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap;
+}
+
+.rating-star {
+    color: var(--primary);
+    font-size: 1rem;
+}
+.rating-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.property-location {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    margin: 0 0 1rem 0;
+}
+
+
+
+
+.detail-item {
+    font-size: 0.875rem;
+}
+
+.property-footer {
+    margin-top: auto; /* pushes it to the bottom */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.property-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+}
+
+.price-amount {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.price-period {
+    font-size: 0.875rem;
+    color: var(--muted);
+}
+
+@media (max-width: 768px) {
+
+    .properties-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .property-card {
+        max-width: 100%;
+    }
+}

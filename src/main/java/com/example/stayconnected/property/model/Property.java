@@ -43,6 +43,9 @@ public class Property {
     @OneToMany(mappedBy = "property")
     private List<PropertyImage> images = new ArrayList<>();
 
+
+    @Transient
+    private BigDecimal averageRating;
     @Transient
     private List<String> amenities = new ArrayList<>();
 
@@ -125,5 +128,13 @@ public class Property {
 
     public void setAmenities(List<String> amenities) {
         this.amenities = amenities;
+    }
+
+    public BigDecimal getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(BigDecimal averageRating) {
+        this.averageRating = averageRating;
     }
 }
