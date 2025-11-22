@@ -1,8 +1,8 @@
 package com.example.stayconnected.review.service;
-
 import com.example.stayconnected.review.model.Review;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,4 +17,8 @@ public interface ReviewService {
     void deleteReview(Review review);
 
     List<Object[]> getAverageRatingsForProperties(List<UUID> propertyIds);
+
+    List<Review> getLast5ReviewsForProperty(UUID propertyId);
+
+    BigDecimal getAverageRatingForProperty(UUID propertyId);
 }

@@ -2,14 +2,16 @@ package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.location.service.LocationService;
 import com.example.stayconnected.property.model.Property;
+import com.example.stayconnected.property.model.PropertyImage;
 import com.example.stayconnected.property.service.PropertyService;
+import com.example.stayconnected.review.model.Review;
 import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
+import com.example.stayconnected.web.dto.DtoMapper;
 import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
 import com.example.stayconnected.web.dto.property.FilterPropertyRequest;
-import com.example.stayconnected.web.dto.property.PropertyEditRequest;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,37 +82,32 @@ public class PropertyController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getPropertyDetails(@PathVariable UUID id) {
+    public ModelAndView getPropertyDetails(@PathVariable UUID id, @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        // Get property by id
-        // Get all reviews for that property (call reviewService)
+        User user = this.userService.getUserById(userPrincipal.getId());
+        Property property = this.propertyService.getById(id);
+        User propertyOwner = property.getOwner();
+
+        List<PropertyImage> gridImages = new ArrayList<>();
+
+        if (property.getImages().size() > 1) {
+            gridImages = property.getImages().subList(1,2);
+        }
+
+        List<Review> last5Reviews = this.reviewService.getLast5ReviewsForProperty(property.getId());
+        int allReviewsCount = this.reviewService.getAllReviewsByPropertyWithId(property.getId()).size();
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("property/property-details");
-
-        // Add objects: property, List<Review> reviews
-
+        modelAndView.addObject("authUser", user);
+        modelAndView.addObject("propertyOwner", propertyOwner);
+        modelAndView.addObject("property", property);
+        modelAndView.addObject("gridImages", gridImages);
+        modelAndView.addObject("last5Reviews", last5Reviews);
+        modelAndView.addObject("countReviews", allReviewsCount);
+        modelAndView.addObject("createReviewRequest", new CreateReviewRequest());
 
         return modelAndView;
-    }
-
-    @PostMapping("/{id}/review")
-    public ModelAndView addReview(@PathVariable UUID id,
-                                  @Valid @ModelAttribute CreateReviewRequest request,
-                                  BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            ModelAndView modelAndView = new ModelAndView("property/property-details");
-            modelAndView.addObject("property", this.propertyService.getById(id));
-            modelAndView.addObject("reviews", this.reviewService.getAllReviewsByPropertyWithId(id));
-            return modelAndView;
-        }
-
-        // Get user by his id (logged-in user)
-
-        // Call the addReview method : this.reviewService.addReview(userId, propertyId, request);
-
-        return new ModelAndView("redirect:/properties/" + id);
     }
 
     @GetMapping("/create")
@@ -123,6 +120,7 @@ public class PropertyController {
         modelAndView.setViewName("property/create-property-form");
         modelAndView.addObject("authUser", authUser);
         modelAndView.addObject("createPropertyRequest", new CreatePropertyRequest());
+
         return modelAndView;
     }
 
@@ -174,30 +172,24 @@ public class PropertyController {
     }
 
     @GetMapping("/{id}/edit")
-    @PreAuthorize("hasRole('Admin')")
-    public ModelAndView getPropertyEditForm(@PathVariable UUID id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView getPropertyEditForm(@PathVariable UUID id, @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        // Get Property by Id
-        // Create a DTO and set value to each field from the property
+        Property property = this.propertyService.getById(id);
+
+        User user = this.userService.getUserById(userPrincipal.getId());
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("property/property-edit-form");
-
-        // Add dto as object and use its fields in Thymeleaf
+        modelAndView.setViewName("property/create-property-form");
+        modelAndView.addObject("authUser", user);
 
         return modelAndView;
     }
 
-    @PostMapping("/{id}/edit")
+    @PatchMapping("/{id}/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView submitPropertyChanges(@PathVariable UUID id,
-                                              @Valid @ModelAttribute
-                                              PropertyEditRequest propertyEditRequest,
-                                              BindingResult bindingResult) {
+    public ModelAndView submitPropertyChanges(@PathVariable UUID id) {
 
-        if (bindingResult.hasErrors()) {
-            return new ModelAndView("property/property-edit-form");
-        }
 
 
         // Call propertyService method that accepts parameters the ID and the PropertyEditRequest

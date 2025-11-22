@@ -42,11 +42,9 @@ public class Property {
     private LocalDateTime createDate;
     @OneToMany(mappedBy = "property")
     private List<PropertyImage> images = new ArrayList<>();
-
-
-    @Transient
+    @Column(name = "average_rating")
     private BigDecimal averageRating;
-    @Transient
+    @ElementCollection
     private List<String> amenities = new ArrayList<>();
 
 

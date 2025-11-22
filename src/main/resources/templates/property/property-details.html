@@ -1,10 +1,480 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>StayConnected</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Beachfront Villa - Property Details</title>
+    <link rel="stylesheet" href="/css/property-details.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
+<header class="header">
+
+    <nav class="nav-container">
+
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <a th:href="@{/home}" style="text-decoration: none">
+                    <h1 class="logo-title">StayConnected</h1>
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link active">Properties</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a th:href="@{/transactions}" class="nav-link">Transactions</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${authUser.id} + '/profile'}" class="dropdown-link">Profile</a></li>
+                            <li><a th:href="@{'/users/wallet'}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a></li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{'/users/wallet'}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(authUser.wallet.balance, 1,2)}"></span>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+<div class="property-details-container">
+    <!-- Property Header -->
+    <div class="property-details-header">
+
+        <a th:href="@{/properties}"><i class="fa-solid fa-arrow-left" style="margin-bottom: 2rem"></i></a>
+
+        <div class="property-title-row">
+            <h1 th:text="${property.title}" class="property-details-title"></h1>
+            <a th:if="${authUser.id == propertyOwner.id}" th:href="@{'/properties/' + ${property.id} + '/edit'}" class="edit-property-btn" style="text-decoration: none">Edit</a>
+            <!--Add delete button-->
+
+        </div>
+
+
+        <div class="property-meta">
+            <div class="property-rating">
+                <span class="rating-star">★</span>
+                <span th:text="${property.averageRating}" class="rating-value"></span>
+                <span th:text="'(' + ${countReviews} + ' reviews)'" class="rating-count"></span>
+            </div>
+            <span th:text="'📍' + ${property.location.city} + ', ' + ${property.location.country}"
+                  class="property-location-link"></span>
+        </div>
+    </div>
+
+    <!-- Property Images Gallery -->
+    <div class="property-gallery">
+        <div class="gallery-main">
+            <img th:src="${property.images[0].imageURL}" alt="Main property view">
+        </div>
+        <div th:if="${!gridImages.isEmpty()}" class="gallery-grid">
+            <img th:each="image : ${gridImages}"
+                    th:src="${image.imageURL}"
+                 alt="Property view">
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="property-details-grid">
+        <!-- Left Column -->
+        <div class="property-details-main">
+            <!-- Property Overview -->
+            <section class="details-section">
+                <div class="section-header">
+                    <div>
+                        <h2 th:text="'Entire ' + ${#strings.toLowerCase(property.categoryType.displayName)} + ' hosted by ' + ${#strings.concat(propertyOwner.firstName, ' ', propertyOwner.lastName)}"></h2>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Property Features -->
+            <section class="details-section">
+                <div class="feature-item">
+                    <span class="feature-icon">🏠</span>
+                    <div>
+                        <h3>Entire home</h3>
+                        <p th:text="'You will have the ' + ${#strings.toLowerCase(property.categoryType.displayName)} + ' to yourself.'"></p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✨</span>
+                    <div>
+                        <h3>Enhanced Clean</h3>
+                        <p>This host committed to enhanced cleaning process.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🔑</span>
+                    <div>
+                        <h3>Self check-in</h3>
+                        <p>Check yourself in with the keypad.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📅</span>
+                    <div>
+                        <h3>Free cancellation</h3>
+                        <p>Get a full refund if you change your mind.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Property Description -->
+            <section class="details-section">
+                <h2>About this place</h2>
+                <p th:text="${property.description}" class="property-description">
+
+                </p>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Amenities -->
+            <section class="details-section">
+                <h2>What this place offers</h2>
+                <div class="amenities-grid">
+
+                    <div th:each="amenity : ${property.amenities}" class="amenity-item">
+                        <span th:if="${amenity == 'hot_tub'}" class="amenity-icon">🛁</span>
+                        <span th:if="${amenity == 'heating'}" class="amenity-icon">🌡️</span>
+                        <span th:if="${amenity == 'gym'}" class="amenity-icon">🏋️</span>
+                        <span th:if="${amenity == 'washer'}" class="amenity-icon">🧺</span>
+                        <span th:if="${amenity == 'kitchen'}" class="amenity-icon">🍳</span>
+                        <span th:if="${amenity == 'air_conditioning'}" class="amenity-icon">❄️</span>
+                        <span th:if="${amenity == 'parking'}" class="amenity-icon">🅿️</span>
+                        <span th:if="${amenity == 'wifi'}" class="amenity-icon">📶</span>
+                        <span th:if="${amenity == 'pool'}" class="amenity-icon">🏊</span>
+                        <span th:if="${amenity == 'dryer'}" class="amenity-icon">👕</span>
+                        <span th:if="${amenity == 'hot_tub'}">Hot Tub</span>
+                        <span th:if="${amenity == 'heating'}">Heating</span>
+                        <span th:if="${amenity == 'gym'}">Gym</span>
+                        <span th:if="${amenity == 'washer'}">Washer</span>
+                        <span th:if="${amenity == 'kitchen'}">Kitchen</span>
+                        <span th:if="${amenity == 'air_conditioning'}">Air conditioning</span>
+                        <span th:if="${amenity == 'parking'}">Free parking</span>
+                        <span th:if="${amenity == 'wifi'}">Wifi</span>
+                        <span th:if="${amenity == 'pool'}">Pool</span>
+                        <span th:if="${amenity == 'dryer'}">Dryer</span>
+                    </div>
+                </div>
+            </section>
+
+            <div th:if="${propertyOwner.id != authUser.id}" class="section-divider"></div>
+
+            <!-- Calendar Booking -->
+            <section th:if="${propertyOwner.id != authUser.id}" class="details-section">
+                <h2>Select dates</h2>
+                <p class="calendar-subtitle">Add your travel dates for exact pricing</p>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="calendar-nav-btn" id="prevMonth">‹</button>
+                        <span class="calendar-month" id="currentMonth">December 2024</span>
+                        <button class="calendar-nav-btn" id="nextMonth">›</button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-day-header">Sun</div>
+                        <div class="calendar-day-header">Mon</div>
+                        <div class="calendar-day-header">Tue</div>
+                        <div class="calendar-day-header">Wed</div>
+                        <div class="calendar-day-header">Thu</div>
+                        <div class="calendar-day-header">Fri</div>
+                        <div class="calendar-day-header">Sat</div>
+                        <!-- Calendar days will be generated here -->
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day">1</div>
+                        <div class="calendar-day">2</div>
+                        <div class="calendar-day">3</div>
+                        <div class="calendar-day">4</div>
+                        <div class="calendar-day">5</div>
+                        <div class="calendar-day">6</div>
+                        <div class="calendar-day">7</div>
+                        <div class="calendar-day">8</div>
+                        <div class="calendar-day">9</div>
+                        <div class="calendar-day">10</div>
+                        <div class="calendar-day">11</div>
+                        <div class="calendar-day">12</div>
+                        <div class="calendar-day">13</div>
+                        <div class="calendar-day">14</div>
+                        <div class="calendar-day">15</div>
+                        <div class="calendar-day">16</div>
+                        <div class="calendar-day">17</div>
+                        <div class="calendar-day">18</div>
+                        <div class="calendar-day">19</div>
+                        <div class="calendar-day selected">20</div>
+                        <div class="calendar-day in-range">21</div>
+                        <div class="calendar-day in-range">22</div>
+                        <div class="calendar-day selected">23</div>
+                        <div class="calendar-day">24</div>
+                        <div class="calendar-day">25</div>
+                        <div class="calendar-day">26</div>
+                        <div class="calendar-day">27</div>
+                        <div class="calendar-day">28</div>
+                        <div class="calendar-day">29</div>
+                        <div class="calendar-day">30</div>
+                        <div class="calendar-day">31</div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Location Map -->
+            <section class="details-section">
+                <h2>Where you'll be</h2>
+                <p th:text="${property.location.address} + ', ' + ${property.location.city} + ', ' + ${property.location.country}"
+                   class="location-description"></p>
+                <div id="map"  class="property-map"></div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Reviews Section -->
+            <section class="details-section">
+                <div class="reviews-header">
+                    <h2>
+                        <span class="amenity-icon">⭐</span>
+                        Recent Reviews
+                        <span class="amenity-icon">⭐</span>
+                    </h2>
+                </div>
+
+                <!-- Reviews List -->
+                <div class="reviews-list">
+
+                    <div th:if="${countReviews != 0}" th:each="review: ${last5Reviews}" class="review-item">
+                        <div class="review-header">
+                            <img th:src="${#strings.isEmpty(review.createdFrom.profilePictureUrl) ?
+                                    'https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png' : review.createdFrom.profilePictureUrl}"
+                                 th:alt="${#strings.concat(review.createdFrom.firstName, ' ', review.createdFrom.lastName)}"
+                                 class="reviewer-avatar">
+                            <div>
+                                <h4 th:text="${#strings.concat(review.createdFrom.firstName, ' ', review.createdFrom.lastName)}" class="reviewer-name"></h4>
+                                <p th:text="'Joined in ' + ${#temporals.format(review.createdFrom.registeredAt, 'MMMM yyyy' )}" class="reviewer-joined"></p>
+                            </div>
+
+                            <form th:if="${review.createdFrom.id == authUser.id}" class="delete-review-form"
+                                  th:action="@{'/reviews/' + ${review.id} + '/delete'}"
+                                  th:method="DELETE">
+                                <button class="delete-review-btn"  title="Delete your review">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M3 6h18"></path>
+                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                    </svg>
+                                </button>
+                            </form>
+
+                        </div>
+                        <div class="review-rating">
+
+                            <div class="property-rating">
+                                <span class="rating-stars" th:each="i : ${#numbers.sequence(1, 5)}"
+                                      th:text="${i <= (review.rating) ? '★' : '☆'}">
+                                </span>
+                            </div>
+
+                            <span th:text="${#temporals.format(review.createdAt, 'MMMM yyyy' )}" class="review-date"></span>
+                        </div>
+                        <p th:text="${review.comment}" class="review-text"></p>
+                    </div>
+
+                    <p th:if="${countReviews == 0}" class="review-text">No reviews yet.</p>
+
+                </div>
+
+            </section>
+
+            <div th:if="${propertyOwner.id != authUser.id}" class="section-divider"></div>
+
+            <!-- Write a Review -->
+            <section th:if="${authUser.id != propertyOwner.id}" class="details-section">
+
+                <h2>Leave a review</h2>
+
+
+                <form class="review-form" th:action="@{'/reviews/create/' + ${property.id}}" th:method="POST" th:object="${createReviewRequest}">
+
+
+                    <input type="hidden" id="rating-input" th:field="*{rating}">
+
+                    <div class="review-rating-input">
+
+                        <label>Your rating</label>
+                        <div class="star-rating-input">
+                            <span class="star-input" data-rating="1">☆</span>
+                            <span class="star-input" data-rating="2">☆</span>
+                            <span class="star-input" data-rating="3">☆</span>
+                            <span class="star-input" data-rating="4">☆</span>
+                            <span class="star-input" data-rating="5">☆</span>
+                        </div>
+                        <p th:if="${#fields.hasErrors('rating')}" class="alert-warning">We need your rating</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-text">Your review</label>
+                        <textarea th:field="*{comment}" id="review-text" rows="5" placeholder="Share your experience at this property..."></textarea>
+                        <p th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" class="alert-warning"></p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">Submit Review</button>
+                </form>
+
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Host Information -->
+            <section class="details-section">
+                <h2>Meet your host</h2>
+                <div class="host-card">
+                    <div class="host-card-header">
+                        <img th:src="${propertyOwner.profilePictureUrl}" alt="Sarah Anderson" class="host-avatar-large">
+                        <div class="host-info">
+                            <h3 th:text="${propertyOwner.username}"></h3>
+                            <p th:text="'Joined in ' + ${#temporals.format(propertyOwner.registeredAt, 'MMMM yyyy' )}"
+                               class="host-joined"></p>
+                        </div>
+                    </div>
+
+                    <div class="host-details">
+                        <div class="host-detail-item">
+                            <span class="host-detail-icon">💬</span>
+                            <span>Response rate: 100%</span>
+                        </div>
+                        <div class="host-detail-item">
+                            <span class="host-detail-icon">⚡</span>
+                            <span>Response time: within an hour</span>
+                        </div>
+                    </div>
+                    <p th:text="'Hello, everyone! I am ' + ${#strings.concat(propertyOwner.firstName, ' ',propertyOwner.lastName)} + '. It is nice to meet you! 😁. Please feel free, if you have any questions, to contact me at:  ' + ${propertyOwner.email}" class="host-description"></p>
+                    <button th:if="${propertyOwner.id != authUser.id}" class="btn btn-outline btn-lg">Contact host</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Right Column - Booking Card -->
+        <aside th:if="${authUser.id != propertyOwner.id}" class="booking-card">
+            <div class="booking-card-sticky">
+                <div class="booking-price">
+                    <span th:text="'€' + ${property.pricePerNight}" class="price-amount"></span>
+                    <span class="price-period">/ night</span>
+                </div>
+                <div class="booking-rating">
+                    <span class="rating-star">★</span>
+                    <span th:text="${property.averageRating}" class="rating-value"></span>
+                    <span th:text="'(' + ${countReviews} + ' reviews)'" class="rating-count"></span>
+                </div>
+
+                <div class="booking-dates">
+                    <div class="booking-date-input">
+                        <label>CHECK-IN</label>
+                        <input type="text" value="12/20/2024" readonly>
+                    </div>
+                    <div class="booking-date-input">
+                        <label>CHECKOUT</label>
+                        <input type="text" value="12/23/2024" readonly>
+                    </div>
+                </div>
+
+                <div class="booking-guests">
+                    <label>GUESTS</label>
+                    <select>
+                        <option>1 guest</option>
+                        <option>2 guests</option>
+                        <option>3 guests</option>
+                        <option>4 guests</option>
+                        <option>5 guests</option>
+                        <option>6 guests</option>
+                        <option>7 guests</option>
+                        <option selected>8 guests</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary btn-lg btn-block">Reserve</button>
+                <p class="booking-notice">You won't be charged yet</p>
+
+                <div class="booking-breakdown">
+                    <div class="booking-line-item">
+                        <span>$850 × 3 nights</span>
+                        <span>$2,550</span>
+                    </div>
+                    <div class="booking-line-item">
+                        <span>Cleaning fee</span>
+                        <span>$150</span>
+                    </div>
+                    <div class="booking-line-item">
+                        <span>Service fee</span>
+                        <span>$380</span>
+                    </div>
+                    <div class="section-divider"></div>
+                    <div class="booking-line-item booking-total">
+                        <span>Total</span>
+                        <span>$3,080</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+
+<footer th:insert="/fragments/footer :: footer"></footer>
+
+<script src="/js/initMaps.js"></script>
+
+<script src="/js/highlightStars.js"></script>
 </body>
 </html>

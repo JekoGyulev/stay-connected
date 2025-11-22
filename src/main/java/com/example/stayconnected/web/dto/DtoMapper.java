@@ -1,6 +1,8 @@
 package com.example.stayconnected.web.dto;
 
+import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.user.model.User;
+import com.example.stayconnected.web.dto.location.LocationRequest;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import lombok.experimental.UtilityClass;
 
@@ -16,5 +18,10 @@ public class DtoMapper {
         );
     }
 
-    // Make a PropertyEditRequest fromProperty(Property property) -> When admin wants to edit the property
+//    public static CreatePropertyRequest fromProperty(Property property) {
+//
+//        LocationRequest locationRequest = new LocationRequest(property.getLocation().getCountry(), property.getLocation().getCity(), property.getLocation().getAddress());
+//
+//
+//    }
 }

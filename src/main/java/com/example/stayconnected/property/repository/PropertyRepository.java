@@ -16,16 +16,16 @@ public interface PropertyRepository extends JpaRepository<Property, UUID> {
 
     List<Property> findAllByOwnerId(UUID ownerId);
 
-    List<Property> findAllByOrderByCreateDateDesc();
+    List<Property> findAllByOrderByCreateDateDescAverageRatingDesc();
 
-    List<Property> findByCategoryTypeAndLocation_CountryOrderByCreateDateDesc(
+    List<Property> findByCategoryTypeAndLocation_CountryOrderByCreateDateDescAverageRatingDesc(
             CategoryType categoryType,
             String country
     );
 
     long countAllByCreateDateBetween(LocalDateTime createDateAfter, LocalDateTime createDateBefore);
 
-    List<Property> findAllByCategoryTypeOrderByCreateDateDesc(CategoryType categoryType);
+    List<Property> findAllByCategoryTypeOrderByCreateDateDescAverageRatingDesc(CategoryType categoryType);
 
-    List<Property> findAllByLocation_CountryOrderByCreateDateDesc(String country);
+    List<Property> findAllByLocation_CountryOrderByCreateDateDescAverageRatingDesc(String country);
 }

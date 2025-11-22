@@ -1,6 +1,5 @@
 package com.example.stayconnected.web.dto.property;
 
-import com.example.stayconnected.location.model.Location;
 import com.example.stayconnected.property.enums.CategoryType;
 import com.example.stayconnected.web.dto.location.LocationRequest;
 import jakarta.validation.Valid;
@@ -8,10 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
@@ -21,6 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CreatePropertyRequest {
     @NotBlank(message = "Please write title")
     private String title;

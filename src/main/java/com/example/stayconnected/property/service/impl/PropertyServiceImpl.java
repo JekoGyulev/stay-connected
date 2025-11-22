@@ -52,9 +52,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public List<Property> getAllProperties() {
-        List<Property> properties = this.propertyRepository.findAllByOrderByCreateDateDesc();
-        applyAverageRatings(properties);
-        return properties;
+        return this.propertyRepository.findAllByOrderByCreateDateDescAverageRatingDesc();
     }
 
     @Override
@@ -70,12 +68,11 @@ public class PropertyServiceImpl implements PropertyService {
                 .location(location)
                 .pricePerNight(createPropertyRequest.getPricePerNight())
                 .owner(owner)
+                .amenities(createPropertyRequest.getAmenities())
                 .createDate(LocalDateTime.now())
                 .build();
 
         this.propertyRepository.save(property);
-
-        property.setAmenities(createPropertyRequest.getAmenities());
 
         for (MultipartFile file : createPropertyRequest.getImages()) {
             if (!file.isEmpty()) {
@@ -92,8 +89,6 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public List<Property> getFilteredProperties(FilterPropertyRequest filterPropertyRequest) {
 
-        List<Property> properties = new ArrayList<>();
-
         String category = filterPropertyRequest.getCategory();
         String country = filterPropertyRequest.getCountry();
 
@@ -101,50 +96,24 @@ public class PropertyServiceImpl implements PropertyService {
         boolean countryFilter = country != null && !country.equals("ALL");
 
         if (!categoryFilter && !countryFilter) {
-           properties = this.propertyRepository.findAllByOrderByCreateDateDesc();
+           return getAllProperties();
         }
 
         if (categoryFilter && countryFilter) {
-            properties = this.propertyRepository.findByCategoryTypeAndLocation_CountryOrderByCreateDateDesc(
+            return this.propertyRepository.findByCategoryTypeAndLocation_CountryOrderByCreateDateDescAverageRatingDesc(
                     CategoryType.valueOf(category), country
             );
         }
 
         if (categoryFilter) {
-            properties = this.propertyRepository
-                    .findAllByCategoryTypeOrderByCreateDateDesc(CategoryType.valueOf(category));
+            return this.propertyRepository
+                    .findAllByCategoryTypeOrderByCreateDateDescAverageRatingDesc(CategoryType.valueOf(category));
         }
 
-        if (countryFilter) {
-            properties = this.propertyRepository
-                    .findAllByLocation_CountryOrderByCreateDateDesc(country);
-        }
 
-        applyAverageRatings(properties);
-
-        return properties;
+        return this.propertyRepository
+                .findAllByLocation_CountryOrderByCreateDateDescAverageRatingDesc(country);
     }
-
-    private void applyAverageRatings(List<Property> properties) {
-
-        List<UUID> propertyIds = properties.stream()
-                .map(Property::getId)
-                .toList();
-
-        List<Object[]> averages = this.reviewService.getAverageRatingsForProperties(propertyIds);
-
-        Map<UUID, BigDecimal> averageMap = averages
-                .stream()
-                .collect(Collectors.toMap(
-                        row -> (UUID) row[0],
-                        row -> BigDecimal.valueOf((Double) row[1])
-                ));
-
-        properties.forEach(property -> {
-                        property.setAverageRating(averageMap.getOrDefault(property.getId(), BigDecimal.ZERO));
-        });
-    }
-
 
     // Have at least 1 logging message -> log.info("Successfully done {your operation}")
 
