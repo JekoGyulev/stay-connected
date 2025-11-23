@@ -27,4 +27,6 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
     @Query("SELECT COALESCE(AVG(r.rating), 0) FROM Review r WHERE r.property.id = :propertyId")
     BigDecimal findAverageRatingForProperty(@Param(value = "propertyId") UUID propertyId);
+
+    void deleteReviewByProperty_Id(UUID propertyId);
 }

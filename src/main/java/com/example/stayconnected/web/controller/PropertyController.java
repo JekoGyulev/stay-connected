@@ -192,7 +192,7 @@ public class PropertyController {
 
     @PatchMapping("/{id}/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView submitPropertyChanges(@PathVariable UUID id) {
+    public ModelAndView editProperty(@PathVariable UUID id) {
 
         // TODO: IMPLEMENT THIS
 
@@ -205,12 +205,9 @@ public class PropertyController {
     @DeleteMapping("/{id}/delete")
     @PreAuthorize("hasRole('ADMIN')")
     public String deleteProperty(@PathVariable UUID id) {
-
-        //TODO: IMPLEMENT THIS
-
-        // Delete the property by id
-
-        return "redirect:/properties/my-properties";
+        Property property = this.propertyService.getById(id);
+        this.propertyService.deleteProperty(property);
+        return "redirect:/properties/my-properties?message=Successfully deleted property!";
     }
 
 

@@ -12,18 +12,18 @@ import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.utility.exception.PropertyDoesNotExist;
 import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
 import com.example.stayconnected.web.dto.property.FilterPropertyRequest;
+import jakarta.persistence.Transient;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 @Slf4j
@@ -113,6 +113,18 @@ public class PropertyServiceImpl implements PropertyService {
 
         return this.propertyRepository
                 .findAllByLocation_CountryOrderByCreateDateDescAverageRatingDesc(country);
+    }
+
+    @Override
+    @Transactional
+    public void deleteProperty(Property property) {
+
+        this.reviewService.deleteAllReviewsForProperty(property.getId());
+
+        this.propertyRepository.deleteById(property.getId());
+
+        log.info("Successfully deleted property with id [%s]"
+                .formatted(property.getId().toString()));
     }
 
     // Have at least 1 logging message -> log.info("Successfully done {your operation}")

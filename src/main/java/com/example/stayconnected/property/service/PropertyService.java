@@ -18,6 +18,8 @@ public interface PropertyService {
 
     List<Property> getFilteredProperties(FilterPropertyRequest filterPropertyRequest);
 
+    void deleteProperty(Property property);
+
     // Update property
     // Delete property
 }

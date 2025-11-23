@@ -11,6 +11,7 @@ import com.example.stayconnected.user.repository.UserRepository;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.utility.exception.PropertyDoesNotExist;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,6 +79,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public BigDecimal getAverageRatingForProperty(UUID propertyId) {
         return this.reviewRepository.findAverageRatingForProperty(propertyId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllReviewsForProperty(UUID id) {
+        this.reviewRepository.deleteReviewByProperty_Id(id);
     }
 
     @Override

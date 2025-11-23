@@ -96,7 +96,7 @@
             <div class="property-actions">
                 <a th:if="${authUser.id == propertyOwner.id}" th:href="@{'/properties/' + ${property.id} + '/edit'}" class="edit-property-btn" style="text-decoration: none">Edit</a>
 
-                <form th:action="@{'/properties/' + ${property.id} + '/delete'}" th:method="DELETE">
+                <form th:if="${authUser.id == propertyOwner.id}" th:action="@{'/properties/' + ${property.id} + '/delete'}" th:method="DELETE">
                         <button type="submit" class="delete-property-btn">Delete</button>
                 </form>
             </div>
@@ -489,8 +489,8 @@
     let deleteButton = document.querySelector(".delete-property-btn");
 
     deleteButton.addEventListener("click", function(event) {
-        if (confirm("Are you sure you want to delete this property?")) {
-
+        if (!confirm("Are you sure you want to delete this property?")) {
+            event.preventDefault();
         }
     });
 </script>
