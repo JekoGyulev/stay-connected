@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Properties</title>
+    <link rel="stylesheet" href="/css/properties.css">
+    <link rel="stylesheet" href="/css/create-property-form.css">
+    <link rel="stylesheet" href="/css/manage-properties.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+
+<header class="header">
+
+    <nav class="nav-container">
+
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <a th:href="@{/home}" style="text-decoration: none">
+                    <h1 class="logo-title">StayConnected</h1>
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link">Properties</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a th:href="@{/transactions}" class="nav-link">Transactions</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${authUser.id} + '/profile'}" class="dropdown-link">Profile</a></li>
+                            <li><a th:href="@{'/users/wallet'}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link active">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a></li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{'/users/wallet'}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(authUser.wallet.balance, 1,2)}"></span>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+<div class="container">
+    <div class="transactions-header">
+        <h1>Manage Properties</h1>
+        <p style="margin: 10px 0 20px 0" class="subtitle">Manage your hosted properties</p>
+    </div>
+
+    <p th:if="${message != null}" th:text="${message}" class="amount-cell positive"></p>
+
+    <div th:if="${!properties.isEmpty()}" class="properties-grid">
+
+        <article class="property-card" th:each="property : ${properties}">
+
+            <div class="property-image">
+                <img th:src="${property.images[0].imageURL}" alt="Modern beachfront villa with ocean views">
+            </div>
+
+            <div class="property-content">
+
+                <div class="property-header">
+
+                    <h2 th:text="${property.title}" class="property-title"></h2>
+
+                    <div class="property-rating">
+                        <span class="rating-star" th:each="i : ${#numbers.sequence(1, 5)}"
+                              th:text="${i <= (property.averageRating.doubleValue()) ? '★' : '☆'}">
+                        </span>
+                    </div>
+
+                </div>
+
+                <p th:text="${property.location.city} + ', ' + ${property.location.country}" class="property-location"></p>
+
+                <div class="property-footer">
+                    <div class="property-price">
+                        <span th:text="'€' + ${property.pricePerNight}" class="price-amount"></span>
+                        <span class="price-period">/ night</span>
+                    </div>
+
+                </div>
+
+                <p style="margin-top: 20px; font-size: 13px" class="property-location" th:text="${#temporals.format(property.createDate ,'dd MMMM yyyy')}"></p>
+
+
+                <div class="property-actions-footer">
+
+
+                        <a th:href="@{'/properties/' + ${property.id}}" class="action-btn view-btn" title="View property">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </a>
+
+
+
+                        <a s th:href="@{'/properties/' + ${property.id} + '/edit'}" class="action-btn edit-btn" title="Edit property">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                                <path d="m15 5 4 4"/>
+                            </svg>
+                        </a>
+
+
+                    <form th:action="@{'/properties/' + ${property.id} + '/delete'}" th:method="DELETE">
+
+                        <button type="submit" class="action-btn delete-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 6h18"/>
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                <line x1="10" x2="10" y1="11" y2="17"/>
+                                <line x1="14" x2="14" y1="11" y2="17"/>
+                            </svg>
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+
+            </div>
+
+        </article>
+    </div>
+
+    <p style="text-align: center" th:if="${properties.isEmpty()}">No available properties found.</p>
+</div>
+</body>
+
+
+<footer th:insert="/fragments/footer :: footer"></footer>
+
+</html>

@@ -49,7 +49,6 @@
 
                     </li>
 
-                    <!--Authorize this-->
                     <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
 
                         <a class="nav-link">Admin</a>
@@ -66,7 +65,7 @@
                     <li class="nav-item wallet-item">
                         <a th:href="@{'/users/wallet'}">
                             <i class="fa-solid fa-wallet"></i>
-                            <!--User's current balance-->
+
                             <span th:text="' : ' + '€' + ${#numbers.formatDecimal(authUser.wallet.balance, 1,2)}"></span>
                         </a>
 
@@ -74,7 +73,7 @@
                 </ul>
             </nav>
 
-            <!-- Logout Button -->
+
             <div class="auth-buttons">
                 <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
             </div>
@@ -85,7 +84,7 @@
 
 <div class="property-details-container">
 
-    <!-- Property Header -->
+
     <div class="property-details-header">
 
         <a th:href="@{/properties}"><i class="fa-solid fa-arrow-left" style="margin-bottom: 2rem"></i></a>
@@ -117,7 +116,7 @@
         </div>
     </div>
 
-    <!-- Property Images Gallery -->
+
     <div class="property-gallery">
         <div class="gallery-main">
             <img th:src="${property.images[0].imageURL}" alt="Main property view">
@@ -131,9 +130,9 @@
 
     <!-- Main Content Grid -->
     <div class="property-details-grid">
-        <!-- Left Column -->
+
         <div class="property-details-main">
-            <!-- Property Overview -->
+
             <section class="details-section">
                 <div class="section-header">
                     <div>
@@ -144,7 +143,7 @@
 
             <div class="section-divider"></div>
 
-            <!-- Property Features -->
+
             <section class="details-section">
                 <div class="feature-item">
                     <span class="feature-icon">🏠</span>
@@ -178,7 +177,7 @@
 
             <div class="section-divider"></div>
 
-            <!-- Property Description -->
+
             <section class="details-section">
                 <h2>About this place</h2>
                 <p th:text="${property.description}" class="property-description">
@@ -188,7 +187,7 @@
 
             <div class="section-divider"></div>
 
-            <!-- Amenities -->
+
             <section class="details-section">
                 <h2>What this place offers</h2>
                 <div class="amenities-grid">
@@ -220,7 +219,7 @@
 
             <div th:if="${propertyOwner.id != authUser.id}" class="section-divider"></div>
 
-            <!-- Calendar Booking -->
+
             <section th:if="${propertyOwner.id != authUser.id}" class="details-section">
 
                 <h2>Select dates</h2>
@@ -285,7 +284,7 @@
 
             <div class="section-divider"></div>
 
-            <!-- Location Map -->
+
             <section class="details-section">
                 <h2>Where you'll be</h2>
                 <p th:text="${property.location.address} + ', ' + ${property.location.city} + ', ' + ${property.location.country}"
@@ -295,7 +294,7 @@
 
             <div class="section-divider"></div>
 
-            <!-- Reviews Section -->
+
             <section class="details-section">
                 <div class="reviews-header">
                     <h2>
@@ -305,7 +304,7 @@
                     </h2>
                 </div>
 
-                <!-- Reviews List -->
+
                 <div class="reviews-list">
 
                     <div th:if="${countReviews != 0}" th:each="review: ${last5Reviews}" class="review-item">
@@ -353,7 +352,7 @@
 
             <div th:if="${propertyOwner.id != authUser.id}" class="section-divider"></div>
 
-            <!-- Write a Review -->
+
             <section th:if="${authUser.id != propertyOwner.id}" class="details-section">
 
                 <h2>Leave a review</h2>
@@ -390,7 +389,7 @@
 
             <div class="section-divider"></div>
 
-            <!-- Host Information -->
+
             <section class="details-section">
                 <h2>Meet your host</h2>
                 <div class="host-card">
@@ -419,7 +418,7 @@
             </section>
         </div>
 
-        <!-- Right Column - Booking Card -->
+
         <aside th:if="${authUser.id != propertyOwner.id}" class="booking-card">
             <div class="booking-card-sticky">
                 <div class="booking-price">

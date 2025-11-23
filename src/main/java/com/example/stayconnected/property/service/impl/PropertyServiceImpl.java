@@ -17,9 +17,12 @@ import com.example.stayconnected.web.dto.property.FilterPropertyRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -52,11 +55,13 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    @Cacheable(value = "properties")
     public List<Property> getAllProperties() {
         return this.propertyRepository.findAllByOrderByCreateDateDescAverageRatingDesc();
     }
 
     @Override
+    @CacheEvict(value = "properties", allEntries = true)
     public Property createProperty(CreatePropertyRequest createPropertyRequest, User owner) {
 
         Location location = this.locationService.createLocation(createPropertyRequest.getLocation());
@@ -71,6 +76,7 @@ public class PropertyServiceImpl implements PropertyService {
                 .owner(owner)
                 .amenities(createPropertyRequest.getAmenities())
                 .createDate(LocalDateTime.now())
+                .averageRating(BigDecimal.ZERO)
                 .build();
 
         this.propertyRepository.save(property);
@@ -118,6 +124,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "properties", allEntries = true)
     public void deleteProperty(Property property) {
 
         this.reviewService.deleteAllReviewsForProperty(property.getId());
@@ -130,6 +137,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "properties", allEntries = true)
     public void editProperty(UUID id, EditPropertyRequest editPropertyRequest) {
 
         Property property = this.getById(id);
@@ -154,6 +162,11 @@ public class PropertyServiceImpl implements PropertyService {
 
         log.info("Successfully edited property with id [%s] and title [%s]"
                 .formatted(property.getId(), property.getTitle()));
+    }
+
+    @Override
+    public List<Property> getPropertiesByAdminId(UUID adminId) {
+        return this.propertyRepository.findAllByOwnerIdOrderByCreateDateDescAverageRatingDesc(adminId);
     }
 
 }

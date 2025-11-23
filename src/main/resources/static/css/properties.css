@@ -1,3 +1,27 @@
+
+.profile-header {
+    background: var(--gradient-hero);
+    padding: 6rem 0 2rem;
+    text-align: center;
+}
+
+.profile-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--foreground);
+    margin: 0 0 0.5rem;
+}
+
+.profile-subtitle {
+    color: var(--muted);
+    font-size: 1.125rem;
+    margin: 0;
+}
+
+
+
+
+
 .properties-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -20,6 +44,7 @@
     transform: translateY(-4px);
     box-shadow: var(--shadow-hover);
 }
+
 
 .property-image {
     width: 100%;

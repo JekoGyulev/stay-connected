@@ -93,7 +93,7 @@ public class PropertyController {
         List<PropertyImage> gridImages = new ArrayList<>();
 
         if (property.getImages().size() > 1) {
-            gridImages = property.getImages().subList(1,2);
+            gridImages = property.getImages().subList(1,property.getImages().size());
         }
 
         List<Review> last5Reviews = this.reviewService.getLast5ReviewsForProperty(property.getId());
@@ -159,22 +159,21 @@ public class PropertyController {
 
     @GetMapping("/my-properties")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView getAdminProperties() {
+    public ModelAndView getAdminProperties(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                           @RequestParam(value = "message", required = false) String message) {
 
-        //TODO: IMPLEMENT THIS
+        User user = this.userService.getUserById(userPrincipal.getId());
 
-        /*
-            Going to use @AuthenticationPrincipal and AuthenticationMetadata
-            to get the logged in user id which we will put in the parameters of
-            propertyService - to get all properties the admin owns
-         */
-
-        // Call propertyService to get all properties the admin owns
+        List<Property> ownedProperties = this.propertyService.getPropertiesByAdminId(user.getId());
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("property/my-properties");
+        modelAndView.setViewName("property/manage-properties");
+        modelAndView.addObject("authUser", user);
+        modelAndView.addObject("properties", ownedProperties);
 
-        // Add properties as object
+        if (message != null) {
+            modelAndView.addObject("message", message);
+        }
 
         return modelAndView;
     }
@@ -228,6 +227,7 @@ public class PropertyController {
     public String deleteProperty(@PathVariable UUID id) {
         Property property = this.propertyService.getById(id);
         this.propertyService.deleteProperty(property);
+        // TODO: USE THE REQUEST PARAMETER IN HTML PAGE (my-properties)
         return "redirect:/properties/my-properties?message=Successfully deleted property!";
     }
 

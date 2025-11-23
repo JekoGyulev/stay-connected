@@ -14,7 +14,7 @@ import java.util.UUID;
 @Repository
 public interface PropertyRepository extends JpaRepository<Property, UUID> {
 
-    List<Property> findAllByOwnerId(UUID ownerId);
+    List<Property> findAllByOwnerIdOrderByCreateDateDescAverageRatingDesc(UUID ownerId);
 
     List<Property> findAllByOrderByCreateDateDescAverageRatingDesc();
 

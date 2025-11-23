@@ -22,4 +22,6 @@ public interface PropertyService {
     void deleteProperty(Property property);
 
     void editProperty(UUID id, EditPropertyRequest editPropertyRequest);
+
+    List<Property> getPropertiesByAdminId(UUID adminId);
 }
