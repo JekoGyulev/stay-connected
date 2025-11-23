@@ -16,8 +16,6 @@ public interface ReviewService {
 
     void deleteReview(Review review);
 
-    List<Object[]> getAverageRatingsForProperties(List<UUID> propertyIds);
-
     List<Review> getLast5ReviewsForProperty(UUID propertyId);
 
     BigDecimal getAverageRatingForProperty(UUID propertyId);

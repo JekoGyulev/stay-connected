@@ -102,13 +102,6 @@ public class ReviewServiceImpl implements ReviewService {
         log.info("Successfully deleted review of property with id [%s]"
                 .formatted(review.getProperty().getId()));
     }
-
-
-    @Override
-    public List<Object[]> getAverageRatingsForProperties(List<UUID> propertyIds) {
-        return this.reviewRepository.findAverageRatingsForProperties(propertyIds);
-    }
-
     @Override
     public List<Review> getLast5ReviewsForProperty(UUID propertyId) {
         return this.reviewRepository.findTop5ByPropertyIdOrderByCreatedAtDesc(propertyId);
