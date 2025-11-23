@@ -155,6 +155,8 @@ public class PropertyController {
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getAdminProperties() {
 
+        //TODO: IMPLEMENT THIS
+
         /*
             Going to use @AuthenticationPrincipal and AuthenticationMetadata
             to get the logged in user id which we will put in the parameters of
@@ -175,12 +177,14 @@ public class PropertyController {
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getPropertyEditForm(@PathVariable UUID id, @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
+        // TODO: IMPLEMENT THIS
+
         Property property = this.propertyService.getById(id);
 
         User user = this.userService.getUserById(userPrincipal.getId());
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("property/create-property-form");
+        modelAndView.setViewName(null);
         modelAndView.addObject("authUser", user);
 
         return modelAndView;
@@ -190,7 +194,7 @@ public class PropertyController {
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView submitPropertyChanges(@PathVariable UUID id) {
 
-
+        // TODO: IMPLEMENT THIS
 
         // Call propertyService method that accepts parameters the ID and the PropertyEditRequest
 
@@ -198,9 +202,11 @@ public class PropertyController {
        return new ModelAndView("redirect:/properties/" + id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete")
     @PreAuthorize("hasRole('ADMIN')")
     public String deleteProperty(@PathVariable UUID id) {
+
+        //TODO: IMPLEMENT THIS
 
         // Delete the property by id
 

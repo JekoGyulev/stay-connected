@@ -91,9 +91,15 @@
 
         <div class="property-title-row">
             <h1 th:text="${property.title}" class="property-details-title"></h1>
-            <a th:if="${authUser.id == propertyOwner.id}" th:href="@{'/properties/' + ${property.id} + '/edit'}" class="edit-property-btn" style="text-decoration: none">Edit</a>
-            <!--Add delete button-->
 
+
+            <div class="property-actions">
+                <a th:if="${authUser.id == propertyOwner.id}" th:href="@{'/properties/' + ${property.id} + '/edit'}" class="edit-property-btn" style="text-decoration: none">Edit</a>
+
+                <form th:action="@{'/properties/' + ${property.id} + '/delete'}" th:method="DELETE">
+                        <button type="submit" class="delete-property-btn">Delete</button>
+                </form>
+            </div>
         </div>
 
 
@@ -213,7 +219,11 @@
 
             <!-- Calendar Booking -->
             <section th:if="${propertyOwner.id != authUser.id}" class="details-section">
+
                 <h2>Select dates</h2>
+
+                <!--TODO: IMPLEMENT THE CALENDAR-->
+
                 <p class="calendar-subtitle">Add your travel dates for exact pricing</p>
                 <div class="calendar-container">
                     <div class="calendar-header">
@@ -474,7 +484,15 @@
 <footer th:insert="/fragments/footer :: footer"></footer>
 
 <script src="/js/initMaps.js"></script>
-
 <script src="/js/highlightStars.js"></script>
+<script>
+    let deleteButton = document.querySelector(".delete-property-btn");
+
+    deleteButton.addEventListener("click", function(event) {
+        if (confirm("Are you sure you want to delete this property?")) {
+
+        }
+    });
+</script>
 </body>
 </html>
