@@ -11,6 +11,7 @@ import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.web.dto.DtoMapper;
 import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
+import com.example.stayconnected.web.dto.property.EditPropertyRequest;
 import com.example.stayconnected.web.dto.property.FilterPropertyRequest;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 import jakarta.validation.Valid;
@@ -82,7 +83,8 @@ public class PropertyController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getPropertyDetails(@PathVariable UUID id, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ModelAndView getPropertyDetails(@PathVariable UUID id, @AuthenticationPrincipal UserPrincipal userPrincipal,
+                                           @RequestParam(value = "message", required = false) String message) {
 
         User user = this.userService.getUserById(userPrincipal.getId());
         Property property = this.propertyService.getById(id);
@@ -106,6 +108,10 @@ public class PropertyController {
         modelAndView.addObject("last5Reviews", last5Reviews);
         modelAndView.addObject("countReviews", allReviewsCount);
         modelAndView.addObject("createReviewRequest", new CreateReviewRequest());
+
+        if (message != null) {
+            modelAndView.addObject("message", message);
+        }
 
         return modelAndView;
     }
@@ -177,29 +183,44 @@ public class PropertyController {
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getPropertyEditForm(@PathVariable UUID id, @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        // TODO: IMPLEMENT THIS
-
         Property property = this.propertyService.getById(id);
 
         User user = this.userService.getUserById(userPrincipal.getId());
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(null);
+        EditPropertyRequest editPropertyRequest = DtoMapper.fromProperty(property);
+
+        ModelAndView modelAndView = new ModelAndView("property/property-edit-form");
         modelAndView.addObject("authUser", user);
+        modelAndView.addObject("propertyId", property.getId());
+        modelAndView.addObject("editPropertyRequest", editPropertyRequest);
 
         return modelAndView;
     }
 
     @PatchMapping("/{id}/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView editProperty(@PathVariable UUID id) {
+    public ModelAndView editProperty(@PathVariable UUID id,
+                                     @AuthenticationPrincipal UserPrincipal userPrincipal,
+                                     @Valid EditPropertyRequest editPropertyRequest,
+                                     BindingResult bindingResult) {
 
-        // TODO: IMPLEMENT THIS
+        if (bindingResult.hasErrors()) {
+            User user = this.userService.getUserById(userPrincipal.getId());
 
-        // Call propertyService method that accepts parameters the ID and the PropertyEditRequest
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("property/property-edit-form");
+            modelAndView.addObject("authUser", user);
+            modelAndView.addObject("propertyId", id);
+            modelAndView.addObject("editPropertyRequest", editPropertyRequest);
+
+            return modelAndView;
+        }
 
 
-       return new ModelAndView("redirect:/properties/" + id);
+        this.propertyService.editProperty(id, editPropertyRequest);
+
+
+        return new ModelAndView("redirect:/properties/" + id + "?message=Successfully edited property");
     }
 
     @DeleteMapping("/{id}/delete")

@@ -739,6 +739,16 @@
     padding-top: 1rem;
 }
 
+.amount-cell {
+    font-weight: 700;
+    font-size: 0.9375rem;
+}
+
+.amount-cell.positive {
+    color: #10b981;
+    white-space: nowrap;
+}
+
 
 @media (max-width: 1024px) {
     .property-details-grid {

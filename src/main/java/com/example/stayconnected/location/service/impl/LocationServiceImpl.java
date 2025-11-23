@@ -42,4 +42,9 @@ public class LocationServiceImpl implements LocationService {
     public List<String> getAllDistinctCountries() {
         return this.locationRepository.findDistinctCountries();
     }
+
+    @Override
+    public void updateLocation(Location location) {
+        this.locationRepository.save(location);
+    }
 }

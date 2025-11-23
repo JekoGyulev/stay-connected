@@ -1,10 +1,253 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>StayConnected</title>
+    <title>Edit Property</title>
+    <link rel="stylesheet" href="/css/create-property-form.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
+
+<header class="header">
+
+    <nav class="nav-container">
+
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <a th:href="@{/home}" style="text-decoration: none">
+                    <h1 class="logo-title">StayConnected</h1>
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link">Properties</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a th:href="@{/transactions}" class="nav-link">Transactions</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${authUser.id} + '/profile'}" class="dropdown-link">Profile</a></li>
+                            <li><a th:href="@{'/users/wallet'}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link active">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a></li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{'/users/wallet'}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(authUser.wallet.balance, 1,2)}"></span>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+
+<div class="container">
+
+    <div class="transactions-header">
+        <h1>Edit Property</h1>
+        <p style="margin: 10px 0 20px 0">Change property information.</p>
+    </div>
+
+
+    <form class="property-form" th:action="@{'/properties/' + ${propertyId} + '/edit'}"
+                                th:method="PATCH"
+                                th:object="${editPropertyRequest}">
+
+        <!-- Basic Information -->
+        <section class="form-section">
+            <h2 class="section-title">
+                <span class="icon">🏠</span>
+                Basic Information
+            </h2>
+
+            <div class="form-group">
+                <label for="title">Property Title *</label>
+                <input th:field="*{title}" type="text" id="title" name="title" placeholder="Cozy apartment in downtown">
+                <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="alert-warning"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description *</label>
+                <textarea th:field="*{description}" id="description" name="description" rows="5" placeholder="Describe your property..."></textarea>
+                <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="alert-warning"></p>
+            </div>
+
+            <div class="form-group">
+
+                <label>Property Type *</label>
+
+                <div class="radio-grid">
+                    <label class="radio-card"
+                           th:each="type : ${T(com.example.stayconnected.property.enums.CategoryType).values()}">
+
+                        <input th:field="*{category}" th:value="${type.name()}" type="radio" name="property-type">
+
+                        <span th:text="${type.displayName}"></span>
+                    </label>
+
+                    <p th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="alert-warning"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location -->
+        <section class="form-section">
+            <h2 class="section-title">
+                <span class="icon">📍</span>
+                Location
+            </h2>
+
+            <div class="form-group">
+                <label for="address">Street Address</label>
+                <input th:field="*{location.address}"
+                       type="text" id="address" name="address" placeholder="123 Main Street">
+
+                <p th:if="${#fields.hasErrors('location.address')}" th:errors="*{location.address}" class="alert-warning"></p>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input th:field="*{location.city}"
+                           type="text" id="city" name="city" placeholder="Pleven">
+
+                    <p th:if="${#fields.hasErrors('location.city')}" th:errors="*{location.city}" class="alert-warning"></p>
+                </div>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input th:field="*{location.country}"
+                           type="text" id="country" name="country" placeholder="Bulgaria">
+
+                    <p th:if="${#fields.hasErrors('location.country')}" th:errors="*{location.country}" class="alert-warning"></p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Pricing -->
+        <section class="form-section">
+            <h2 class="section-title">
+                <span class="icon">💰</span>
+                Pricing
+            </h2>
+
+            <div class="form-group">
+                <label for="price">Price per night *</label>
+                <div class="input-with-icon">
+                    <span class="input-icon">€</span>
+                    <input th:field="*{pricePerNight}" type="number" id="price" name="price" placeholder="150"
+                           style="padding-left: 30px">
+                </div>
+
+                <p th:if="${#fields.hasErrors('pricePerNight')}" th:errors="*{pricePerNight}" class="alert-warning"></p>
+            </div>
+        </section>
+
+        <!-- Amenities -->
+        <section class="form-section">
+            <h2 class="section-title">
+                <span class="icon">✨</span>
+                Amenities
+            </h2>
+
+            <div class="checkbox-grid">
+
+                <label class="checkbox-card">
+                    <input th:field="*{amenities}" type="checkbox" name="amenities" value="wifi">
+                    <span>WiFi</span>
+                </label>
+
+                <label class="checkbox-card">
+                    <input th:field="*{amenities}" type="checkbox" name="amenities" value="kitchen">
+                    <span>Kitchen</span>
+                </label>
+                <label class="checkbox-card">
+                    <input th:field="*{amenities}" type="checkbox" name="amenities" value="air_conditioning">
+                    <span>Air Conditioning</span>
+                </label>
+                <label class="checkbox-card">
+                    <input th:field="*{amenities}" type="checkbox" name="amenities" value="heating">
+                    <span>Heating</span>
+                </label>
+                <label class="checkbox-card">
+                    <input th:field="*{amenities}" type="checkbox" name="amenities" value="washer">
+                    <span>Washer</span>
+                </label>
+                <label class="checkbox-card">
+                    <input th:field="*{amenities}" type="checkbox" name="amenities" value="dryer">
+                    <span>Dryer</span>
+                </label>
+                <label class="checkbox-card">
+                    <input th:field="*{amenities}" type="checkbox" name="amenities" value="parking">
+                    <span>Free Parking</span>
+                </label>
+                <label class="checkbox-card">
+                    <input th:field="*{amenities}" type="checkbox" name="amenities" value="pool">
+                    <span>Pool</span>
+                </label>
+                <label class="checkbox-card">
+                    <input th:field="*{amenities}" type="checkbox" name="amenities" value="hot_tub">
+                    <span>Hot Tub</span>
+                </label>
+                <label class="checkbox-card">
+                    <input th:field="*{amenities}" type="checkbox" name="amenities" value="gym">
+                    <span>Gym</span>
+                </label>
+
+                <p th:if="${#fields.hasErrors('amenities')}" th:errors="*{amenities}" class="alert-warning"></p>
+            </div>
+        </section>
+
+        <!-- Submit Buttons -->
+        <div class="form-actions">
+            <a th:href="@{/properties/my-properties}" type="button" class="btn btn-outline">Cancel</a>
+            <button type="submit" class="btn btn-primary">Edit</button>
+        </div>
+    </form>
+</div>
+
+
+<footer th:insert="/fragments/footer :: footer"></footer>
 
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.example.stayconnected.property.service;
 import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
+import com.example.stayconnected.web.dto.property.EditPropertyRequest;
 import com.example.stayconnected.web.dto.property.FilterPropertyRequest;
 
 import java.util.List;
@@ -20,6 +21,5 @@ public interface PropertyService {
 
     void deleteProperty(Property property);
 
-    // Update property
-    // Delete property
+    void editProperty(UUID id, EditPropertyRequest editPropertyRequest);
 }

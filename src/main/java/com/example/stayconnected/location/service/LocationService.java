@@ -10,4 +10,6 @@ public interface LocationService {
     Location createLocation(LocationRequest locationRequest);
 
     List<String> getAllDistinctCountries();
+
+    void updateLocation(Location location);
 }

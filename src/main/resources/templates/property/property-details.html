@@ -84,10 +84,13 @@
 
 
 <div class="property-details-container">
+
     <!-- Property Header -->
     <div class="property-details-header">
 
         <a th:href="@{/properties}"><i class="fa-solid fa-arrow-left" style="margin-bottom: 2rem"></i></a>
+
+        <p th:if="${message != null}" th:text="${message}" class="amount-cell positive"></p>
 
         <div class="property-title-row">
             <h1 th:text="${property.title}" class="property-details-title"></h1>

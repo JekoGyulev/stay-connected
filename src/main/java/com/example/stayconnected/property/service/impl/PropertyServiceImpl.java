@@ -10,9 +10,10 @@ import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.utility.exception.PropertyDoesNotExist;
+import com.example.stayconnected.web.dto.location.LocationRequest;
 import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
+import com.example.stayconnected.web.dto.property.EditPropertyRequest;
 import com.example.stayconnected.web.dto.property.FilterPropertyRequest;
-import jakarta.persistence.Transient;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 
 @Service
 @Slf4j
@@ -127,6 +128,32 @@ public class PropertyServiceImpl implements PropertyService {
                 .formatted(property.getId().toString()));
     }
 
-    // Have at least 1 logging message -> log.info("Successfully done {your operation}")
+    @Override
+    @Transactional
+    public void editProperty(UUID id, EditPropertyRequest editPropertyRequest) {
+
+        Property property = this.getById(id);
+
+        LocationRequest locationRequest = editPropertyRequest.getLocation();
+
+        Location location = property.getLocation();
+        location.setCountry(locationRequest.getCountry());
+        location.setCity(locationRequest.getCity());
+        location.setAddress(locationRequest.getAddress());
+
+        this.locationService.updateLocation(location);
+
+        property.setTitle(editPropertyRequest.getTitle());
+        property.setDescription(editPropertyRequest.getDescription());
+        property.setCategoryType(editPropertyRequest.getCategory());
+        property.setLocation(location);
+        property.setPricePerNight(editPropertyRequest.getPricePerNight());
+        property.setAmenities(editPropertyRequest.getAmenities());
+
+        this.propertyRepository.save(property);
+
+        log.info("Successfully edited property with id [%s] and title [%s]"
+                .formatted(property.getId(), property.getTitle()));
+    }
 
 }
