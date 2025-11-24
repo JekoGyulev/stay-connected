@@ -52,7 +52,9 @@ public class AuthController {
 
         if (errorParam != null) {
             modelAndView.addObject("errorMessage", "Username or password incorrect.");
-        } else if (inactiveParam != null) {
+        }
+
+        if (inactiveParam != null) {
             modelAndView.addObject("errorMessage", "Your account has been deactivated.");
         }
 
