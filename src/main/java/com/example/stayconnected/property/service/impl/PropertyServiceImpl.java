@@ -19,9 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Pageable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -167,6 +169,11 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public List<Property> getPropertiesByAdminId(UUID adminId) {
         return this.propertyRepository.findAllByOwnerIdOrderByCreateDateDescAverageRatingDesc(adminId);
+    }
+
+    @Override
+    public List<Property> getFeaturedProperties() {
+        return this.propertyRepository.findTop4ByOrderByAverageRatingDesc();
     }
 
 }

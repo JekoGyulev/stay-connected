@@ -98,120 +98,61 @@
 
             <h2 class="section-title">Featured Properties</h2>
 
-            <div class="slider-wrapper">
+            <div th:unless="${featuredProperties.isEmpty()}" class="slider-wrapper">
+
                 <div class="slider">
 
-                    <div class="property-card">
+                    <a th:each="property : ${featuredProperties}" th:href="@{'/properties/' + ${property.id}}"
+                       class="property-card">
 
-                        <div class="property-image" style="background: linear-gradient(135deg, #FF385C, #FF5A7D);"></div>
-
-                        <div class="property-info">
-                            <h3 class="property-title">Modern Beach House</h3>
-                            <p class="property-location">Malibu, California</p>
-                            <p class="property-price">$450 / night</p>
-                        </div>
-
-                    </div>
-
-                    <div class="property-card">
-
-                        <div class="property-image" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+                        <img th:src="${property.images[0].imageURL}" class="property-image"></img>
 
                         <div class="property-info">
-                            <h3 class="property-title">Mountain Retreat</h3>
-                            <p class="property-location">Aspen, Colorado</p>
-                            <p class="property-price">$380 / night</p>
+                            <h3 th:text="${property.title}" class="property-title"></h3>
+                            <p th:text="${#strings.concat(property.location.city, ', ', property.location.country )}" class="property-location"></p>
+                            <p th:text="'€' + ${property.pricePerNight} + ' / night'" class="property-price"></p>
                         </div>
 
-                    </div>
-
-                    <div class="property-card">
-
-                        <div class="property-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
-
-                        <div class="property-info">
-                            <h3 class="property-title">City Loft</h3>
-                            <p class="property-location">New York, NY</p>
-                            <p class="property-price">$320 / night</p>
-                        </div>
-
-                    </div>
-
-                    <div class="property-card">
-
-                        <div class="property-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
-
-                        <div class="property-info">
-                            <h3 class="property-title">City Loft</h3>
-                            <p class="property-location">New York, NY</p>
-                            <p class="property-price">$320 / night</p>
-                        </div>
-
-                    </div>
+                    </a>
 
                 </div>
             </div>
+
+            <p th:if="${featuredProperties.isEmpty()}">No available properties yet.</p>
+
+
         </div>
+
+
+
     </section>
 
     <!-- Popular Destinations Slider Section -->
-    <section class="slider-section">
+    <section style="padding-top: 10px;" class="slider-section">
 
         <div class="container">
 
             <h2 class="section-title">Popular Destinations</h2>
 
-            <div class="slider-wrapper">
+            <div th:unless="${mostPopularDestinations.isEmpty()}" class="slider-wrapper">
 
                 <div class="slider">
 
-                    <div class="destination-card">
-                        <div class="destination-image" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+                    <div th:each="location : ${mostPopularDestinations}" class="destination-card">
+
 
                         <div class="destination-info">
-                            <h3 class="destination-name">Paris</h3>
-                            <p class="destination-count">1,234 properties</p>
-                        </div>
-                    </div>
-
-                    <div class="destination-card">
-                        <div class="destination-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
-
-                        <div class="destination-info">
-                            <h3 class="destination-name">Tokyo</h3>
-                            <p class="destination-count">2,456 properties</p>
-                        </div>
-                    </div>
-
-                    <div class="destination-card">
-                        <div class="destination-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
-
-                        <div class="destination-info">
-                            <h3 class="destination-name">London</h3>
-                            <p class="destination-count">1,890 properties</p>
-                        </div>
-                    </div>
-
-                    <div class="destination-card">
-                        <div class="destination-image" style="background: linear-gradient(135deg, #fa709a, #fee140);"></div>
-
-                        <div class="destination-info">
-                            <h3 class="destination-name">Barcelona</h3>
-                            <p class="destination-count">987 properties</p>
-                        </div>
-                    </div>
-
-                    <div class="destination-card">
-                        <div class="destination-image" style="background: linear-gradient(135deg, #30cfd0, #330867);"></div>
-
-                        <div class="destination-info">
-                            <h3 class="destination-name">Dubai</h3>
-                            <p class="destination-count">1,567 properties</p>
+                            <h3 th:text="${location.cityName}" class="destination-name"></h3>
+                            <p th:if="${location.countProperties > 1}" th:text="${location.countProperties + ' properties'}" class="destination-count"></p>
+                            <p th:if="${location.countProperties == 1}" th:text="${location.countProperties + ' property'}" class="destination-count"></p>
                         </div>
                     </div>
 
                 </div>
             </div>
+
+
+            <p th:if="${mostPopularDestinations.isEmpty()}">No available destinations yet.</p>
         </div>
     </section>
 

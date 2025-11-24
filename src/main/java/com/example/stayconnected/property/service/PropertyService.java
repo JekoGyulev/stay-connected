@@ -24,4 +24,6 @@ public interface PropertyService {
     void editProperty(UUID id, EditPropertyRequest editPropertyRequest);
 
     List<Property> getPropertiesByAdminId(UUID adminId);
+
+    List<Property> getFeaturedProperties();
 }

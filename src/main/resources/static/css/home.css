@@ -55,6 +55,7 @@
     overflow-x: auto;
     scroll-behavior: smooth;
     padding-bottom: 1rem;
+    padding-top: 10px;
     scrollbar-width: thin;
     scrollbar-color: var(--primary) var(--card-border);
 }
@@ -87,6 +88,7 @@
     border: 1px solid var(--card-border);
     transition: all 0.3s ease;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .property-card:hover {

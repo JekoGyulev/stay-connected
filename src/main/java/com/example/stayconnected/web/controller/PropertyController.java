@@ -227,7 +227,6 @@ public class PropertyController {
     public String deleteProperty(@PathVariable UUID id) {
         Property property = this.propertyService.getById(id);
         this.propertyService.deleteProperty(property);
-        // TODO: USE THE REQUEST PARAMETER IN HTML PAGE (my-properties)
         return "redirect:/properties/my-properties?message=Successfully deleted property!";
     }
 

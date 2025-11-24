@@ -1,5 +1,8 @@
 package com.example.stayconnected.web.controller;
 
+import com.example.stayconnected.dto.CityStatsDTO;
+import com.example.stayconnected.location.model.Location;
+import com.example.stayconnected.location.service.LocationService;
 import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.security.UserPrincipal;
@@ -20,11 +23,13 @@ public class IndexController {
 
     private final UserService userService;
     private final PropertyService propertyService;
+    private final LocationService locationService;
 
     @Autowired
-    public IndexController(UserService userService, PropertyService propertyService) {
+    public IndexController(UserService userService, PropertyService propertyService, LocationService locationService) {
         this.userService = userService;
         this.propertyService = propertyService;
+        this.locationService = locationService;
     }
 
     @GetMapping("/")
@@ -37,12 +42,16 @@ public class IndexController {
 
         User user = this.userService.getUserById(userPrincipal.getId());
 
-        // Get 4 best properties and add it to the modelAndView
-        // Get all locations from LocationService
+        List<Property> featuredProperties = this.propertyService.getFeaturedProperties();
+
+        List<CityStatsDTO> mostPopularDestinations = this.locationService.get4MostPopularDestinations();
+
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("user/home");
         modelAndView.addObject("user", user);
+        modelAndView.addObject("featuredProperties", featuredProperties);
+        modelAndView.addObject("mostPopularDestinations", mostPopularDestinations);
 
         return modelAndView;
     }
