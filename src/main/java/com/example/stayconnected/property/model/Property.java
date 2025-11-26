@@ -25,7 +25,7 @@ public class Property {
     private UUID id;
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
     @ManyToOne(optional = false)
     @JoinColumn(name = "location_id")

@@ -255,7 +255,13 @@
 
                 <p th:if="${#fields.hasErrors('images')}" th:errors="*{images}" class="alert-warning"></p>
             </div>
+
+
+            <div id="preview-container" class="preview-container"></div>
+
         </section>
+
+
 
         <!-- Submit Buttons -->
         <div class="form-actions">
@@ -268,5 +274,35 @@
 
 <footer th:insert="/fragments/footer :: footer"></footer>
 
+<script>
+    const input = document.getElementById("photos");
+
+    const previewContainer = document.getElementById("preview-container");
+
+
+    input.addEventListener("change", () => {
+        previewContainer.innerHTML = "";
+
+        const files = input.files;
+
+        if (!files) {
+            return;
+        }
+
+        [...files].forEach(file => {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const photo = document.createElement("img");
+                photo.src = e.target.result;
+                previewContainer.appendChild(photo);
+            };
+
+
+            reader.readAsDataURL(file);
+        })
+
+    })
+</script>
 </body>
 </html>

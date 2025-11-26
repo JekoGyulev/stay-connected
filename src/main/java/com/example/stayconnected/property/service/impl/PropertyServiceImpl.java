@@ -64,6 +64,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     @CacheEvict(value = "properties", allEntries = true)
+    @Transactional
     public Property createProperty(CreatePropertyRequest createPropertyRequest, User owner) {
 
         Location location = this.locationService.createLocation(createPropertyRequest.getLocation());

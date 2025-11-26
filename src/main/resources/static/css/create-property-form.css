@@ -14,6 +14,8 @@
     gap: 2rem;
 }
 
+
+
 .form-section {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
@@ -226,6 +228,22 @@
     gap: 1rem;
     margin-top: 1rem;
 }
+
+.preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.preview-container img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
 
 @media (max-width: 768px) {
     .header h1 {
