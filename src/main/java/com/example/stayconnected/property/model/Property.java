@@ -40,7 +40,7 @@ public class Property {
     private User owner;
     @Column(name = "create_date", nullable = false)
     private LocalDateTime createDate;
-    @OneToMany(mappedBy = "property", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "property", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PropertyImage> images = new ArrayList<>();
     @Column(name = "average_rating")
     private BigDecimal averageRating;

@@ -3,5 +3,5 @@ package com.example.stayconnected.email;
 import com.example.stayconnected.event.SuccessfulRegistrationEvent;
 
 public interface EmailService {
-    void sendEmailWhenUserRegister(SuccessfulRegistrationEvent event);
+    void handleRegistration(SuccessfulRegistrationEvent event);
 }

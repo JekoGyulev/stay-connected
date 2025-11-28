@@ -1,6 +1,7 @@
 package com.example.stayconnected.user.service.impl;
 
 import com.example.stayconnected.event.SuccessfulRegistrationEvent;
+import com.example.stayconnected.notification.enums.NotificationType;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
@@ -71,8 +72,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         SuccessfulRegistrationEvent event = SuccessfulRegistrationEvent
                 .builder()
-                .username(user.getUsername())
+                .user(user)
                 .email(user.getEmail())
+                .type(NotificationType.REGISTRATION)
                 .build();
 
         this.eventPublisher.publishEvent(event);
