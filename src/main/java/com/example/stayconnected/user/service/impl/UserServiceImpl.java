@@ -74,7 +74,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .builder()
                 .user(user)
                 .email(user.getEmail())
-                .type(NotificationType.REGISTRATION)
                 .build();
 
         this.eventPublisher.publishEvent(event);

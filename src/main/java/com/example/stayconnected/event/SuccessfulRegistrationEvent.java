@@ -1,6 +1,5 @@
 package com.example.stayconnected.event;
 
-import com.example.stayconnected.notification.enums.NotificationType;
 import com.example.stayconnected.user.model.User;
 import lombok.*;
 
@@ -12,5 +11,4 @@ import lombok.*;
 public class SuccessfulRegistrationEvent {
     private User user;
     private String email;
-    private NotificationType type;
 }
