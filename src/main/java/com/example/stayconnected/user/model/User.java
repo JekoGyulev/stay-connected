@@ -1,11 +1,11 @@
 package com.example.stayconnected.user.model;
 
-import com.example.stayconnected.reservation.model.Reservation;
+
 import com.example.stayconnected.user.enums.UserRole;
 
 import com.example.stayconnected.wallet.model.Wallet;
 import jakarta.persistence.*;
-import lombok.Builder;
+
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -35,8 +35,6 @@ public class User {
     private LocalDateTime registeredAt;
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
-    @OneToMany(mappedBy = "user")
-    private List<Reservation> reservations = new ArrayList<>();
     @OneToOne(mappedBy = "owner")
     private Wallet wallet;
     @Column
@@ -145,14 +143,6 @@ public class User {
 
     public void setWallet(Wallet wallet) {
         this.wallet = wallet;
-    }
-
-    public List<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
     }
 
     public String getProfilePictureUrl() {

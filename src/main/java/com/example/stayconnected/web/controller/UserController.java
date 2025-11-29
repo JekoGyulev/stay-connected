@@ -2,7 +2,6 @@ package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.dashboard.DashboardStatsService;
 import com.example.stayconnected.property.service.PropertyService;
-import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.transaction.service.TransactionService;
@@ -32,7 +31,6 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class UserController {
 
-    private final ReservationService reservationService;
     private final UserService userService;
     private final PropertyService propertyService;
     private final WalletService walletService;
@@ -40,8 +38,7 @@ public class UserController {
     private final DashboardStatsService dashboardStatsService;
 
     @Autowired
-    public UserController(ReservationService reservationService, UserService userService, PropertyService propertyService, WalletService walletService, TransactionService transactionService, DashboardStatsService dashboardStatsService) {
-        this.reservationService = reservationService;
+    public UserController(UserService userService, PropertyService propertyService, WalletService walletService, TransactionService transactionService, DashboardStatsService dashboardStatsService) {
         this.userService = userService;
         this.propertyService = propertyService;
         this.walletService = walletService;
@@ -204,12 +201,10 @@ public class UserController {
         modelAndView.addObject("user", user);
         modelAndView.addObject("totalUsers", this.userService.getAllUsersOrderedByDateAndUsername().size());
         modelAndView.addObject("totalProperties", this.propertyService.getAllProperties().size());
-        modelAndView.addObject("totalBookings", this.reservationService.getAllReservations().size());
         modelAndView.addObject("totalTransactions", this.transactionService.getAllTransactions().size());
         modelAndView.addObject("totalRevenue", formatRevenue(this.transactionService.getTotalRevenue()));
         modelAndView.addObject("totalFailedTransactions", this.transactionService.getAllFailedTransactions().size());
         modelAndView.addObject("totalActiveUsers",  this.userService.getTotalActiveUsers());
-        modelAndView.addObject("totalCompletedReservations", this.reservationService.getTotalCompletedReservations());
         modelAndView.addObject("averageTransactionAmount", this.transactionService.getAverageTransactionAmount());
 
         modelAndView.addObject("newUsersToday", this.dashboardStatsService.getCountNewUsersToday());
@@ -217,7 +212,6 @@ public class UserController {
         modelAndView.addObject("totalRevenueToday", formatRevenue(this.dashboardStatsService.getCountTotalRevenueToday()));
         modelAndView.addObject("newPropertiesToday", this.dashboardStatsService.getCountNewPropertiesToday());
         modelAndView.addObject("percentageActiveUsers", this.userService.getPercentageActiveUsers());
-        modelAndView.addObject("percentageCompletedReservations", this.reservationService.getPercentageCompletedReservations());
         modelAndView.addObject("averageTransactionGrowth", this.dashboardStatsService.getAverageWeeklyTransactionGrowth());
 
         return modelAndView;

@@ -1,8 +1,6 @@
 package com.example.stayconnected.dashboard;
 
 import com.example.stayconnected.property.repository.PropertyRepository;
-import com.example.stayconnected.reservation.enums.ReservationStatus;
-import com.example.stayconnected.reservation.repository.ReservationRepository;
 import com.example.stayconnected.transaction.enums.TransactionStatus;
 import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.transaction.repository.TransactionRepository;
@@ -26,7 +24,6 @@ import java.util.List;
 public class DashboardStatsService {
 
     private final UserRepository userRepository;
-    private final ReservationRepository reservationRepository;
     private final PropertyRepository propertyRepository;
     private final TransactionRepository  transactionRepository;
 
@@ -46,9 +43,8 @@ public class DashboardStatsService {
 
 
     @Autowired
-    public DashboardStatsService(UserRepository userRepository, ReservationRepository reservationRepository, PropertyRepository propertyRepository, TransactionService transactionService, TransactionRepository transactionRepository, TransactionService transactionService1) {
+    public DashboardStatsService(UserRepository userRepository,PropertyRepository propertyRepository, TransactionService transactionService, TransactionRepository transactionRepository, TransactionService transactionService1) {
         this.userRepository = userRepository;
-        this.reservationRepository = reservationRepository;
         this.propertyRepository = propertyRepository;
         this.transactionRepository = transactionRepository;
         this.transactionService = transactionService1;
@@ -62,9 +58,6 @@ public class DashboardStatsService {
         this.countNewUsersToday = this.userRepository.countAllByRegisteredAtBetween(today.atStartOfDay(),
                 today.plusDays(1).atStartOfDay());
 
-        this.countNewReservationsToday = this.reservationRepository.countAllByStatusAndCreatedAtBetween(
-                ReservationStatus.PAID,today.atStartOfDay(),
-                today.plusDays(1).atStartOfDay());
 
         this.countNewPropertiesToday = this.propertyRepository.countAllByCreateDateBetween(today.atStartOfDay(),
                 today.plusDays(1).atStartOfDay());
