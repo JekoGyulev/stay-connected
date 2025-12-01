@@ -1,4 +1,4 @@
-package com.example.stayconnected.dto;
+package com.example.stayconnected.web.dto.location;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

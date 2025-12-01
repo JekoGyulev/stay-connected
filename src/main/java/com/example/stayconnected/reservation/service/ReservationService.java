@@ -10,4 +10,6 @@ public interface ReservationService {
     long getTotalReservations();
 
     List<ReservationResponse> getReservationsByUserId(UUID userId);
+
+    void cancel(UUID id);
 }

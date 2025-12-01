@@ -1,14 +1,12 @@
 package com.example.stayconnected.web.controller;
 
-import com.example.stayconnected.dto.CityStatsDTO;
-import com.example.stayconnected.location.model.Location;
+import com.example.stayconnected.web.dto.location.CityStatsDTO;
 import com.example.stayconnected.location.service.LocationService;
 import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class IndexController {

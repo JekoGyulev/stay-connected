@@ -33,4 +33,9 @@ public class ReservationServiceImpl implements ReservationService {
         ResponseEntity<List<ReservationResponse>> reservationHistoryForUser = this.reservationClient.getReservationHistoryForUser(userId);
         return reservationHistoryForUser.getBody() != null ? reservationHistoryForUser.getBody() : Collections.emptyList();
     }
+
+    @Override
+    public void cancel(UUID id) {
+        this.reservationClient.cancelReservation(id);
+    }
 }

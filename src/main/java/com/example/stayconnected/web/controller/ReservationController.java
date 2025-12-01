@@ -16,10 +16,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @Controller
@@ -119,6 +122,12 @@ public class ReservationController {
         modelAndView.addObject("filter", "cancelled");
 
         return modelAndView;
+    }
+
+    @PatchMapping("/{id}/cancel")
+    public String cancel(@PathVariable UUID id) {
+        this.reservationService.cancel(id);
+        return "redirect:/reservations/user/table";
     }
 
 }

@@ -4,6 +4,7 @@ import com.example.stayconnected.reservation.client.dto.ReservationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -17,4 +18,7 @@ public interface ReservationClient {
 
     @GetMapping
     ResponseEntity<List<ReservationResponse>> getReservationHistoryForUser(@RequestParam("userId") UUID userId);
+
+    @PutMapping("/cancellation")
+    ResponseEntity<ReservationResponse> cancelReservation(@RequestParam("reservationId") UUID id);
 }
