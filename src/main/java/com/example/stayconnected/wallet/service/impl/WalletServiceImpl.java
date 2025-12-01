@@ -5,7 +5,7 @@ import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.transaction.service.TransactionService;
 import com.example.stayconnected.user.model.User;
-import com.example.stayconnected.utility.exception.WalletDoesNotExist;
+import com.example.stayconnected.utils.exception.WalletDoesNotExist;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.repository.WalletRepository;
 import com.example.stayconnected.wallet.service.WalletService;

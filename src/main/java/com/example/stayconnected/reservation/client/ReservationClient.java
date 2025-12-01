@@ -13,5 +13,5 @@ import java.util.UUID;
 public interface ReservationClient {
 
     @GetMapping
-    ResponseEntity<List<ReservationResponse>> getReservationHistoryForUser(@RequestParam UUID userId);
+    ResponseEntity<List<ReservationResponse>> getReservationHistoryForUser(@RequestParam("userId") UUID userId);
 }

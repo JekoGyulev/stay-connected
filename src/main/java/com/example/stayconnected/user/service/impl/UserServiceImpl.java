@@ -1,13 +1,12 @@
 package com.example.stayconnected.user.service.impl;
 
 import com.example.stayconnected.event.SuccessfulRegistrationEvent;
-import com.example.stayconnected.notification.enums.NotificationType;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
 import com.example.stayconnected.user.service.UserService;
-import com.example.stayconnected.utility.exception.UsernameAlreadyExists;
+import com.example.stayconnected.utils.exception.UsernameAlreadyExists;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.service.WalletService;
 import com.example.stayconnected.web.dto.user.*;

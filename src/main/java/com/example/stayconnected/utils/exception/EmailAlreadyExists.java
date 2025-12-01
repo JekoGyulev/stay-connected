@@ -1,4 +1,4 @@
-package com.example.stayconnected.utility.exception;
+package com.example.stayconnected.utils.exception;
 
 public class EmailAlreadyExists extends RuntimeException {
     public EmailAlreadyExists(String message) {

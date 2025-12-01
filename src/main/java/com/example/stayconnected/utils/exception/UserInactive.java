@@ -1,4 +1,4 @@
-package com.example.stayconnected.utility.exception;
+package com.example.stayconnected.utils.exception;
 
 public class UserInactive extends RuntimeException {
     public UserInactive(String message) {

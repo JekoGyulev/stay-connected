@@ -2,14 +2,12 @@ package com.example.stayconnected.review.service.impl;
 
 import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.repository.PropertyRepository;
-import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.review.model.Review;
 import com.example.stayconnected.review.repository.ReviewRepository;
 import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
-import com.example.stayconnected.user.service.UserService;
-import com.example.stayconnected.utility.exception.PropertyDoesNotExist;
+import com.example.stayconnected.utils.exception.PropertyDoesNotExist;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;

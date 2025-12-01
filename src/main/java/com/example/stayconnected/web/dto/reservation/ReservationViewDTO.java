@@ -1,6 +1,6 @@
-package com.example.stayconnected.reservation.client.dto;
+package com.example.stayconnected.web.dto.reservation;
 
-
+import com.example.stayconnected.web.dto.property.PropertyViewDTO;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,13 +10,13 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class ReservationResponse {
+public class ReservationViewDTO {
 
     private UUID reservationId;
     private LocalDate startDate;
     private LocalDate endDate;
     private BigDecimal totalPrice;
     private String status;
-    private UUID propertyId;
+    private PropertyViewDTO propertyViewDTO;
 
 }
