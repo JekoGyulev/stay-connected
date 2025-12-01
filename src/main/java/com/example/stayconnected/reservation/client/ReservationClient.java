@@ -1,11 +1,10 @@
 package com.example.stayconnected.reservation.client;
 
+import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
 import com.example.stayconnected.reservation.client.dto.ReservationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,4 +20,7 @@ public interface ReservationClient {
 
     @PutMapping("/cancellation")
     ResponseEntity<ReservationResponse> cancelReservation(@RequestParam("reservationId") UUID id);
+
+    @PostMapping
+    ResponseEntity<ReservationResponse> createReservation(@RequestBody CreateReservationRequest createReservationRequest);
 }
