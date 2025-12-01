@@ -7,5 +7,7 @@ import java.util.UUID;
 
 public interface ReservationService {
 
+    long getTotalReservations();
+
     List<ReservationResponse> getReservationsByUserId(UUID userId);
 }

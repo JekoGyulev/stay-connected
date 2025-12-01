@@ -12,6 +12,9 @@ import java.util.UUID;
 @FeignClient(name = "reservation-svc", url = "http://localhost:8081/api/v1/reservations")
 public interface ReservationClient {
 
+    @GetMapping("/total")
+    ResponseEntity<Long> getTotalReservations();
+
     @GetMapping
     ResponseEntity<List<ReservationResponse>> getReservationHistoryForUser(@RequestParam("userId") UUID userId);
 }

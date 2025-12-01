@@ -23,6 +23,12 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
+    public long getTotalReservations() {
+        ResponseEntity<Long> totalReservations = this.reservationClient.getTotalReservations();
+        return totalReservations.getBody() != null ? totalReservations.getBody() : 0;
+    }
+
+    @Override
     public List<ReservationResponse> getReservationsByUserId(UUID userId) {
         ResponseEntity<List<ReservationResponse>> reservationHistoryForUser = this.reservationClient.getReservationHistoryForUser(userId);
         return reservationHistoryForUser.getBody() != null ? reservationHistoryForUser.getBody() : Collections.emptyList();

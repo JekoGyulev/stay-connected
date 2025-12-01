@@ -2,6 +2,7 @@ package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.dashboard.DashboardStatsService;
 import com.example.stayconnected.property.service.PropertyService;
+import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.transaction.service.TransactionService;
@@ -35,14 +36,16 @@ public class UserController {
     private final PropertyService propertyService;
     private final WalletService walletService;
     private final TransactionService transactionService;
+    private final ReservationService reservationService;
     private final DashboardStatsService dashboardStatsService;
 
     @Autowired
-    public UserController(UserService userService, PropertyService propertyService, WalletService walletService, TransactionService transactionService, DashboardStatsService dashboardStatsService) {
+    public UserController(UserService userService, PropertyService propertyService, WalletService walletService, TransactionService transactionService, ReservationService reservationService, DashboardStatsService dashboardStatsService) {
         this.userService = userService;
         this.propertyService = propertyService;
         this.walletService = walletService;
         this.transactionService = transactionService;
+        this.reservationService = reservationService;
         this.dashboardStatsService = dashboardStatsService;
     }
 
@@ -205,6 +208,7 @@ public class UserController {
         modelAndView.addObject("totalRevenue", formatRevenue(this.transactionService.getTotalRevenue()));
         modelAndView.addObject("totalFailedTransactions", this.transactionService.getAllFailedTransactions().size());
         modelAndView.addObject("totalActiveUsers",  this.userService.getTotalActiveUsers());
+        modelAndView.addObject("totalReservations", this.reservationService.getTotalReservations());
         modelAndView.addObject("averageTransactionAmount", this.transactionService.getAverageTransactionAmount());
 
         modelAndView.addObject("newUsersToday", this.dashboardStatsService.getCountNewUsersToday());
