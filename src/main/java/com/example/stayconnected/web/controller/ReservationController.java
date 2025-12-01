@@ -1,5 +1,10 @@
 package com.example.stayconnected.web.controller;
 
+import com.example.stayconnected.security.UserPrincipal;
+import com.example.stayconnected.user.model.User;
+import com.example.stayconnected.user.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,53 +20,27 @@ import java.util.UUID;
 @RequestMapping("/reservations")
 public class ReservationController {
 
+    private final UserService userService;
+
+    @Autowired
+    public ReservationController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/user/table")
-    public ModelAndView getReservationsByUser() {
+    public ModelAndView getReservationsByUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        /*
-            Going to use @AuthenticationPrincipal and UserPrincipal
-            to get the logged in user id which we will put in the getAllReservationsByUser
+        User user = this.userService.getUserById(userPrincipal.getId());
+        // Get user's reservations
 
-         */
-
-        //List<ReservationInfoDTO> reservationsByUser = this.reservationService.getAllReservationsByUser("the id");
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("reservation/user-reservations");
-        //modelAndView.addObject("reservationsByUser", reservationsByUser);
+        modelAndView.addObject("user", user);
+
+
 
         return modelAndView;
-    }
-
-
-
-    // POST /reservations -> Create reservation
-
-
-
-    @GetMapping("/{id}/details")
-    public ModelAndView getReservationDetails(@PathVariable UUID id) {
-
-        // Fetch the reservation by id
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("reservation/reservation-details");
-
-        // Add reservation as object to the ModelAndView, as well as the property
-
-        return modelAndView;
-    }
-
-    // POST Mapping -> Create reservation
-
-    @PutMapping("/{id}/cancel")
-    public String modelAndView(@PathVariable UUID id) {
-
-        // Get reservation by id
-        // Change status to CANCELLED
-
-        return "redirect:/reservations";
     }
 
 }

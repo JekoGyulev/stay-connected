@@ -146,6 +146,13 @@ p.alert-warning {
     padding: 4rem 1.5rem;
 }
 
+.footer-container-1030 {
+    max-width: 1030px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+}
+
+
 .footer-section {
     display: flex;
     flex-direction: column;
