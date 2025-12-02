@@ -233,7 +233,7 @@
                         <span class="calendar-month" id="currentMonth">December 2024</span>
                         <button class="calendar-nav-btn" id="nextMonth">›</button>
                     </div>
-                    <div class="calendar-grid">
+                    <div class="calendar-grid" id="calendar">
                         <div class="calendar-day-header">Sun</div>
                         <div class="calendar-day-header">Mon</div>
                         <div class="calendar-day-header">Tue</div>
@@ -420,52 +420,70 @@
 
 
         <aside th:if="${authUser.id != propertyOwner.id}" class="booking-card">
-            <div class="booking-card-sticky">
-                <div class="booking-price">
-                    <span th:text="'€' + ${property.pricePerNight}" class="price-amount"></span>
-                    <span class="price-period">/ night</span>
-                </div>
-                <div class="booking-rating">
-                    <span class="rating-star">★</span>
-                    <span th:text="${property.averageRating}" class="rating-value"></span>
-                    <span th:text="'(' + ${countReviews} + ' reviews)'" class="rating-count"></span>
-                </div>
 
-                <div class="booking-dates">
-                    <div class="booking-date-input">
-                        <label>CHECK-IN</label>
-                        <input type="text" value="12/20/2024" readonly>
+            <form class="booking-card-sticky" th:action="@{'/reservations/create/' + ${property.id}}"
+                  th:method="POST"
+                  th:object="${createReservationRequest}">
+                <div >
+                    <div class="booking-price">
+                        <span id="pricePerNight" th:data-price="${property.pricePerNight}" th:text="'€' + ${property.pricePerNight}" class="price-amount"></span>
+                        <span class="price-period">/ night</span>
                     </div>
-                    <div class="booking-date-input">
-                        <label>CHECKOUT</label>
-                        <input type="text" value="12/23/2024" readonly>
+                    <div class="booking-rating">
+                        <span class="rating-star">★</span>
+                        <span th:text="${property.averageRating}" class="rating-value"></span>
+                        <span th:text="'(' + ${countReviews} + ' reviews)'" class="rating-count"></span>
+                    </div>
+
+                    <div class="booking-dates">
+                        <div class="booking-date-input">
+                            <label>CHECK-IN</label>
+                            <input  th:field="*{startDate}" id="checkInInput" type="text">
+                            <p class="alert-warning" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></p>
+                        </div>
+                        <div class="booking-date-input">
+                            <label>CHECKOUT</label>
+                            <input th:field="*{endDate}" id="checkOutInput" type="text">
+                            <p class="alert-warning" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></p>
+                        </div>
+                    </div>
+
+
+                    <button class="btn btn-primary btn-lg btn-block">Reserve</button>
+                    <p class="booking-notice">Additional information:</p>
+
+                    <div class="booking-breakdown">
+                        <div class="booking-line-item">
+                        <span id="priceBreakdown">
+                            €0 x 0 nights
+                        </span>
+                            <span id="subtotal">€0</span>
+                        </div>
+                        <div class="booking-line-item">
+                            <span>Cleaning fee</span>
+                            <span id="cleaningFee"
+                                  th:text="'€' + 150"
+                                  th:data-fee="150"></span>
+                        </div>
+                        <div class="booking-line-item">
+                            <span>Service fee</span>
+                            <span id="serviceFee"
+                                  th:text="'€' + 100"
+                                  th:data-fee="100"></span>
+                        </div>
+                        <div class="section-divider"></div>
+                        <div class="booking-line-item booking-total">
+                            <span>Total</span>
+                            <input th:field="*{totalPrice}" type="hidden" id="totalPriceHidden">
+                            <span id="totalPrice">€0</span>
+                            <p th:if="${#fields.hasErrors('totalPrice')}" th:errors="*{totalPrice}"></p>
+                        </div>
+
+                        <p class="alert-warning" th:if="${errorMessage != null}" th:text="${errorMessage}" ></p>
                     </div>
                 </div>
+            </form>
 
-
-                <button class="btn btn-primary btn-lg btn-block">Reserve</button>
-                <p class="booking-notice">Additional information:</p>
-
-                <div class="booking-breakdown">
-                    <div class="booking-line-item">
-                        <span>$850 × 3 nights</span>
-                        <span>$2,550</span>
-                    </div>
-                    <div class="booking-line-item">
-                        <span>Cleaning fee</span>
-                        <span>$150</span>
-                    </div>
-                    <div class="booking-line-item">
-                        <span>Service fee</span>
-                        <span>$380</span>
-                    </div>
-                    <div class="section-divider"></div>
-                    <div class="booking-line-item booking-total">
-                        <span>Total</span>
-                        <span>$3,080</span>
-                    </div>
-                </div>
-            </div>
         </aside>
     </div>
 </div>
@@ -474,6 +492,7 @@
 
 <script src="/js/initMaps.js"></script>
 <script src="/js/highlightStars.js"></script>
+<script src="/js/calendar.js"></script>
 <script>
     let deleteButton = document.querySelector(".delete-property-btn");
 

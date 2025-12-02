@@ -4,6 +4,7 @@ import com.example.stayconnected.location.service.LocationService;
 import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.model.PropertyImage;
 import com.example.stayconnected.property.service.PropertyService;
+import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
 import com.example.stayconnected.review.model.Review;
 import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.security.UserPrincipal;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Controller
 @RequestMapping("/properties")
@@ -108,6 +110,7 @@ public class PropertyController {
         modelAndView.addObject("last5Reviews", last5Reviews);
         modelAndView.addObject("countReviews", allReviewsCount);
         modelAndView.addObject("createReviewRequest", new CreateReviewRequest());
+        modelAndView.addObject("createReservationRequest",  new CreateReservationRequest());
 
         if (message != null) {
             modelAndView.addObject("message", message);

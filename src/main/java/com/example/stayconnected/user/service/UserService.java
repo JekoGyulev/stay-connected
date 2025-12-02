@@ -1,5 +1,6 @@
 package com.example.stayconnected.user.service;
 
+import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.web.dto.user.*;
 import jakarta.validation.Valid;
@@ -34,4 +35,5 @@ public interface UserService {
     BigDecimal getPercentageActiveUsers();
 
     List<User> getFilteredUsers(FilterUserRequest filterUserRequest);
+
 }

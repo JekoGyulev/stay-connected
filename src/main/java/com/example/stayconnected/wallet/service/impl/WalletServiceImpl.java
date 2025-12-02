@@ -1,5 +1,6 @@
 package com.example.stayconnected.wallet.service.impl;
 
+import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
 import com.example.stayconnected.transaction.enums.TransactionStatus;
 import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.transaction.model.Transaction;
@@ -83,5 +84,34 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public List<Transaction> getLastThreeTransactions(Wallet wallet) {
         return this.transactionService.getLastThreeTransactions(wallet);
+    }
+
+    @Override
+    @Transactional
+    public void exchange(CreateReservationRequest createReservationRequest, UUID ownerId) {
+
+        Wallet reserverWallet = this.walletRepository.findByOwner_Id(createReservationRequest.getUserId());
+        reserverWallet.setBalance(reserverWallet.getBalance().subtract(createReservationRequest.getTotalPrice()));
+
+        this.walletRepository.save(reserverWallet);
+
+
+        Wallet propertyOwnerWallet = this.walletRepository.findByOwner_Id(ownerId);
+        topUp(propertyOwnerWallet.getId(), createReservationRequest.getTotalPrice());
+
+
+        this.transactionService.persistTransaction(
+                reserverWallet.getOwner(),
+                reserverWallet.getId().toString(),
+                STAY_CONNECTED,
+                createReservationRequest.getTotalPrice(),
+                reserverWallet.getBalance(),
+                TransactionType.BOOKING_PAYMENT,
+                TransactionStatus.SUCCEEDED,
+                BOOKING_PAYMENT_FORMAT_DESCRIPTION.formatted(createReservationRequest.getTotalPrice()),
+                null
+       );
+
+
     }
 }

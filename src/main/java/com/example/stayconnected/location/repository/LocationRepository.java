@@ -15,7 +15,7 @@ public interface LocationRepository extends JpaRepository<Location, UUID> {
     @Query("SELECT DISTINCT l.country FROM Location l")
     List<String> findDistinctCountries();
 
-    @Query(value = "SELECT new com.example.stayconnected.dto.CityStatsDTO(l.city, COUNT(l)) " +
+    @Query(value = "SELECT new com.example.stayconnected.web.dto.location.CityStatsDTO(l.city, COUNT(l)) " +
             "FROM Location l " +
             "GROUP BY l.city " +
             "ORDER BY COUNT(l.city) DESC " +
