@@ -20,5 +20,7 @@ public interface WalletService {
 
     void exchange(CreateReservationRequest createReservationRequest, UUID ownerId);
 
-    // Refund method -> when user cancels reservation
+    void refund(UUID userId, BigDecimal totalPrice);
+
+    void reverseEarning(BigDecimal totalPrice, UUID propertyId);
 }

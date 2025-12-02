@@ -13,7 +13,7 @@ public interface ReservationService {
 
     List<ReservationResponse> getReservationsByUserId(UUID userId);
 
-    void cancel(UUID id);
+    void cancel(UUID reservationId, UUID userId);
 
     void create(CreateReservationRequest createReservationRequest, UUID ownerId);
 }

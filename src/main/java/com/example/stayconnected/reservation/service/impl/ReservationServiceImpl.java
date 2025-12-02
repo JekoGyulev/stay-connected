@@ -21,11 +21,13 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationClient reservationClient;
     private final WalletService walletService;
+    private final UserService userService;
 
     @Autowired
-    public ReservationServiceImpl(ReservationClient reservationClient, WalletService walletService) {
+    public ReservationServiceImpl(ReservationClient reservationClient, WalletService walletService, UserService userService) {
         this.reservationClient = reservationClient;
         this.walletService = walletService;
+        this.userService = userService;
     }
 
 
@@ -42,8 +44,13 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void cancel(UUID id) {
-        this.reservationClient.cancelReservation(id);
+    public void cancel(UUID reservationId, UUID userId) {
+        ResponseEntity<ReservationResponse> responseEntity = this.reservationClient.cancelReservation(reservationId);
+
+        ReservationResponse response = responseEntity.getBody();
+
+        this.walletService.reverseEarning(response.getTotalPrice(), response.getPropertyId());
+        this.walletService.refund(userId, response.getTotalPrice());
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.review.model.Review;
 import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.security.UserPrincipal;
+import com.example.stayconnected.transaction.service.TransactionService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.utils.ReservationUtils;
@@ -39,14 +40,16 @@ public class ReservationController {
     private final UserService userService;
     private final PropertyService propertyService;
     private final ReviewService reviewService;
+    private final TransactionService transactionService;
 
 
     @Autowired
-    public ReservationController(ReservationService reservationService, UserService userService, PropertyService propertyService, ReviewService reviewService) {
+    public ReservationController(ReservationService reservationService, UserService userService, PropertyService propertyService, ReviewService reviewService, TransactionService transactionService) {
         this.reservationService = reservationService;
         this.userService = userService;
         this.propertyService = propertyService;
         this.reviewService = reviewService;
+        this.transactionService = transactionService;
     }
 
 
@@ -87,6 +90,8 @@ public class ReservationController {
 
             if (insufficientFunds) {
                 modelAndView.addObject("errorMessage", "Insufficient Funds");
+
+
             } else if (totalPrice == null) {
                 modelAndView.addObject("errorMessage", "Total Price Is Missing");
             }
@@ -105,9 +110,9 @@ public class ReservationController {
     }
 
 
-    @PatchMapping("/{id}/cancel")
-    public String cancel(@PathVariable UUID id) {
-        this.reservationService.cancel(id);
+    @PatchMapping("/{reservationId}/cancel")
+    public String cancel(@PathVariable UUID reservationId, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        this.reservationService.cancel(reservationId, userPrincipal.getId());
         return "redirect:/reservations/user/table";
     }
 
