@@ -56,36 +56,22 @@ public class WalletServiceImpl implements WalletService {
         this.walletRepository.save(wallet);
 
 
-        Transaction transaction;
+        String description = (transactionType == TransactionType.DEPOSIT)
+                ? TOP_UP_FORMAT_DESCRIPTION.formatted(amount)
+                : BOOKING_EARNING_FORMAT_DESCRIPTION.formatted(amount);
 
-        if (transactionType == TransactionType.DEPOSIT) {
-            transaction = this.transactionService.persistTransaction(
-                    wallet.getOwner(),
-                    STAY_CONNECTED,
-                    wallet.getId().toString(),
-                    amount,
-                    wallet.getBalance(),
-                    transactionType,
-                    TransactionStatus.SUCCEEDED,
-                    TOP_UP_FORMAT_DESCRIPTION.formatted(amount),
-                    null
-            );
 
-        } else {
-            transaction = this.transactionService.persistTransaction(
-                    wallet.getOwner(),
-                    STAY_CONNECTED,
-                    wallet.getId().toString(),
-                    amount,
-                    wallet.getBalance(),
-                    transactionType,
-                    TransactionStatus.SUCCEEDED,
-                    BOOKING_EARNING_FORMAT_DESCRIPTION.formatted(amount),
-                    null
-            );
-        }
-
-        return transaction;
+        return this.transactionService.persistTransaction(
+                wallet.getOwner(),
+                STAY_CONNECTED,
+                wallet.getId().toString(),
+                amount,
+                wallet.getBalance(),
+                transactionType,
+                TransactionStatus.SUCCEEDED,
+                description,
+                null
+        );
     }
 
     @Override

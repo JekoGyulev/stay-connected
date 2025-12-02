@@ -122,7 +122,9 @@
             <div class="transaction-amount-display">
                 <span th:if="${transaction.type.name() == 'DEPOSIT'}" class="amount-prefix">+</span>
                 <span th:if="${transaction.type.name() == 'REFUND'}" class="amount-prefix">+</span>
+                <span th:if="${transaction.type.name() == 'BOOKING_EARNING'}" class="amount-prefix">+</span>
                 <span th:if="${transaction.type.name() == 'BOOKING_PAYMENT'}" class="amount-prefix">-</span>
+                <span th:if="${transaction.type.name() == 'EARNING_REVERSAL'}" class="amount-prefix">-</span>
                 <span th:text="${'€' + #numbers.formatDecimal(transaction.amount, 1,2)}" class="amount-value"></span>
             </div>
 

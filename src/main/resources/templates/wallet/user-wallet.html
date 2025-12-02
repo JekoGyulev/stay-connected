@@ -188,7 +188,19 @@
                                     </svg>
                                 </div>
 
+                                <div th:if="${transaction.type.name() == 'BOOKING_EARNING'}" class="wallet-transaction-icon success">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                                    </svg>
+                                </div>
+
                                 <div th:if="${transaction.type.name() == 'BOOKING_PAYMENT'}" class="wallet-transaction-icon expense">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                                    </svg>
+                                </div>
+
+                                <div th:if="${transaction.type.name() == 'EARNING_REVERSAL'}" class="wallet-transaction-icon expense">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
                                     </svg>
@@ -202,7 +214,9 @@
 
                                 <div th:if="${transaction.type.name() == 'DEPOSIT'}" th:text="'+' + '€' + ${#numbers.formatDecimal(transaction.amount, 1, 2)}"  class="wallet-transaction-amount success"></div>
                                 <div th:if="${transaction.type.name() == 'REFUND'}" th:text="'+' + '€' + ${#numbers.formatDecimal(transaction.amount, 1, 2)}"  class="wallet-transaction-amount success"></div>
+                                <div th:if="${transaction.type.name() == 'BOOKING_EARNING'}"  th:text="'+' + '€' + ${#numbers.formatDecimal(transaction.amount, 1, 2)}" class="wallet-transaction-amount success"> </div>
                                 <div th:if="${transaction.type.name() == 'BOOKING_PAYMENT'}" th:text="'-' + '€' + ${#numbers.formatDecimal(transaction.amount, 1,2)}" class="wallet-transaction-amount expense"></div>
+                                <div th:if="${transaction.type.name() == 'EARNING_REVERSAL'}" th:text="'-' + '€' + ${#numbers.formatDecimal(transaction.amount, 1,2)}" class="wallet-transaction-amount expense"></div>
                             </div>
 
                         </div>
