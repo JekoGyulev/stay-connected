@@ -1,6 +1,7 @@
 package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.security.UserPrincipal;
+import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
@@ -35,7 +36,7 @@ public class WalletController {
         User user = this.userService.getUserById(userPrincipal.getId());
         UUID walletID = user.getWallet().getId();
 
-        Transaction transaction = this.walletService.topUp(walletID, amount);
+        Transaction transaction = this.walletService.topUp(walletID, amount, TransactionType.DEPOSIT);
 
         return "redirect:/transactions/" + transaction.getId();
     }

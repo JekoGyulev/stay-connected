@@ -25,8 +25,9 @@ public class WalletServiceImpl implements WalletService {
 
     private static final String STAY_CONNECTED = "STAY_CONNECTED";
     private static final String TOP_UP_FORMAT_DESCRIPTION = "Top up €%.2f";
-    private static final String BOOKING_PAYMENT_FORMAT_DESCRIPTION = "Booking Payment %.2f";
-    private static final String REFUND_FORMAT_DESCRIPTION = "Refund %.2f";;
+    private static final String BOOKING_PAYMENT_FORMAT_DESCRIPTION = "Booking Payment €%.2f";
+    private static final String REFUND_FORMAT_DESCRIPTION = "Refund €%.2f";;
+    private static final String BOOKING_EARNING_FORMAT_DESCRIPTION = "Booking Earning €%.2f";
 
     private final WalletRepository walletRepository;
 
@@ -40,7 +41,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    public Transaction topUp(UUID walletId, BigDecimal amount) {
+    public Transaction topUp(UUID walletId, BigDecimal amount, TransactionType transactionType) {
         Wallet wallet = this.walletRepository.findById(walletId)
                 .orElseThrow(
                         () -> new WalletDoesNotExist("Wallet with such id [%s] does not exist"
@@ -54,17 +55,35 @@ public class WalletServiceImpl implements WalletService {
 
         this.walletRepository.save(wallet);
 
-        Transaction transaction = this.transactionService.persistTransaction(
-                wallet.getOwner(),
-                STAY_CONNECTED,
-                wallet.getId().toString(),
-                amount,
-                wallet.getBalance(),
-                TransactionType.DEPOSIT,
-                TransactionStatus.SUCCEEDED,
-                TOP_UP_FORMAT_DESCRIPTION.formatted(amount),
-                null
-        );
+
+        Transaction transaction;
+
+        if (transactionType == TransactionType.DEPOSIT) {
+            transaction = this.transactionService.persistTransaction(
+                    wallet.getOwner(),
+                    STAY_CONNECTED,
+                    wallet.getId().toString(),
+                    amount,
+                    wallet.getBalance(),
+                    transactionType,
+                    TransactionStatus.SUCCEEDED,
+                    TOP_UP_FORMAT_DESCRIPTION.formatted(amount),
+                    null
+            );
+
+        } else {
+            transaction = this.transactionService.persistTransaction(
+                    wallet.getOwner(),
+                    STAY_CONNECTED,
+                    wallet.getId().toString(),
+                    amount,
+                    wallet.getBalance(),
+                    transactionType,
+                    TransactionStatus.SUCCEEDED,
+                    BOOKING_EARNING_FORMAT_DESCRIPTION.formatted(amount),
+                    null
+            );
+        }
 
         return transaction;
     }
@@ -97,7 +116,7 @@ public class WalletServiceImpl implements WalletService {
 
 
         Wallet propertyOwnerWallet = this.walletRepository.findByOwner_Id(ownerId);
-        topUp(propertyOwnerWallet.getId(), createReservationRequest.getTotalPrice());
+        topUp(propertyOwnerWallet.getId(), createReservationRequest.getTotalPrice(), TransactionType.BOOKING_EARNING);
 
 
         this.transactionService.persistTransaction(

@@ -7,6 +7,7 @@ import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.wallet.service.WalletService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,5 @@ public class ReservationServiceImpl implements ReservationService {
         this.reservationClient.createReservation(createReservationRequest);
 
         this.walletService.exchange(createReservationRequest, ownerId);
-
     }
 }

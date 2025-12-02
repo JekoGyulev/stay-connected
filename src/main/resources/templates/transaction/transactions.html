@@ -151,6 +151,12 @@
                         th:classappend="${transaction.status.name() == 'FAILED'} ? ' crossed' : ''">
                     </td>
 
+                    <td th:if="${transaction.type.name() == 'BOOKING_EARNING'}"
+                        th:text="'+' + '€' + ${#numbers.formatDecimal(transaction.amount,1,2)}"
+                        class="amount-cell positive"
+                        th:classappend="${transaction.status.name() == 'FAILED'} ? ' crossed' : ''">
+                    </td>
+
                     <td th:if="${transaction.type.name() == 'REFUND'}"
                         th:text="'+' + '€' + ${#numbers.formatDecimal(transaction.amount,1,2)}"
                         class="amount-cell positive"
@@ -163,6 +169,15 @@
                         th:classappend="${transaction.status.name() == 'FAILED'} ? ' crossed' : ''">
                     </td>
 
+                    <td th:if="${transaction.type.name() == 'EARNING_REVERSAL'}"
+                        th:text="'-' + '€' + ${#numbers.formatDecimal(transaction.amount,1,2)}"
+                        class="amount-cell negative"
+                        th:classappend="${transaction.status.name() == 'FAILED'} ? ' crossed' : ''">
+                    </td>
+
+
+
+
                     <td th:unless="${#strings.isEmpty(transaction.description)}"
                         th:text="${transaction.description}"
                     ></td>
@@ -172,6 +187,14 @@
                     ></td>
 
                     <td th:if="${transaction.type.name() == 'DEPOSIT'}">
+                        <div th:text="${transaction.type.displayName}" class="transaction-type"></div>
+                    </td>
+
+                    <td th:if="${transaction.type.name() == 'BOOKING_EARNING'}">
+                        <div th:text="${transaction.type.displayName}" class="transaction-type"></div>
+                    </td>
+
+                    <td th:if="${transaction.type.name() == 'EARNING_REVERSAL'}">
                         <div th:text="${transaction.type.displayName}" class="transaction-type"></div>
                     </td>
 
