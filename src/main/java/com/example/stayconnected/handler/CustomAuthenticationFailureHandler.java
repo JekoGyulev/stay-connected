@@ -19,9 +19,11 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         System.out.println("Failure handler triggered Exception: " + exception.getClass().getSimpleName());
 
         if (exception instanceof DisabledException) {
-            response.sendRedirect("/auth/login?inactive=true");
+            request.getSession().setAttribute("error", "Your account has been disabled");
         } else if (exception instanceof BadCredentialsException) {
-            response.sendRedirect("/auth/login?error=true");
+            request.getSession().setAttribute("error", "Username or password is incorrect");
         }
+
+        response.sendRedirect("/auth/login");
     }
 }

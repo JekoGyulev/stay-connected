@@ -39,6 +39,8 @@
                     <h2 class="title">Log in your account</h2>
                 </div>
 
+                <p th:if="${successfulRegistration}" th:text="${successfulRegistration}" class="success-register" style="margin-bottom: 10px"></p>
+
                 <form class="form" th:action="@{/auth/login}" th:method="POST" th:object="${loginRequest}">
 
                     <p th:if="${errorMessage}" th:text="${errorMessage}" class="alert-warning"></p>
