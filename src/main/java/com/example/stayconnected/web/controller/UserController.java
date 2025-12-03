@@ -8,6 +8,7 @@ import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.transaction.service.TransactionService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
+import com.example.stayconnected.utils.RevenueUtils;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.service.WalletService;
 import com.example.stayconnected.web.dto.DtoMapper;
@@ -205,14 +206,14 @@ public class UserController {
         modelAndView.addObject("totalUsers", this.userService.getAllUsersOrderedByDateAndUsername().size());
         modelAndView.addObject("totalProperties", this.propertyService.getAllProperties().size());
         modelAndView.addObject("totalTransactions", this.transactionService.getAllTransactions().size());
-        modelAndView.addObject("totalRevenue", formatRevenue(this.transactionService.getTotalRevenue()));
+        modelAndView.addObject("totalRevenue", RevenueUtils.formatRevenue(this.transactionService.getTotalRevenue()));
         modelAndView.addObject("totalFailedTransactions", this.transactionService.getAllFailedTransactions().size());
         modelAndView.addObject("totalActiveUsers",  this.userService.getTotalActiveUsers());
         modelAndView.addObject("totalReservations", this.reservationService.getTotalReservationsByStatus("ALL"));
         modelAndView.addObject("averageTransactionAmount", this.transactionService.getAverageTransactionAmount());
         modelAndView.addObject("newUsersToday", this.dashboardStatsService.getCountNewUsersToday());
         modelAndView.addObject("newBookingsToday", this.dashboardStatsService.getCountNewReservationsToday());
-        modelAndView.addObject("totalRevenueToday", formatRevenue(this.dashboardStatsService.getCountTotalRevenueToday()));
+        modelAndView.addObject("totalRevenueToday", RevenueUtils.formatRevenue(this.dashboardStatsService.getCountTotalRevenueToday()));
         modelAndView.addObject("newPropertiesToday", this.dashboardStatsService.getCountNewPropertiesToday());
         modelAndView.addObject("totalBookedReservations", this.reservationService.getTotalReservationsByStatus("BOOKED"));
         modelAndView.addObject("percentageActiveUsers", this.userService.getPercentageActiveUsers());
@@ -236,18 +237,4 @@ public class UserController {
         this.userService.switchStatus(id);
         return "redirect:/users/table";
     }
-
-
-    private String formatRevenue(BigDecimal revenue) {
-        if (revenue.compareTo(BigDecimal.valueOf(1_000_000)) >= 0) {
-            return String.format("€%.1fM", revenue.doubleValue() / 1_000_000);
-        } else if (revenue.compareTo(BigDecimal.valueOf(1_000)) >= 0) {
-            return String.format("€%.1fK", revenue.doubleValue() / 1_000);
-        } else {
-            return String.format("€%.2f", revenue);
-        }
-    }
-
-
-
 }
