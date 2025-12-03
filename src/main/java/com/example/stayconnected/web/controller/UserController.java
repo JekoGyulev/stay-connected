@@ -208,14 +208,15 @@ public class UserController {
         modelAndView.addObject("totalRevenue", formatRevenue(this.transactionService.getTotalRevenue()));
         modelAndView.addObject("totalFailedTransactions", this.transactionService.getAllFailedTransactions().size());
         modelAndView.addObject("totalActiveUsers",  this.userService.getTotalActiveUsers());
-        modelAndView.addObject("totalReservations", this.reservationService.getTotalReservations());
+        modelAndView.addObject("totalReservations", this.reservationService.getTotalReservationsByStatus("ALL"));
         modelAndView.addObject("averageTransactionAmount", this.transactionService.getAverageTransactionAmount());
-
         modelAndView.addObject("newUsersToday", this.dashboardStatsService.getCountNewUsersToday());
         modelAndView.addObject("newBookingsToday", this.dashboardStatsService.getCountNewReservationsToday());
         modelAndView.addObject("totalRevenueToday", formatRevenue(this.dashboardStatsService.getCountTotalRevenueToday()));
         modelAndView.addObject("newPropertiesToday", this.dashboardStatsService.getCountNewPropertiesToday());
+        modelAndView.addObject("totalBookedReservations", this.reservationService.getTotalReservationsByStatus("BOOKED"));
         modelAndView.addObject("percentageActiveUsers", this.userService.getPercentageActiveUsers());
+        modelAndView.addObject("percentageBookedReservations", this.reservationService.getAveragePercentageOfReservationsByStatus("BOOKED"));
         modelAndView.addObject("averageTransactionGrowth", this.dashboardStatsService.getAverageWeeklyTransactionGrowth());
 
         return modelAndView;

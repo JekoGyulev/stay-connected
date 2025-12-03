@@ -19,4 +19,5 @@ public class ReservationUtils {
                 .filter(reservation -> reservation.getStatus().equals("CANCELLED"))
                 .toList();
     }
+
 }

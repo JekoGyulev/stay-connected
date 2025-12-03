@@ -6,14 +6,18 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 @FeignClient(name = "reservation-svc", url = "http://localhost:8081/api/v1/reservations")
 public interface ReservationClient {
 
+    @GetMapping("/percentage")
+    ResponseEntity<BigDecimal> getAveragePercentageOfReservationsByStatus(@RequestParam("status") String status);
+
     @GetMapping("/total")
-    ResponseEntity<Long> getTotalReservations();
+    ResponseEntity<Long> getTotalReservationsByStatus(@RequestParam(value = "status") String status);
 
     @GetMapping
     ResponseEntity<List<ReservationResponse>> getReservationHistoryForUser(@RequestParam("userId") UUID userId);

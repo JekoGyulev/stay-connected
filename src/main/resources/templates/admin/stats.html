@@ -213,14 +213,14 @@
                 </svg>
             </div>
 
-            <p th:text="${totalCompletedReservations}" class="secondary-stat-value"></p>
+            <p th:text="${totalBookedReservations}" class="secondary-stat-value"></p>
 
             <div class="secondary-stat-bar">
                 <div class="secondary-stat-bar-fill secondary-stat-bar-success"
-                     th:style="'width: ' + ${percentageCompletedReservations} + '%'"></div>
+                     th:style="'width: ' + ${percentageBookedReservations} + '%'"></div>
             </div>
 
-            <p th:text="${percentageCompletedReservations} + '%' + ' of total bookings'"
+            <p th:text="${percentageBookedReservations} + '%' + ' of total bookings'"
                class="secondary-stat-description"></p>
         </div>
 

@@ -4,14 +4,13 @@ import com.example.stayconnected.reservation.client.ReservationClient;
 import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
 import com.example.stayconnected.reservation.client.dto.ReservationResponse;
 import com.example.stayconnected.reservation.service.ReservationService;
-import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.wallet.service.WalletService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -32,8 +31,13 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
-    public long getTotalReservations() {
-        ResponseEntity<Long> totalReservations = this.reservationClient.getTotalReservations();
+    public BigDecimal getAveragePercentageOfReservationsByStatus(String status) {
+        return this.reservationClient.getAveragePercentageOfReservationsByStatus(status).getBody();
+    }
+
+    @Override
+    public long getTotalReservationsByStatus(String status) {
+        ResponseEntity<Long> totalReservations = this.reservationClient.getTotalReservationsByStatus(status);
         return totalReservations.getBody() != null ? totalReservations.getBody() : 0;
     }
 
