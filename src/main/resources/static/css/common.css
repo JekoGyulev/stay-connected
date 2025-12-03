@@ -65,6 +65,31 @@ p.alert-warning {
     margin: 5px 0 0;
 }
 
+.success-register {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(to left, #12b212, #4cb43c, #43c43a);
+    background-size: 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+p.success-register {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(to left, #12b212, #4cb43c, #43c43a);
+    background-size: 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 5px 0 0;
+}
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -116,6 +141,10 @@ p.alert-warning {
     font-size: 1rem;
     height: 48px;
     border-radius: calc(var(--radius) + 2px);
+}
+
+.go-back-arrow:hover {
+    cursor: pointer;
 }
 
 

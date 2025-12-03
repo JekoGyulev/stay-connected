@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>500 - Internal Server Error | StayConnected</title>
+    <link rel="stylesheet" href="/css/internal-server-error-page.css">
+</head>
+<body>
+<div class="error-container">
+    <div class="error-icon">
+        <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+            <rect x="20" y="25" width="80" height="20" rx="4" fill="#FF385C" opacity="0.2"/>
+            <rect x="20" y="50" width="80" height="20" rx="4" fill="#FF385C" opacity="0.3"/>
+            <rect x="20" y="75" width="80" height="20" rx="4" fill="#FF385C" opacity="0.4"/>
+
+
+            <circle cx="60" cy="60" r="35" fill="#FF385C"/>
+            <path d="M45 45L75 75M75 45L45 75" stroke="white" stroke-width="6" stroke-linecap="round"/>
+
+            <circle cx="30" cy="35" r="3" fill="#FF385C"/>
+            <circle cx="40" cy="35" r="3" fill="#FF385C"/>
+            <circle cx="30" cy="60" r="3" fill="#FF385C"/>
+            <circle cx="40" cy="60" r="3" fill="#FF385C"/>
+            <circle cx="30" cy="85" r="3" fill="#FF385C"/>
+            <circle cx="40" cy="85" r="3" fill="#FF385C"/>
+        </svg>
+    </div>
+
+    <div class="error-code">500</div>
+    <h1 class="error-title">Something went wrong</h1>
+    <p class="error-message">
+        We're experiencing technical difficulties on our end. Our team has been notified and is working to fix the issue. Please try again in a few moments.
+    </p>
+
+    <div class="button-group">
+        <a th:href="@{/home}" class="btn btn-primary">Return to Home</a>
+        <button onclick="location.reload()" class="btn btn-secondary">Refresh Page</button>
+    </div>
+
+    <div class="support-info">
+        <p class="support-text">If the problem persists, please contact our support team</p>
+    </div>
+</div>
+
+</body>
+</html>

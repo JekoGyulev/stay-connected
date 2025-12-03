@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404 - Page Not Found | StayConnected</title>
+    <link rel="stylesheet" href="/css/not-found-error-page.css">
+</head>
+<body>
+<div class="container">
+    <div class="icon-container">
+        <svg class="icon" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Map pin icon -->
+            <circle cx="60" cy="60" r="55" fill="#FFE8EC" stroke="#FF385C" stroke-width="2"/>
+            <path d="M60 25C49.5066 25 41 33.5066 41 44C41 57.5 60 75 60 75C60 75 79 57.5 79 44C79 33.5066 70.4934 25 60 25Z" fill="#FF385C" stroke="white" stroke-width="2"/>
+            <circle cx="60" cy="44" r="7" fill="white"/>
+            <!-- Question mark inside pin -->
+            <text x="60" y="48" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">?</text>
+        </svg>
+    </div>
+
+    <div class="error-code">404</div>
+
+    <h1 class="error-title">Page Not Found</h1>
+
+    <p class="error-message">
+        Oops! We can't seem to find the page you're looking for. The page may have been moved, deleted, or the link might be broken.
+    </p>
+
+    <div class="button-group">
+        <a th:href="@{/home}" class="btn btn-primary">Go to Homepage</a>
+        <button onclick="history.back()" class="btn btn-secondary">Go Back</button>
+    </div>
+</div>
+</body>
+</html>

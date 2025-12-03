@@ -1,0 +1,138 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #ffffff 0%, #fff5f7 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px;
+    text-align: center;
+    animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.lock-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 30px;
+    background: #FF385C;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 40px rgba(255, 56, 92, 0.2);
+}
+
+.lock-icon svg {
+    width: 60px;
+    height: 60px;
+    fill: white;
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #222222;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+}
+
+.error-code {
+    font-size: 18px;
+    color: #FF385C;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 16px;
+    color: #717171;
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+.button-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #FF385C, #E61E4D);
+    color: white;
+    box-shadow: 0 2px 8px rgba(255, 56, 92, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 56, 92, 0.4);
+}
+
+.btn-secondary {
+    background: white;
+    color: #222222;
+    border: 1px solid #DDDDDD;
+}
+
+.btn-secondary:hover {
+    border-color: #222222;
+}
+
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 26px;
+    }
+
+    .lock-icon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .lock-icon svg {
+        width: 50px;
+        height: 50px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}

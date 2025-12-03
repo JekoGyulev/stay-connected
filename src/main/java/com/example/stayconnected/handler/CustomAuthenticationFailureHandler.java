@@ -16,8 +16,6 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
-        System.out.println("Failure handler triggered Exception: " + exception.getClass().getSimpleName());
-
         if (exception instanceof DisabledException) {
             request.getSession().setAttribute("error", "Your account has been disabled");
         } else if (exception instanceof BadCredentialsException) {

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>400 - Bad Request | StayConnected</title>
+    <link rel="stylesheet" href="/css/bad-request-error-page.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="error-icon">
+        <div class="icon-circle">
+            <div class="icon-exclamation">!</div>
+        </div>
+    </div>
+
+    <div class="error-code">400</div>
+
+    <h1>Bad Request</h1>
+
+    <p>Oops! The request couldn't be understood by the server.</p>
+
+    <p>There might be an issue with the information you submitted.</p>
+
+    <div class="details">
+        <h2>Common causes:</h2>
+        <ul>
+            <li>Invalid or missing information in the form</li>
+            <li>Malformed URL or request parameters</li>
+            <li>Unsupported file type or size</li>
+            <li>Expired or invalid session</li>
+        </ul>
+    </div>
+
+    <div class="button-group">
+        <a th:href="@{/home}" class="btn btn-primary">Go to Homepage</a>
+        <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+    </div>
+</div>
+
+</body>
+</html>

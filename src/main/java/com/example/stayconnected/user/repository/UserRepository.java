@@ -29,4 +29,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     List<User> findAllByRoleOrderByRegisteredAtDescUsernameAsc(UserRole role);
 
     List<User> findAllByIsActiveOrderByRegisteredAtDescUsernameAsc(boolean isActive);
+
+    Optional<User> findByEmail(String email);
 }

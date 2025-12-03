@@ -6,10 +6,13 @@ import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
 import com.example.stayconnected.user.service.UserService;
+import com.example.stayconnected.utils.exception.EmailAlreadyExists;
+import com.example.stayconnected.utils.exception.UserDoesNotExist;
 import com.example.stayconnected.utils.exception.UsernameAlreadyExists;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.service.WalletService;
 import com.example.stayconnected.web.dto.user.*;
+import jakarta.validation.constraints.Email;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -58,6 +61,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     .formatted(request.getUsername()));
         }
 
+        if (this.userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new EmailAlreadyExists("Email already taken: %s"
+                    .formatted(request.getEmail()));
+        }
+
         User user = initUser(request);
 
         this.userRepository.save(user);
@@ -89,7 +97,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User getUserById(UUID id) {
         return this.userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserDoesNotExist("User not found"));
     }
 
     @Override

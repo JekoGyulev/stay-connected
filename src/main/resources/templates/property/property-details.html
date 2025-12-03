@@ -87,7 +87,7 @@
 
     <div class="property-details-header">
 
-        <a th:href="@{/properties}"><i class="fa-solid fa-arrow-left" style="margin-bottom: 2rem"></i></a>
+        <a onclick="history.back()"><i class="fa-solid fa-arrow-left go-back-arrow" style="margin-bottom: 2rem"></i></a>
 
         <p th:if="${message != null}" th:text="${message}" class="amount-cell positive"></p>
 
