@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -216,13 +217,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private User initUser(RegisterRequest request) {
-        return new User (
-                request.getFirstName(),
-                request.getLastName(),
-                request.getUsername(),
-                passwordEncoder.encode(request.getPassword()),
-                request.getEmail()
-        );
+        return User.builder()
+                .username(request.getUsername())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .email(request.getEmail())
+                .isActive(true)
+                .role(UserRole.USER)
+                .registeredAt(LocalDateTime.now())
+                .build();
     }
 
     @Override

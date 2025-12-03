@@ -1,7 +1,11 @@
 package com.example.stayconnected.web.dto.user;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
+@Builder
+@AllArgsConstructor
 public class RegisterRequest {
     @NotBlank(message = "First name cannot be empty or blank.")
     @Size(min = 2, message = "First name must be at least 2 characters long.")
@@ -22,14 +26,6 @@ public class RegisterRequest {
     private String password;
 
     public RegisterRequest() {}
-
-    public RegisterRequest(String firstName, String lastName, String email, String username, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
 
     public String getFirstName() {
         return firstName;

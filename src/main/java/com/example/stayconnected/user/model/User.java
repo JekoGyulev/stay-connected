@@ -5,6 +5,8 @@ import com.example.stayconnected.user.enums.UserRole;
 
 import com.example.stayconnected.wallet.model.Wallet;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 
 import java.time.LocalDateTime;
@@ -12,6 +14,8 @@ import java.util.*;
 
 @Entity
 @Table(name = "users")
+@Builder
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -40,22 +44,7 @@ public class User {
     @Column
     private LocalDateTime lastLoggedIn;
 
-
     public User() {}
-
-
-    // User REGISTER  constructor
-    public User(String firstName, String lastName, String username, String password, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.isActive = true;
-        this.role = UserRole.USER;
-        this.registeredAt = LocalDateTime.now();
-    }
-
 
     public String getFirstName() {
         return firstName;

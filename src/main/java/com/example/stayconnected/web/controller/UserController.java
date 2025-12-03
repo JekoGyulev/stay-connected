@@ -24,8 +24,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,8 +64,6 @@ public class UserController {
                               BindingResult bindingResult,
                               @AuthenticationPrincipal UserPrincipal principal) {
 
-        // TODO: FIX HERE the PRINCIPAL
-
         User user = this.userService.getUserById(principal.getId());
 
         if (bindingResult.hasErrors()) {
@@ -77,8 +73,8 @@ public class UserController {
             return modelAndView;
         }
 
-
         this.userService.updatePhoto(user, updatePhotoRequest);
+
         return new ModelAndView("redirect:/users/" + user.getId() + "/profile");
     }
 
