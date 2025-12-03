@@ -307,10 +307,6 @@ public class UserServiceImplUTest {
     }
 
 
-
-    // TODO:
-
-
     @Test
     void whenUserFiltersOtherUsers_andThereAreNoFiltersApplied_thenShowAllUsers() {
 
@@ -462,11 +458,13 @@ public class UserServiceImplUTest {
                 .build();
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("password", user.getPassword())).thenReturn(true);
 
         UserDetails userDetails = userServiceImpl.loadUserByUsername(username);
 
         assertEquals(username,  userDetails.getUsername());
         assertEquals(true, userDetails.isEnabled());
+        assertTrue(passwordEncoder.matches("password", userDetails.getPassword()));
         assertEquals("ROLE_USER",  userDetails.getAuthorities().iterator().next().getAuthority());
     }
 

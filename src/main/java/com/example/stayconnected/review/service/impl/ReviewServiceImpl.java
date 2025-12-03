@@ -8,6 +8,7 @@ import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
 import com.example.stayconnected.utils.exception.PropertyDoesNotExist;
+import com.example.stayconnected.utils.exception.UserDoesNotExist;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,18 +51,18 @@ public class ReviewServiceImpl implements ReviewService {
     public void addReview(UUID userId, UUID propertyId, CreateReviewRequest request) {
 
         User user = this.userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserDoesNotExist("User not found"));
 
         Property property = this.propertyRepository.findById(propertyId)
                 .orElseThrow(() -> new PropertyDoesNotExist("Property with such id [%s] does not exist"
                         .formatted(propertyId)));
 
-        Review review = new Review  (
-                                            request.getComment(),
-                                            request.getRating(),
-                                            user,
-                                            property
-                                    );
+        Review review = Review.builder().comment(request.getComment())
+                .rating(request.getRating())
+                .createdFrom(user)
+                .property(property)
+                .createdAt(LocalDateTime.now())
+                .build();
 
         this.reviewRepository.save(review);
 
