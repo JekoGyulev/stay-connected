@@ -25,11 +25,9 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public Location createLocation(LocationRequest locationRequest) {
-        Location location = new Location(
-                locationRequest.getCountry(),
-                locationRequest.getCity(),
-                locationRequest.getAddress()
-        );
+        Location location = Location.builder().city(locationRequest.getCity())
+                .country(locationRequest.getCountry())
+                .address(locationRequest.getAddress()).build();
 
         this.locationRepository.save(location);
 

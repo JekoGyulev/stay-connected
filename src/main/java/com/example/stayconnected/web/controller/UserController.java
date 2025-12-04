@@ -227,6 +227,7 @@ public class UserController {
         this.userService.switchRole(id);
         return "redirect:/users/table";
     }
+
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public String changeUserStatus(@PathVariable UUID id) {

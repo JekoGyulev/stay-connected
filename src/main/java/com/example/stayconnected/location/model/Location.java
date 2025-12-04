@@ -1,12 +1,15 @@
 package com.example.stayconnected.location.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "locations")
+@Builder
+@AllArgsConstructor
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -18,15 +21,8 @@ public class Location {
     @Column(nullable = false)
     private String address;
 
-
     public String getFullName() {
         return address + ", " + city +  ", " + country;
-    }
-
-    public Location(String country, String city, String address) {
-        this.country = country;
-        this.city = city;
-        this.address = address;
     }
 
     public Location() {}
