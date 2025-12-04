@@ -82,7 +82,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Wallet createWallet(User user) {
-        Wallet wallet = new Wallet(BigDecimal.valueOf(50), user);
+        Wallet wallet = Wallet.builder().balance(BigDecimal.valueOf(50)).owner(user).build();
 
         this.walletRepository.save(wallet);
 

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -30,15 +29,18 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction persistTransaction(User owner, String sender, String receiver, BigDecimal amount, BigDecimal balanceLeft, TransactionType transactionType, TransactionStatus transactionStatus, String description, String reasonForFailure) {
-        Transaction transaction = new Transaction(
-                owner, sender,
-                receiver, amount,
-                balanceLeft, transactionType,
-                transactionStatus, description,
-                reasonForFailure
-        );
-
-        return this.transactionRepository.save(transaction);
+        return this.transactionRepository.save(Transaction.builder()
+                .owner(owner)
+                .sender(sender)
+                .receiver(receiver)
+                .amount(amount)
+                .balanceLeft(balanceLeft)
+                .createdOn(LocalDateTime.now())
+                .description(description)
+                .status(transactionStatus)
+                .type(transactionType)
+                .reasonForFailure(reasonForFailure)
+                .build());
     }
 
     @Override

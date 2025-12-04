@@ -5,6 +5,7 @@ import com.example.stayconnected.transaction.enums.TransactionStatus;
 import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.user.model.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -14,7 +15,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "transactions")
-
+@Builder
+@AllArgsConstructor
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -46,18 +48,6 @@ public class Transaction {
 
 
     public Transaction() {}
-
-    public Transaction(User owner, String sender, String receiver, BigDecimal amount, BigDecimal balanceLeft, TransactionType type, TransactionStatus status, String description, String reasonForFailure) {
-        this.owner = owner;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.amount = amount;
-        this.balanceLeft = balanceLeft;
-        this.type = type;
-        this.status = status;
-        this.description = description;
-        this.reasonForFailure = reasonForFailure;
-    }
 
     public BigDecimal getAmount() {
         return amount;

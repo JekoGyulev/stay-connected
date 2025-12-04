@@ -2,6 +2,7 @@ package com.example.stayconnected.wallet.model;
 
 import com.example.stayconnected.user.model.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,6 +13,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "wallets")
+@Builder
+@AllArgsConstructor
 public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,11 +32,6 @@ public class Wallet {
     private LocalDateTime updatedAt;
 
     public Wallet() {}
-
-    public Wallet(BigDecimal amount, User owner) {
-        this.balance = amount;
-        this.owner = owner;
-    }
 
     public UUID getId() {
         return id;
