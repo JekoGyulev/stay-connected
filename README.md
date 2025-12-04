@@ -26,9 +26,7 @@ It aims to simplify property listing, searching, booking and reservation managem
 
 At the moment, the project uses standalone technologies. Possible or intended integrations (if you add them) could include:  
 - A relational database (e.g. PostgreSQL / MySQL) to store users, properties, bookings.  
-- An authentication system for users/hosts (
-
-## 🛠️ Getting Started / Setup & Run (for development)
+- An authentication system for users/hosts 
 
 
    
