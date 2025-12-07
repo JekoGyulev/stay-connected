@@ -1,12 +1,15 @@
 package com.example.stayconnected.property.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "property_images")
+@Builder
+@AllArgsConstructor
 public class PropertyImage {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -32,7 +32,7 @@ public class ReviewController {
     private final PropertyService propertyService;
 
     @Autowired
-    public ReviewController(ReviewService reviewService, PropertyService propertyService, UserService userService, PropertyService propertyService1) {
+    public ReviewController(ReviewService reviewService, UserService userService, PropertyService propertyService1) {
         this.reviewService = reviewService;
         this.userService = userService;
         this.propertyService = propertyService1;
