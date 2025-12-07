@@ -127,6 +127,7 @@ public class UserController {
     public ModelAndView changePassword(@Valid @ModelAttribute ChangePasswordRequest changePasswordRequest,
                                        BindingResult bindingResult,
                                        @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
         User user = this.userService.getUserById(userPrincipal.getId());
 
         if (bindingResult.hasErrors()) {
@@ -187,7 +188,6 @@ public class UserController {
         modelAndView.addObject("users", filteredUsers);
 
         return modelAndView;
-
     }
 
     @GetMapping("/app-stats")

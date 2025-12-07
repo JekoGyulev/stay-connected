@@ -13,4 +13,4 @@ downloadPDFButton.addEventListener('click', () => {
     };
 
     return html2pdf().from(element).set(options).save();
-});
+}); 

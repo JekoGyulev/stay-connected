@@ -14,11 +14,15 @@ import com.example.stayconnected.transaction.service.TransactionService;
 import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
+import com.example.stayconnected.utils.RevenueUtils;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.service.WalletService;
 import com.example.stayconnected.web.controller.UserController;
+import com.example.stayconnected.web.dto.transaction.FilterTransactionRequest;
 import com.example.stayconnected.web.dto.user.ChangePasswordRequest;
+import com.example.stayconnected.web.dto.user.FilterUserRequest;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
+import com.example.stayconnected.web.dto.user.UpdatePhotoRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -152,9 +157,49 @@ public class UserControllerTest {
                 .andExpect(redirectedUrl("/users/" + user.getId() + "/profile"));
 
         verify(userService).changePassword(eq(user), any(ChangePasswordRequest.class));
+    }
+
+    @Test
+    void patchRequestToChangePassword_WhenInvalid_ShouldReturnSamePage_WithErrors() throws Exception {
+
+
+        UserPrincipal userPrincipal = getNonAdminAuthentication();
+
+        User user = User.builder().username(userPrincipal.getUsername())
+                .password(userPrincipal.getPassword())
+                .id(userPrincipal.getId())
+                .build();
+
+        user.setWallet(createRandomWallet(user));
+
+
+
+        ChangePasswordRequest dto = ChangePasswordRequest.builder()
+                .newPassword("Invalid")
+                .confirmPassword("InvalidPassword")
+                .build();
+
+
+        when(userService.getUserById(user.getId())).thenReturn(user);
+
+
+        MockHttpServletRequestBuilder request =
+                patch("/users/change-password")
+                        .with(user(userPrincipal))
+                        .with(csrf())
+                        .param("newPassword", dto.getNewPassword())
+                        .param("confirmPassword", dto.getConfirmPassword());
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/change-password-form"))
+                .andExpect(model().attributeExists("user"));
+
 
 
     }
+
+
 
 
 
@@ -208,14 +253,57 @@ public class UserControllerTest {
                 .param("lastName", profileEditRequest.getLastName());
 
 
-        // Act
+
         mockMvc.perform(request)
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/users/" + user.getId() + "/profile"));
 
-        // Assert: verify service method call using ArgumentCaptor
+
         ArgumentCaptor<ProfileEditRequest> captor = ArgumentCaptor.forClass(ProfileEditRequest.class);
         verify(userService).updateProfile(eq(user), captor.capture());
+
+    }
+
+    @Test
+    void putRequestToEditProfileWithError_shouldReturnSamePage_andNotInvokeServiceMethod() throws Exception {
+
+        UserPrincipal userPrincipal = getNonAdminAuthentication();
+
+        User user = User.builder()
+                .id(userPrincipal.getId())
+                .username(userPrincipal.getUsername())
+                .password(userPrincipal.getPassword())
+                .email("zhekogyulev@gmail.com")
+                .build();
+
+        Wallet wallet = Wallet.builder().balance(BigDecimal.TEN).build();
+
+        user.setWallet(wallet);
+
+        ProfileEditRequest profileEditRequest = ProfileEditRequest.builder()
+                .username("no")
+                .email("invalid@email")
+                .firstName("newFirstName")
+                .lastName("newLastName")
+                .build();
+
+
+        when(userService.getUserById(userPrincipal.getId())).thenReturn(user);
+
+        MockHttpServletRequestBuilder request = put("/users/profile/edit")
+                .with(user(userPrincipal))
+                .with(csrf())
+                .param("username", profileEditRequest.getUsername())
+                .param("email", profileEditRequest.getEmail())
+                .param("firstName", profileEditRequest.getFirstName())
+                .param("lastName", profileEditRequest.getLastName());
+
+
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/profile-edit-form"))
+                .andExpect(model().attributeExists("user"));
 
     }
 
@@ -301,6 +389,248 @@ public class UserControllerTest {
     }
 
 
+    @Test
+    void sendRequestToProfileEditPage_shouldReturn200Ok_andView() throws Exception {
+        UserPrincipal userPrincipal = getNonAdminAuthentication();
+
+        User user = User.builder()
+                .id(UUID.randomUUID())
+                .username(userPrincipal.getUsername())
+                .password(userPrincipal.getPassword())
+                .build();
+
+        user.setWallet(createRandomWallet(user));
+
+
+        when(userService.getUserById(any())).thenReturn(user);
+
+        MockHttpServletRequestBuilder request =
+                get("/users/profile/edit")
+                        .with(user(userPrincipal));
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/profile-edit-form"))
+                .andExpect(model().attributeExists("profileEditRequest"));
+    }
+
+    @Test
+    void sendGetRequestToProfilePageOfUser_shouldReturn200Ok_andView() throws Exception {
+        UserPrincipal userPrincipal = getNonAdminAuthentication();
+
+        User user = User.builder()
+                .id(UUID.randomUUID())
+                .username(userPrincipal.getUsername())
+                .password(userPrincipal.getPassword())
+                .build();
+
+        user.setWallet(createRandomWallet(user));
+
+        when(userService.getUserById(any())).thenReturn(user);
+
+
+        MockHttpServletRequestBuilder request =
+                get("/users/{id}/profile",  user.getId())
+                        .with(user(userPrincipal));
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/profile-details"));
+
+    }
+
+    @Test
+    void sendPatchRequestToProfileEditPhotoPage_shouldReturnRedirect_andView() throws Exception {
+
+        UserPrincipal userPrincipal = getNonAdminAuthentication();
+
+        User user = User.builder()
+                .id(UUID.randomUUID())
+                .username(userPrincipal.getUsername())
+                .password(userPrincipal.getPassword())
+                .profilePictureUrl("uploads/some_url.jpg")
+                .build();
+
+        user.setWallet(createRandomWallet(user));
+
+
+        UpdatePhotoRequest dto =
+                new UpdatePhotoRequest("https://cdn-icons-png.flaticon.com/512/25/25471.png");
+
+
+        when(userService.getUserById(any())).thenReturn(user);
+
+
+        MockHttpServletRequestBuilder request =
+                patch("/users/update-photo")
+                        .with(user(userPrincipal))
+                        .with(csrf())
+                        .param("photoURL", dto.getPhotoURL());
+
+        mockMvc.perform(request)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/users/" +  user.getId() + "/profile"));
+
+        ArgumentCaptor<UpdatePhotoRequest> captor = ArgumentCaptor.forClass(UpdatePhotoRequest.class);
+
+        verify(userService).updatePhoto(eq(user), captor.capture());
+
+        UpdatePhotoRequest actual = captor.getValue();
+
+        assertEquals(dto.getPhotoURL(), actual.getPhotoURL());
+    }
+
+
+    @Test
+    void sendPatchRequestToProfileEditPhotoPageWithError_shouldReturnOK_andView() throws Exception {
+
+        UserPrincipal userPrincipal = getNonAdminAuthentication();
+
+        User user = User.builder()
+                .id(UUID.randomUUID())
+                .username(userPrincipal.getUsername())
+                .password(userPrincipal.getPassword())
+                .profilePictureUrl("uploads/some_url.jpg")
+                .build();
+
+        user.setWallet(createRandomWallet(user));
+
+
+        UpdatePhotoRequest dto =
+                new UpdatePhotoRequest("invalidUrl");
+
+
+        when(userService.getUserById(any())).thenReturn(user);
+
+
+        MockHttpServletRequestBuilder request =
+                patch("/users/update-photo")
+                        .with(user(userPrincipal))
+                        .with(csrf())
+                        .param("photoURL", dto.getPhotoURL());
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/profile-details"))
+                .andExpect(model().attributeExists("user"));
+    }
+
+
+
+    @Test
+    void sendGetRequestToUsersTable_shouldReturn200Ok_andView() throws Exception {
+
+        UserPrincipal adminAuthentication = getAdminAuthentication();
+
+        User user = User.builder()
+                .id(adminAuthentication.getId())
+                .username(adminAuthentication.getUsername())
+                .password(adminAuthentication.getPassword())
+                .build();
+
+
+        User user2 = User.builder()
+                        .id(UUID.randomUUID())
+                                .username("username")
+                                        .password("password")
+                                            .role(UserRole.USER)
+                                                .build();
+
+
+        user.setWallet(createRandomWallet(user));
+        user2.setWallet(createRandomWallet(user2));
+
+        FilterUserRequest dto = new FilterUserRequest("ALL", "ALL");
+
+
+        when(userService.getFilteredUsers(any()))
+                .thenReturn(List.of(user, user2));
+
+        when(userService.getUserById(any())).thenReturn(user);
+
+
+        MockHttpServletRequestBuilder request =
+                get("/users/table/filter")
+                        .with(user(adminAuthentication));
+
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(view().name("/admin/users"))
+                .andExpect(model().attribute("authUser", user))
+                .andExpect(model().attributeExists("filterUsersRequest"))
+                .andExpect(model().attributeExists("users"));
+
+        verify(userService).getFilteredUsers(any());
+    }
+
+
+    @Test
+    void sendGetRequestToAppStatsPage_shouldReturn200Ok_andView() throws Exception {
+
+        UserPrincipal userPrincipal = getAdminAuthentication();
+
+        User user = User.builder()
+                .id(userPrincipal.getId())
+                .username(userPrincipal.getUsername())
+                .password(userPrincipal.getPassword())
+                .build();
+
+
+        user.setWallet(createRandomWallet(user));
+
+
+        when(userService.getUserById(any())).thenReturn(user);
+        when(userService.getAllUsersOrderedByDateAndUsername()).thenReturn(List.of(user));
+        when(propertyService.getAllProperties()).thenReturn(List.of());
+        when(transactionService.getAllTransactions()).thenReturn(List.of());
+        when(transactionService.getTotalRevenue()).thenReturn(BigDecimal.valueOf(1000));
+        when(transactionService.getAllFailedTransactions()).thenReturn(List.of());
+        when(userService.getTotalActiveUsers()).thenReturn(1L);
+        when(reservationService.getTotalReservationsByStatus("ALL")).thenReturn(0L);
+        when(transactionService.getAverageTransactionAmount()).thenReturn(BigDecimal.valueOf(100));
+        when(dashboardStatsService.getCountNewUsersToday()).thenReturn(2L);
+        when(dashboardStatsService.getCountNewReservationsToday()).thenReturn(3L);
+        when(dashboardStatsService.getCountTotalRevenueToday()).thenReturn(BigDecimal.valueOf(500));
+        when(dashboardStatsService.getCountNewPropertiesToday()).thenReturn(1L);
+        when(reservationService.getTotalReservationsByStatus("BOOKED")).thenReturn(0L);
+        when(userService.getPercentageActiveUsers()).thenReturn(BigDecimal.valueOf(50));
+        when(reservationService.getAveragePercentageOfReservationsByStatus("BOOKED")).thenReturn(BigDecimal.ZERO);
+        when(dashboardStatsService.getAverageWeeklyTransactionGrowth()).thenReturn(BigDecimal.valueOf(10));
+
+
+        MockHttpServletRequestBuilder request =
+                get("/users/app-stats")
+                        .with(user(userPrincipal));
+
+
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/stats"))
+                .andExpect(model().attribute("user", user))
+                .andExpect(model().attribute("totalUsers", 1))
+                .andExpect(model().attribute("totalProperties", 0))
+                .andExpect(model().attribute("totalTransactions", 0))
+                .andExpect(model().attribute("totalRevenue", RevenueUtils.formatRevenue(BigDecimal.valueOf(1000))))
+                .andExpect(model().attribute("totalFailedTransactions", 0))
+                .andExpect(model().attribute("totalActiveUsers", 1L))
+                .andExpect(model().attribute("totalReservations", 0L))
+                .andExpect(model().attribute("averageTransactionAmount", BigDecimal.valueOf(100)))
+                .andExpect(model().attribute("newUsersToday", 2L))
+                .andExpect(model().attribute("newBookingsToday", 3L))
+                .andExpect(model().attribute("totalRevenueToday", RevenueUtils.formatRevenue(BigDecimal.valueOf(500))))
+                .andExpect(model().attribute("newPropertiesToday", 1L))
+                .andExpect(model().attribute("totalBookedReservations", 0L))
+                .andExpect(model().attribute("percentageActiveUsers", BigDecimal.valueOf(50)))
+                .andExpect(model().attribute("percentageBookedReservations", BigDecimal.valueOf(0)))
+                .andExpect(model().attribute("averageTransactionGrowth", BigDecimal.valueOf(10)));
+
+    }
+
+
+
+
 
 
 
@@ -346,60 +676,10 @@ public class UserControllerTest {
         return user;
     }
 
+    public static Wallet createRandomWallet(User user) {
 
-
-
-
-//    @Test
-//    void getWalletPage_ShouldReturnWalletViewWithModel() throws Exception {
-//
-//        // --- Arrange ---
-//        UUID userId = UUID.randomUUID();
-//
-//        UserPrincipal principal = new UserPrincipal(
-//                userId,
-//                "john",
-//                "hashed-password",
-//                true,
-//                UserRole.USER
-//        );
-//
-//        Wallet wallet = Wallet.builder()
-//                .id(UUID.randomUUID())
-//                .balance(BigDecimal.valueOf(100))
-//                .build();
-//
-//        User user = User.builder()
-//                .id(userId)
-//                .username("john")
-//                .wallet(wallet)
-//                .build();
-//
-//        List<Transaction> transactions = List.of(
-//                new Transaction(),
-//                new Transaction(),
-//                new Transaction()
-//        );
-//
-//        Mockito.when(userService.getUserById(userId)).thenReturn(user);
-//        Mockito.when(walletService.getLastThreeTransactions(wallet)).thenReturn(transactions);
-//
-//        UsernamePasswordAuthenticationToken auth =
-//                new UsernamePasswordAuthenticationToken(
-//                        principal,
-//                        principal.getPassword(),
-//                        principal.getAuthorities()
-//                );
-//
-//        // --- Act + Assert ---
-//        mockMvc.perform(get("/wallet")
-//                        .with(authentication(auth)))     // <-- NEED THIS FOR @WebMvcTest
-//                .andExpect(status().isOk())
-//                .andExpect(view().name("wallet/user-wallet"))
-//                .andExpect(model().attributeExists("user"))
-//                .andExpect(model().attributeExists("wallet"))
-//                .andExpect(model().attributeExists("transactions"));
-//    }
-
-
+        return Wallet.builder().id(UUID.randomUUID())
+                .owner(user)
+                .build();
+    }
 }
