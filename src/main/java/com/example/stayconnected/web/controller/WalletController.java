@@ -5,15 +5,18 @@ import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
+import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -27,6 +30,23 @@ public class WalletController {
     public WalletController(UserService userService, WalletService walletService) {
         this.userService = userService;
         this.walletService = walletService;
+    }
+
+    @GetMapping("/wallet")
+    public ModelAndView getWalletPage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        User user = this.userService.getUserById(userPrincipal.getId());
+
+        Wallet wallet = user.getWallet();
+
+        List<Transaction> transactions = this.walletService.getLastThreeTransactions(wallet);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("wallet/user-wallet");
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("wallet", wallet);
+        modelAndView.addObject("transactions", transactions);
+
+        return modelAndView;
     }
 
     @PatchMapping("/wallet/top-up")

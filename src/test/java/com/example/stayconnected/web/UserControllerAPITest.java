@@ -1,6 +1,5 @@
 package com.example.stayconnected.web;
 
-import com.example.stayconnected.config.WebConfiguration;
 import com.example.stayconnected.dashboard.DashboardStatsService;
 import com.example.stayconnected.handler.CustomAuthenticationFailureHandler;
 import com.example.stayconnected.handler.CustomAuthenticationSuccessHandler;
@@ -18,7 +17,6 @@ import com.example.stayconnected.utils.RevenueUtils;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.service.WalletService;
 import com.example.stayconnected.web.controller.UserController;
-import com.example.stayconnected.web.dto.transaction.FilterTransactionRequest;
 import com.example.stayconnected.web.dto.user.ChangePasswordRequest;
 import com.example.stayconnected.web.dto.user.FilterUserRequest;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
@@ -28,7 +26,6 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
-import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -39,7 +36,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -52,7 +48,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(value = UserController.class)
-public class UserControllerTest {
+public class UserControllerAPITest {
 
     @MockitoBean
     private UserService userService;
@@ -355,38 +351,6 @@ public class UserControllerTest {
 
     }
 
-
-    @Test
-    void getWalletPage_shouldReturn200AndView() throws Exception {
-
-        UserPrincipal userPrincipal = getNonAdminAuthentication();
-
-
-        Wallet wallet =  Wallet.builder().balance(BigDecimal.valueOf(50)).build();
-
-        User user = new User();
-        user.setWallet(wallet);
-
-        Transaction transaction = Transaction.builder()
-                .type(TransactionType.DEPOSIT)
-                .status(TransactionStatus.SUCCEEDED)
-                .owner(user)
-                .build();
-
-        when(userService.getUserById(any())).thenReturn(user);
-        when(walletService.getLastThreeTransactions(any())).thenReturn(List.of(transaction));
-
-        MockHttpServletRequestBuilder request =
-                get("/users/wallet")
-                        .with(user(userPrincipal));
-
-        mockMvc.perform(request)
-                .andExpect(status().isOk())
-                .andExpect(view().name("wallet/user-wallet"))
-                .andExpect(model().attributeExists("user"))
-                .andExpect(model().attributeExists("wallet"))
-                .andExpect(model().attributeExists("transactions"));
-    }
 
 
     @Test

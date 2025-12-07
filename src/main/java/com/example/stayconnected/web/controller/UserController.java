@@ -33,16 +33,14 @@ public class UserController {
 
     private final UserService userService;
     private final PropertyService propertyService;
-    private final WalletService walletService;
     private final TransactionService transactionService;
     private final ReservationService reservationService;
     private final DashboardStatsService dashboardStatsService;
 
     @Autowired
-    public UserController(UserService userService, PropertyService propertyService, WalletService walletService, TransactionService transactionService, ReservationService reservationService, DashboardStatsService dashboardStatsService) {
+    public UserController(UserService userService, PropertyService propertyService, TransactionService transactionService, ReservationService reservationService, DashboardStatsService dashboardStatsService) {
         this.userService = userService;
         this.propertyService = propertyService;
-        this.walletService = walletService;
         this.transactionService = transactionService;
         this.reservationService = reservationService;
         this.dashboardStatsService = dashboardStatsService;
@@ -140,23 +138,6 @@ public class UserController {
         this.userService.changePassword(user, changePasswordRequest);
 
         return new ModelAndView("redirect:/users/" + user.getId() + "/profile");
-    }
-
-    @GetMapping("/wallet")
-    public ModelAndView getWalletPage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        User user = this.userService.getUserById(userPrincipal.getId());
-
-        Wallet wallet = user.getWallet();
-
-        List<Transaction> transactions = this.walletService.getLastThreeTransactions(wallet);
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("wallet/user-wallet");
-        modelAndView.addObject("user", user);
-        modelAndView.addObject("wallet", wallet);
-        modelAndView.addObject("transactions", transactions);
-
-        return modelAndView;
     }
 
 
