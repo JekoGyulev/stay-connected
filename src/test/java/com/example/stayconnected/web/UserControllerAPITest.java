@@ -76,25 +76,29 @@ public class UserControllerAPITest {
 
         Wallet wallet = Wallet.builder().balance(BigDecimal.valueOf(50)).build();
 
-        UUID userId = UUID.randomUUID();
+        UserPrincipal userPrincipal = getNonAdminAuthentication();
 
         User user = User.builder()
-                .id(userId)
-                .username("john")
-                .email("john@example.com")
-                .wallet(wallet)
+                        .id(userPrincipal.getId())
+                                .username(userPrincipal.getUsername())
+                                        .password(userPrincipal.getPassword())
+                                                .wallet(wallet)
                 .build();
 
-        when(userService.getUserById(userId)).thenReturn(user);
+        when(userService.getUserById(any())).thenReturn(user);
 
-        mockMvc.perform(get("/users/{id}/profile", userId))
+        MockHttpServletRequestBuilder request =
+                get("/users/{id}/profile", user.getId())
+                        .with(user(userPrincipal));
+
+        mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/profile-details"))
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attributeExists("updatePhotoRequest"))
                 .andExpect(model().attribute("user", user));
 
-        verify(userService).getUserById(userId);
+        verify(userService).getUserById(eq(user.getId()));
     }
 
 
