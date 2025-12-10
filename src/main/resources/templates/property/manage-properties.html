@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/manage-properties.css">
     <link rel="stylesheet" href="/css/header-post-authentication.css">
     <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
 
@@ -62,7 +63,7 @@
                     </li>
 
                     <li class="nav-item wallet-item">
-                        <a th:href="@{'/users/wallet'}">
+                        <a th:href="@{'/wallet'}">
                             <i class="fa-solid fa-wallet"></i>
                             <!--User's current balance-->
                             <span th:text="' : ' + '€' + ${#numbers.formatDecimal(authUser.wallet.balance, 1,2)}"></span>

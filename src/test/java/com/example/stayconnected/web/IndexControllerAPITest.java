@@ -101,6 +101,33 @@ public class IndexControllerAPITest {
                 .andExpect(model().attributeExists("mostPopularDestinations"));
     }
 
+
+    @Test
+    void sendGetRequestToTermsAndConditionsPage_shouldReturn200AndView() throws Exception {
+
+        UserPrincipal userPrincipal = getNonAdminAuthentication();
+
+
+        MockHttpServletRequestBuilder request = get("/terms-and-condition")
+                .with(user(userPrincipal));
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(view().name("terms-and-condition"));
+
+    }
+
+
+    public static UserPrincipal getNonAdminAuthentication() {
+        return new UserPrincipal(
+                UUID.randomUUID(),
+                "Jeko777",
+                "Password123",
+                true,
+                UserRole.USER
+        );
+    }
+
     public static List<PropertyImage> getRandomImage() {
 
         PropertyImage propertyImage = new PropertyImage();

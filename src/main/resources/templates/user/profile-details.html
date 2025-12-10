@@ -64,7 +64,7 @@
                     </li>
 
                     <li class="nav-item wallet-item">
-                        <a th:href="@{'/users/wallet'}">
+                        <a th:href="@{'/wallet'}">
                             <i class="fa-solid fa-wallet"></i>
                             <!--User's current balance-->
                             <span th:text="' : ' + '€' + ${#numbers.formatDecimal(user.wallet.balance, 1,2)}"></span>
