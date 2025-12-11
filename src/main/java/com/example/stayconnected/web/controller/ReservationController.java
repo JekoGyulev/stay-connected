@@ -91,7 +91,6 @@ public class ReservationController {
             if (insufficientFunds) {
                 modelAndView.addObject("errorMessage", "Insufficient Funds");
 
-
             } else if (totalPrice == null) {
                 modelAndView.addObject("errorMessage", "Total Price Is Missing");
             }

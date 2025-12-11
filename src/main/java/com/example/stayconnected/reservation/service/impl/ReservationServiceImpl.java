@@ -20,13 +20,11 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationClient reservationClient;
     private final WalletService walletService;
-    private final UserService userService;
 
     @Autowired
-    public ReservationServiceImpl(ReservationClient reservationClient, WalletService walletService, UserService userService) {
+    public ReservationServiceImpl(ReservationClient reservationClient, WalletService walletService) {
         this.reservationClient = reservationClient;
         this.walletService = walletService;
-        this.userService = userService;
     }
 
 
