@@ -1,5 +1,6 @@
 package com.example.stayconnected;
 
+
 import com.example.stayconnected.location.model.Location;
 import com.example.stayconnected.location.repository.LocationRepository;
 import com.example.stayconnected.property.enums.CategoryType;
@@ -12,38 +13,38 @@ import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
 import com.example.stayconnected.utils.exception.PropertyDoesNotExist;
-import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class AddReviewITest {
+public class DeleteReviewITest {
 
     @Autowired
     private ReviewService reviewService;
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private PropertyRepository propertyRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private LocationRepository locationRepository;
 
 
     @Test
-    void whenAddReview_shouldInvokeServiceMethod_andPersistToDatabase() {
+    void whenDeleteReview_shouldInvokeServiceMethod_andChangeTheAverageRatingOfProperty() {
+
 
         User user = User.builder()
                 .firstName("John")
@@ -75,30 +76,39 @@ public class AddReviewITest {
 
         propertyRepository.save(property);
 
-
-        CreateReviewRequest createReviewRequest = CreateReviewRequest.builder()
+        Review review = Review.builder()
                 .rating(5)
-                .comment("Nice property test!")
+                .comment("Commented from someone test!")
+                .createdFrom(user)
+                .property(property)
+                .createdAt(LocalDateTime.now())
                 .build();
 
+        reviewRepository.save(review);
 
-        reviewService.addReview(user.getId(), property.getId(), createReviewRequest);
+        property.setAverageRating(BigDecimal.valueOf(review.getRating()));
+
+        propertyRepository.save(property);
+
+        BigDecimal averageRatingBeforeReviewDelete = property.getAverageRating();
+
+        long sizeBeforeReviewDelete = reviewRepository.findAllByPropertyIdOrderByCreatedAtDesc(property.getId()).size();
+
+        reviewService.deleteReview(review);
+
+
+        long sizeAfterReviewDelete = reviewRepository.findAllByPropertyIdOrderByCreatedAtDesc(property.getId()).size();
 
         Property updatedProperty = propertyRepository.findById(property.getId())
-                .orElseThrow(() -> new PropertyDoesNotExist("Property with such id [%s] does not exist"
-                        .formatted(property.getId())));
+                .orElseThrow(() -> new PropertyDoesNotExist("Property does not exist"));
 
-        List<Review> reviewsForProperty = reviewRepository.findAllByPropertyIdOrderByCreatedAtDesc(property.getId());
-        Review savedReview = reviewsForProperty.get(0);
+        BigDecimal averageRatingAfterReviewDelete = updatedProperty.getAverageRating();
 
 
-        assertEquals(1, reviewsForProperty.size());
-        assertEquals("Nice property test!", savedReview.getComment());
-        assertEquals(user.getId(), savedReview.getCreatedFrom().getId());
-        assertEquals(property.getId(), savedReview.getProperty().getId());
-        assertEquals(BigDecimal.valueOf(5).setScale(2, RoundingMode.HALF_UP), updatedProperty.getAverageRating());
-
+        assertEquals(sizeBeforeReviewDelete - 1, sizeAfterReviewDelete);
+        assertNotEquals(averageRatingBeforeReviewDelete, averageRatingAfterReviewDelete);
     }
+
 
 
 
