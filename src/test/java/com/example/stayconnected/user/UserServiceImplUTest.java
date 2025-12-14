@@ -1,7 +1,7 @@
 package com.example.stayconnected.user;
 
 
-import com.example.stayconnected.event.SuccessfulRegistrationEvent;
+import com.example.stayconnected.event.payload.UserRegisteredEvent;
 import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.repository.UserRepository;
@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -67,22 +68,23 @@ public class UserServiceImplUTest {
                 .build();
 
 
-        User retrievedUser = User.builder()
+        User updatedUser = User.builder()
                 .firstName("Joro")
                 .lastName("Jorov")
                 .email(null)
                 .username("Joro777")
-                        .build();
+                .build();
 
 
 
-        userServiceImpl.updateProfile(retrievedUser, dto);
+        userServiceImpl.updateProfile(updatedUser, dto);
 
 
-        assertEquals("Jeko", retrievedUser.getFirstName());
-        assertEquals("Gyulev", retrievedUser.getLastName());
-        assertNotNull(retrievedUser.getEmail());
-        verify(userRepository).save(retrievedUser);
+        assertEquals("Jeko", updatedUser.getFirstName());
+        assertEquals("Gyulev", updatedUser.getLastName());
+        assertNotNull(updatedUser.getEmail());
+
+        verify(userRepository).save(updatedUser);
     }
 
 
@@ -186,7 +188,7 @@ public class UserServiceImplUTest {
 
         BigDecimal percentageActiveUsers = userServiceImpl.getPercentageActiveUsers();
 
-        assertEquals(BigDecimal.valueOf(50).setScale(2), percentageActiveUsers);
+        assertEquals(BigDecimal.valueOf(50).setScale(2, RoundingMode.HALF_UP), percentageActiveUsers);
     }
 
     @Test
@@ -288,7 +290,7 @@ public class UserServiceImplUTest {
 
         verify(userRepository).save(any(User.class));
         verify(walletService).createWallet(any(User.class));
-        verify(eventPublisher).publishEvent(any(SuccessfulRegistrationEvent.class));
+        verify(eventPublisher).publishEvent(any(UserRegisteredEvent.class));
     }
 
     @Test

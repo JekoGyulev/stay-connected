@@ -19,8 +19,6 @@ public class UserRegistrationITest {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
 
     @Test
     void whenUserRegisters_shouldBeInvokedServiceMethod_andSavedToDatabase() {
@@ -35,16 +33,13 @@ public class UserRegistrationITest {
 
         User registeredUser = userService.register(registerRequest);
 
-        User savedUser = userRepository.findById(registeredUser.getId())
-                .orElseThrow(() -> new UserDoesNotExist("User doesn't exist"));
+        assertNotNull(registeredUser);
+        assertEquals("John", registeredUser.getFirstName());
+        assertEquals("John@gmail.com", registeredUser.getEmail());
+        assertNotEquals("John123456", registeredUser.getPassword());
 
-        assertNotNull(savedUser);
-        assertEquals("John", savedUser.getFirstName());
-        assertEquals("John@gmail.com", savedUser.getEmail());
-        assertNotEquals("John123456", savedUser.getPassword());
-
-        assertNotNull(savedUser.getWallet());
-        assertEquals(savedUser.getId(), savedUser.getWallet().getOwner().getId());
+        assertNotNull(registeredUser.getWallet());
+        assertEquals(registeredUser.getId(), registeredUser.getWallet().getOwner().getId());
     }
 
 

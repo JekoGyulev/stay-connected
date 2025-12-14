@@ -79,10 +79,10 @@ public class UserControllerAPITest {
         UserPrincipal userPrincipal = getNonAdminAuthentication();
 
         User user = User.builder()
-                        .id(userPrincipal.getId())
-                                .username(userPrincipal.getUsername())
-                                        .password(userPrincipal.getPassword())
-                                                .wallet(wallet)
+                .id(userPrincipal.getId())
+                .username(userPrincipal.getUsername())
+                .password(userPrincipal.getPassword())
+                .wallet(wallet)
                 .build();
 
         when(userService.getUserById(any())).thenReturn(user);

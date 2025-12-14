@@ -16,17 +16,11 @@ import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.web.controller.IndexController;
 import com.example.stayconnected.web.dto.location.CityStatsDTO;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -68,8 +62,7 @@ public class IndexControllerAPITest {
 
         mockMvc.perform(request)
                 .andExpect(view().name("index"))
-                .andExpect(status().isOk())
-        ;
+                .andExpect(status().isOk());
 
     }
 
@@ -87,13 +80,17 @@ public class IndexControllerAPITest {
         when(propertyService.getFeaturedProperties()).thenReturn(List.of(property));
         when(locationService.get4MostPopularDestinations()).thenReturn(List.of(destination));
 
-        mockMvc.perform(get("/home").with(user(new UserPrincipal(
-                                user.getId(),
-                            user.getUsername(),
-                            user.getPassword(),
-                            user.isActive(),
-                            user.getRole()
-                ))))
+        MockHttpServletRequestBuilder request = get("/home")
+                .with(user(new UserPrincipal(
+                                                    user.getId(),
+                                                    user.getUsername(),
+                                                    user.getPassword(),
+                                                    user.isActive(),
+                                                    user.getRole()
+                                            ))
+                );
+
+        mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/home"))
                 .andExpect(model().attributeExists("user"))
@@ -106,7 +103,6 @@ public class IndexControllerAPITest {
     void sendGetRequestToTermsAndConditionsPage_shouldReturn200AndView() throws Exception {
 
         UserPrincipal userPrincipal = getNonAdminAuthentication();
-
 
         MockHttpServletRequestBuilder request = get("/terms-and-condition")
                 .with(user(userPrincipal));

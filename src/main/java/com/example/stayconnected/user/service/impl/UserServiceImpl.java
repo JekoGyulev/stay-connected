@@ -1,6 +1,7 @@
 package com.example.stayconnected.user.service.impl;
 
-import com.example.stayconnected.event.SuccessfulRegistrationEvent;
+import com.example.stayconnected.event.UserRegisteredEventPublisher;
+import com.example.stayconnected.event.payload.UserRegisteredEvent;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
@@ -12,7 +13,6 @@ import com.example.stayconnected.utils.exception.UsernameAlreadyExists;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.service.WalletService;
 import com.example.stayconnected.web.dto.user.*;
-import jakarta.validation.constraints.Email;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -41,14 +41,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final ApplicationEventPublisher eventPublisher;
+    private final UserRegisteredEventPublisher userRegisteredEventPublisher;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, WalletService walletService, PasswordEncoder passwordEncoder, ApplicationEventPublisher eventPublisher) {
+    public UserServiceImpl(UserRepository userRepository, WalletService walletService, PasswordEncoder passwordEncoder, UserRegisteredEventPublisher userRegisteredEventPublisher) {
         this.userRepository = userRepository;
         this.walletService = walletService;
         this.passwordEncoder = passwordEncoder;
-        this.eventPublisher = eventPublisher;
+        this.userRegisteredEventPublisher = userRegisteredEventPublisher;
     }
 
 
@@ -78,13 +78,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Successfully registered user with id [%s] and username [%s]"
                 .formatted(user.getId(), user.getUsername()));
 
-        SuccessfulRegistrationEvent event = SuccessfulRegistrationEvent
+
+        UserRegisteredEvent event = UserRegisteredEvent
                 .builder()
-                .user(user)
+                .userId(user.getId())
+                .username(user.getUsername())
                 .email(user.getEmail())
                 .build();
 
-        this.eventPublisher.publishEvent(event);
+        this.userRegisteredEventPublisher.publish(event);
 
         return user;
     }
