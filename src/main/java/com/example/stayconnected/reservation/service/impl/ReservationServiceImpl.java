@@ -1,11 +1,14 @@
 package com.example.stayconnected.reservation.service.impl;
 
 import com.example.stayconnected.event.ReservationBookedEventPublisher;
+import com.example.stayconnected.event.ReservationCancelledEventPublisher;
 import com.example.stayconnected.event.payload.ReservationBookedEvent;
+import com.example.stayconnected.event.payload.ReservationCancelledEvent;
 import com.example.stayconnected.reservation.client.ReservationClient;
 import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
 import com.example.stayconnected.reservation.client.dto.ReservationResponse;
 import com.example.stayconnected.reservation.service.ReservationService;
+import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.wallet.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +27,15 @@ public class ReservationServiceImpl implements ReservationService {
     private final WalletService walletService;
     private final UserService userService;
     private final ReservationBookedEventPublisher  reservationBookedEventPublisher;
+    private final ReservationCancelledEventPublisher reservationCancelledEventPublisher;
 
     @Autowired
-    public ReservationServiceImpl(ReservationClient reservationClient, WalletService walletService, UserService userService, ReservationBookedEventPublisher reservationBookedEventPublisher) {
+    public ReservationServiceImpl(ReservationClient reservationClient, WalletService walletService, UserService userService, ReservationBookedEventPublisher reservationBookedEventPublisher, ReservationCancelledEventPublisher reservationCancelledEventPublisher) {
         this.reservationClient = reservationClient;
         this.walletService = walletService;
         this.userService = userService;
         this.reservationBookedEventPublisher = reservationBookedEventPublisher;
+        this.reservationCancelledEventPublisher = reservationCancelledEventPublisher;
     }
 
 
@@ -59,6 +64,20 @@ public class ReservationServiceImpl implements ReservationService {
 
         this.walletService.reverseEarning(response.getTotalPrice(), response.getPropertyId());
         this.walletService.refund(userId, response.getTotalPrice());
+
+
+        User user = this.userService.getUserById(userId);
+
+        ReservationCancelledEvent event = ReservationCancelledEvent.builder()
+                .userId(userId)
+                .userEmail(user.getEmail())
+                .username(user.getUsername())
+                .reservationStartDate(response.getStartDate())
+                .reservationEndDate(response.getEndDate())
+                .reservationTotalPrice(response.getTotalPrice())
+                .build();
+
+        this.reservationCancelledEventPublisher.publish(event);
     }
 
     @Override
