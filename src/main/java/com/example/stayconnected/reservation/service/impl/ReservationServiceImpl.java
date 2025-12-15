@@ -1,5 +1,7 @@
 package com.example.stayconnected.reservation.service.impl;
 
+import com.example.stayconnected.event.ReservationBookedEventPublisher;
+import com.example.stayconnected.event.payload.ReservationBookedEvent;
 import com.example.stayconnected.reservation.client.ReservationClient;
 import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
 import com.example.stayconnected.reservation.client.dto.ReservationResponse;
@@ -20,11 +22,15 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationClient reservationClient;
     private final WalletService walletService;
+    private final UserService userService;
+    private final ReservationBookedEventPublisher  reservationBookedEventPublisher;
 
     @Autowired
-    public ReservationServiceImpl(ReservationClient reservationClient, WalletService walletService) {
+    public ReservationServiceImpl(ReservationClient reservationClient, WalletService walletService, UserService userService, ReservationBookedEventPublisher reservationBookedEventPublisher) {
         this.reservationClient = reservationClient;
         this.walletService = walletService;
+        this.userService = userService;
+        this.reservationBookedEventPublisher = reservationBookedEventPublisher;
     }
 
 
@@ -60,5 +66,15 @@ public class ReservationServiceImpl implements ReservationService {
         this.reservationClient.createReservation(createReservationRequest);
 
         this.walletService.exchange(createReservationRequest, ownerId);
+
+        ReservationBookedEvent event = ReservationBookedEvent.builder()
+                .userId(createReservationRequest.getUserId())
+                .userEmail(this.userService.getUserById(createReservationRequest.getUserId()).getEmail())
+                .reservationStartDate(createReservationRequest.getStartDate())
+                .reservationEndDate(createReservationRequest.getEndDate())
+                .reservationTotalPrice(createReservationRequest.getTotalPrice())
+                .build();
+
+        this.reservationBookedEventPublisher.publish(event);
     }
 }
