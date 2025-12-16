@@ -1,9 +1,11 @@
 package com.example.stayconnected.web.dto;
 
+import com.example.stayconnected.email.client.dto.EmailResponse;
 import com.example.stayconnected.property.model.Property;
 
 import com.example.stayconnected.reservation.client.dto.ReservationResponse;
 import com.example.stayconnected.user.model.User;
+import com.example.stayconnected.web.dto.email.EmailViewDTO;
 import com.example.stayconnected.web.dto.location.LocationRequest;
 import com.example.stayconnected.web.dto.property.EditPropertyRequest;
 import com.example.stayconnected.web.dto.property.PropertyViewDTO;
@@ -57,6 +59,17 @@ public class DtoMapper {
                 .status(reservationResponse.getStatus())
                 .totalPrice(reservationResponse.getTotalPrice())
                 .propertyViewDTO(propertyViewDTO)
+                .build();
+    }
+
+
+    public static EmailViewDTO viewFromEmailResponse(EmailResponse emailResponse) {
+        return EmailViewDTO.builder()
+                .id(emailResponse.getEmailId())
+                .subject(emailResponse.getSubject())
+                .trigger(emailResponse.getEmailTrigger())
+                .status(emailResponse.getEmailStatus())
+                .createdAt(emailResponse.getCreatedAt())
                 .build();
     }
 

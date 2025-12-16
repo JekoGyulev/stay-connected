@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>My Notifications | StayConnected</title>
+    <link rel="stylesheet" href="/css/emails.css">
+    <link rel="stylesheet" href="/css/header-post-authentication.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body>
+
+
+
+<header class="header">
+
+    <nav class="nav-container">
+
+        <div class="nav-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <h1 class="logo-title">StayConnected</h1>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+                        <a th:href="@{/properties}" class="nav-link">Properties</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a th:href="@{/transactions}" class="nav-link">Transactions</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link">Account</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">Profile</a></li>
+                            <li><a th:href="@{/wallet}" class="dropdown-link">Wallet</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!--Authorize this-->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+
+                        <a class="nav-link">Admin</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a></li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item">
+                        <a th:href="@{/notifications}" class="nav-link active">Notifications</a>
+                    </li>
+
+                    <li class="nav-item wallet-item">
+                        <a th:href="@{/wallet}">
+                            <i class="fa-solid fa-wallet"></i>
+                            <!--User's current balance-->
+                            <span th:text="' : ' + '€' + ${#numbers.formatDecimal(user.wallet.balance, 1,2)}"></span>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="auth-buttons">
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+<main class="notifications-page">
+    <div class="notifications-header">
+
+        <div class="notifications-title-section">
+
+            <h1 class="notifications-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                Email Notifications
+            </h1>
+
+            <p class="notifications-subtitle">Stay updated with your booking confirmations and alerts</p>
+        </div>
+
+        <div class="notifications-stats">
+            <div class="stat-card">
+                <span th:text="${countTotalEmails}" class="stat-number"></span>
+                <span class="stat-label">Total</span>
+            </div>
+            <div class="stat-card stat-sent">
+                <span th:text="${countSentEmails}" class="stat-number"></span>
+                <span class="stat-label">Sent</span>
+            </div>
+            <div class="stat-card stat-failed">
+                <span th:text="${countFailedEmails}"  class="stat-number"></span>
+                <span class="stat-label">Failed</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="notifications-controls">
+
+        <div class="filter-tabs">
+
+            <a th:href="@{/notifications}" class="filter-tab"
+                th:classappend=" ${filter} == 'ALL' ? ' active' : '' ">
+                <div class="filter-tab-flex-elements">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <p>All</p>
+                </div>
+            </a>
+
+            <a th:href="@{/notifications/sent}" class="filter-tab"
+                th:classappend="${filter} == 'SENT' ? ' active' : '' ">
+                <div class="filter-tab-flex-elements">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 2L11 13"></path>
+                        <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                    </svg>
+                    <p>Sent</p>
+                </div>
+            </a>
+
+            <a th:href="@{/notifications/failed}" class="filter-tab"
+                th:classappend="${filter} == 'FAILED' ? ' active' : '' ">
+                <div class="filter-tab-flex-elements">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                    <p>Failed</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" placeholder="Search notifications..." class="search-input">
+        </div>
+
+    </div>
+
+    <p class="notification-preview" style="margin-bottom: 15px">
+        Note: The view button opens Gmail. If you have multiple accounts, select the one that received this email.
+    </p>
+
+    <div class="notifications-list">
+        <div class="notification-card "
+             th:each="email : ${emails}"
+             th:classappend="${email.status == 'SENT'} ? ' notification-sent' : ' notification-failed'">
+
+            <div th:if="${email.status == 'SENT'}" class="notification-status status-sent">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+
+            <div th:if="${email.status == 'FAILED'}" class="notification-status status-failed">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+            </div>
+
+            <div class="notification-content">
+
+                <div class="notification-header">
+                    <h3 th:text="${email.subject}" class="notification-subject"></h3>
+                    <span th:if="${email.status == 'SENT'}" class="notification-badge badge-sent">Sent</span>
+                    <span th:if="${email.status == 'FAILED'}" class="notification-badge badge-failed">Failed</span>
+                </div>
+
+                <p th:if="${email.status == 'SENT'}" class="notification-preview">Click the view button to see more...</p>
+                <p th:if="${email.status == 'FAILED'}" class="notification-preview">Failed to sent...</p>
+
+                <div class="notification-meta">
+
+                    <div class="notification-date">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <p th:text="${#temporals.format(email.createdAt, 'dd MMM yyyy')}"></p>
+                    </div>
+
+                    <span th:if="${email.trigger == 'BOOK_RESERVATION'}" class="notification-type">Booking</span>
+                    <span th:if="${email.trigger == 'CANCEL_RESERVATION'}" class="notification-type">Cancel Reservation</span>
+                    <span th:if="${email.trigger == 'REGISTER'}" class="notification-type">Registration</span>
+                </div>
+
+            </div>
+
+            <div th:if="${email.status == 'SENT'}" class="notification-actions">
+                <a th:href="'https://mail.google.com/mail/#search/' +
+                                        'to:' + ${user.email} +
+                                        '+from:zhekogyulev@gmail.com' +
+                                        '+subject:%22' + ${email.subject} + '%22'"
+                   target="_blank"
+                           class="action-btn view-btn"
+                           title="View">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" th:if="${emails.isEmpty()}" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+        <h3>No notifications found</h3>
+        <p>You don't have any notifications matching this filter.</p>
+    </div>
+</main>
+
+<footer th:insert="/fragments/footer :: footer"></footer>
+
+
+</body>
+</html>
