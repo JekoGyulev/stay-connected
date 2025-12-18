@@ -14,4 +14,8 @@ public interface EmailClient {
 
     @GetMapping
     List<EmailResponse> getAllEmailsByUserId(@RequestParam("userId") UUID userId);
+
+    @GetMapping
+    List<EmailResponse> getAllEmailsBySubjectContainingAndUserId(@RequestParam(value = "search") String search,
+                                                                 @RequestParam(value = "userId") UUID userId);
 }

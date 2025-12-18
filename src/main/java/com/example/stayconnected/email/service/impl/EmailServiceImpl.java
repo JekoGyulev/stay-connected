@@ -25,6 +25,11 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    public List<EmailResponse> getAllEmailsBySubjectContainingAndUserId(String search, UUID userId) {
+        return this.emailClient.getAllEmailsBySubjectContainingAndUserId(search, userId);
+    }
+
+    @Override
     public List<EmailResponse> getAllSentEmails(List<EmailResponse> emailResponses) {
         return emailResponses
                 .stream()

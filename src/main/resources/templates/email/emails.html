@@ -164,7 +164,9 @@
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <input type="text" placeholder="Search notifications..." class="search-input">
+            <form th:action="@{'/notifications/search'}" th:method="GET" >
+                <input type="text" name="value" placeholder="Search notifications..." class="search-input">
+            </form>
         </div>
 
     </div>

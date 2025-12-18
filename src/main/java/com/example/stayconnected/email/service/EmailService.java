@@ -9,6 +9,8 @@ public interface EmailService {
 
     List<EmailResponse> getAllEmailsByUserId(UUID userId);
 
+    List<EmailResponse> getAllEmailsBySubjectContainingAndUserId(String search, UUID userId);
+
     List<EmailResponse> getAllSentEmails(List<EmailResponse> emailResponses);
 
     List<EmailResponse> getAllFailedEmails(List<EmailResponse> emailResponses);

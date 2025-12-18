@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -57,6 +58,40 @@ public class NotificationController {
         modelAndView.addObject("countTotalEmails", countTotalEmails);
         modelAndView.addObject("user", user);
         modelAndView.addObject("filter", "ALL");
+
+        return modelAndView;
+    }
+
+    @GetMapping("/search")
+    public ModelAndView showEmailsPageBySearch(@RequestParam(value = "value") String search,
+                                               @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        User user = this.userService.getUserById(userPrincipal.getId());
+
+        UUID userId = user.getId();
+
+        List<EmailResponse> allEmails = this.emailService.getAllEmailsByUserId(userId);
+        List<EmailResponse> allEmailsBySubjectContaining = this.emailService.getAllEmailsBySubjectContainingAndUserId(search, userId);
+
+
+        long countSentEmails = this.emailService.getAllSentEmails(allEmails).size();
+        long countFailedEmails = this.emailService.getAllFailedEmails(allEmails).size();
+        long countTotalEmails = countFailedEmails + countSentEmails;
+
+        List<EmailViewDTO> viewDTOS = allEmailsBySubjectContaining.stream()
+                .map(DtoMapper::viewFromEmailResponse)
+                .toList();
+
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/email/emails");
+        modelAndView.addObject("emails", viewDTOS);
+        modelAndView.addObject("countSentEmails", countSentEmails);
+        modelAndView.addObject("countFailedEmails", countFailedEmails);
+        modelAndView.addObject("countTotalEmails", countTotalEmails);
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("filter", "ALL");
+
 
         return modelAndView;
     }
