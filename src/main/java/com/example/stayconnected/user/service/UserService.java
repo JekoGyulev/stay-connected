@@ -36,4 +36,5 @@ public interface UserService {
 
     List<User> getFilteredUsers(FilterUserRequest filterUserRequest);
 
+    List<User> getUsersBySearchUsername(String username);
 }

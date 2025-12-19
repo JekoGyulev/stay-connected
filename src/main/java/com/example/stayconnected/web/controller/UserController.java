@@ -165,6 +165,24 @@ public class UserController {
         return modelAndView;
     }
 
+    @GetMapping("/table/search")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView getUsersTableSearchPage(@RequestParam(value = "username") String username,
+                                                @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        User authUser = this.userService.getUserById(userPrincipal.getId());
+        List<User> users = this.userService.getUsersBySearchUsername(username);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/users");
+        modelAndView.addObject("users", users);
+        modelAndView.addObject("authUser", authUser);
+        modelAndView.addObject("filterUsersRequest", new FilterUserRequest());
+
+        return modelAndView;
+    }
+
+
     @GetMapping("/table/filter")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getStatsFilterPage(@AuthenticationPrincipal UserPrincipal userPrincipal,

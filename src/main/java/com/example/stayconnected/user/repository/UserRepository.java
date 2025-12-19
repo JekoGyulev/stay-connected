@@ -31,4 +31,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     List<User> findAllByIsActiveOrderByRegisteredAtDescUsernameAsc(boolean isActive);
 
     Optional<User> findByEmail(String email);
+
+    List<User> findAllByUsernameContainingIgnoreCase(String username);
 }

@@ -226,6 +226,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         );
     }
 
+    @Override
+    public List<User> getUsersBySearchUsername(String username) {
+        return this.userRepository.findAllByUsernameContainingIgnoreCase(username);
+    }
+
     private User initUser(RegisterRequest request) {
         return User.builder()
                 .username(request.getUsername())

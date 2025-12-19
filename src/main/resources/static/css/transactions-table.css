@@ -15,8 +15,7 @@
     gap: 1rem;
     margin-bottom: 2rem;
     flex-wrap: wrap;
-    padding: 1.5rem;
-    background: var(--accent-bg);
+    padding-top: 1.7rem;
     border-radius: var(--radius);
 }
 
