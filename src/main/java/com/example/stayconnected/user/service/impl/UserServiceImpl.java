@@ -156,13 +156,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void changePassword(User user, ChangePasswordRequest changePasswordRequest) {
-
-        if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
-            throw new RuntimeException("Passwords do not match");
-        }
-
         user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
-
         this.userRepository.save(user);
     }
 

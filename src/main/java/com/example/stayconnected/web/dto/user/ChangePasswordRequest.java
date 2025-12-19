@@ -16,7 +16,5 @@ public class ChangePasswordRequest {
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).*$" , message = "Password is too weak.")
     private String newPassword;
     @NotBlank(message = "Password cannot be empty or blank.")
-    @Size(min = 5, message = "Password must be at least 5 characters long.")
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).*$" , message = "Password is too weak.")
     private String confirmPassword;
 }

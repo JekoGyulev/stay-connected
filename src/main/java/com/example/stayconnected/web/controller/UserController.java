@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -36,14 +37,16 @@ public class UserController {
     private final TransactionService transactionService;
     private final ReservationService reservationService;
     private final DashboardStatsService dashboardStatsService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService, PropertyService propertyService, TransactionService transactionService, ReservationService reservationService, DashboardStatsService dashboardStatsService) {
+    public UserController(UserService userService, PropertyService propertyService, TransactionService transactionService, ReservationService reservationService, DashboardStatsService dashboardStatsService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.propertyService = propertyService;
         this.transactionService = transactionService;
         this.reservationService = reservationService;
         this.dashboardStatsService = dashboardStatsService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/{id}/profile")
@@ -128,10 +131,16 @@ public class UserController {
 
         User user = this.userService.getUserById(userPrincipal.getId());
 
-        if (bindingResult.hasErrors()) {
+        boolean doMatch = changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword());
+
+        boolean isTheSamePassword = this.passwordEncoder.matches(changePasswordRequest.getNewPassword(), user.getPassword());
+
+        if (bindingResult.hasErrors() || !doMatch || isTheSamePassword) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("user/change-password-form");
             modelAndView.addObject("user", user);
+            modelAndView.addObject("doMatch", doMatch);
+            modelAndView.addObject("isTheSamePassword", isTheSamePassword);
             return modelAndView;
         }
 
