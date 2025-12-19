@@ -1,6 +1,8 @@
 package com.example.stayconnected.user.service.impl;
 
+import com.example.stayconnected.event.PasswordChangedEventPublisher;
 import com.example.stayconnected.event.UserRegisteredEventPublisher;
+import com.example.stayconnected.event.payload.PasswordChangedEvent;
 import com.example.stayconnected.event.payload.UserRegisteredEvent;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.enums.UserRole;
@@ -17,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,13 +43,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     private final UserRegisteredEventPublisher userRegisteredEventPublisher;
+    private final PasswordChangedEventPublisher passwordChangedEventPublisher;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, WalletService walletService, PasswordEncoder passwordEncoder, UserRegisteredEventPublisher userRegisteredEventPublisher) {
+    public UserServiceImpl(UserRepository userRepository, WalletService walletService, PasswordEncoder passwordEncoder, UserRegisteredEventPublisher userRegisteredEventPublisher, PasswordChangedEventPublisher passwordChangedEventPublisher) {
         this.userRepository = userRepository;
         this.walletService = walletService;
         this.passwordEncoder = passwordEncoder;
         this.userRegisteredEventPublisher = userRegisteredEventPublisher;
+        this.passwordChangedEventPublisher = passwordChangedEventPublisher;
     }
 
 
@@ -158,6 +161,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void changePassword(User user, ChangePasswordRequest changePasswordRequest) {
         user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
         this.userRepository.save(user);
+
+
+        PasswordChangedEvent event = PasswordChangedEvent
+                .builder()
+                .userId(user.getId())
+                .username(user.getUsername())
+                .userEmail(user.getEmail())
+                .changedAt(LocalDateTime.now())
+                .build();
+
+        this.passwordChangedEventPublisher.publish(event);
     }
 
     @Override

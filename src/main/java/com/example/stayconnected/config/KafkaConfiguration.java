@@ -12,6 +12,7 @@ public class KafkaConfiguration {
     public static final String USER_REGISTERED_EVENT_KAFKA_TOPIC_NAME = "user-registered-event.v1";
     public static final String RESERVATION_BOOKED_EVENT_KAFKA_TOPIC_NAME = "reservation-booked-event.v1";
     public static final String RESERVATION_CANCELLED_EVENT_KAFKA_TOPIC_NAME = "reservation-cancelled-event.v1";
+    public static final String PASSWORD_CHANGED_EVENT_KAFKA_TOPIC_NAME = "password-changed-event.v1";
 
     @Bean
     public NewTopic userRegisteredTopic() {
@@ -26,5 +27,10 @@ public class KafkaConfiguration {
     @Bean
     public NewTopic reservationCancelledTopic() {
         return TopicBuilder.name(RESERVATION_CANCELLED_EVENT_KAFKA_TOPIC_NAME).build();
+    }
+
+    @Bean
+    public NewTopic passwordChangedTopic() {
+        return TopicBuilder.name(PASSWORD_CHANGED_EVENT_KAFKA_TOPIC_NAME).build();
     }
 }

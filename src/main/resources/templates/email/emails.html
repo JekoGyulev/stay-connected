@@ -216,9 +216,10 @@
                         <p th:text="${#temporals.format(email.createdAt, 'dd MMM yyyy')}"></p>
                     </div>
 
-                    <span th:if="${email.trigger == 'BOOK_RESERVATION'}" class="notification-type">Booking</span>
-                    <span th:if="${email.trigger == 'CANCEL_RESERVATION'}" class="notification-type">Cancel Reservation</span>
+                    <span th:if="${email.trigger == 'BOOK_RESERVATION'}" class="notification-type">Booking Confirmation</span>
+                    <span th:if="${email.trigger == 'CANCEL_RESERVATION'}" class="notification-type">Booking Cancellation</span>
                     <span th:if="${email.trigger == 'REGISTER'}" class="notification-type">Registration</span>
+                    <span th:if="${email.trigger == 'CHANGE_PASSWORD'}" class="notification-type">Password Change</span>
                 </div>
 
             </div>
