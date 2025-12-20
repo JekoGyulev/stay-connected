@@ -1,9 +1,5 @@
 package com.example.stayconnected.security.oauth2;
 
-import com.example.stayconnected.security.UserPrincipal;
-import com.example.stayconnected.user.model.User;
-import com.example.stayconnected.user.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -23,13 +19,6 @@ import java.util.Map;
 
 @Component
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-
-    private final UserService userService;
-
-    @Autowired
-    public CustomOAuth2UserService(UserService userService) {
-        this.userService = userService;
-    }
 
 
     @Override
@@ -58,7 +47,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     "id"
             );
 
-
         }
 
         return oAuth2User;
@@ -85,7 +73,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                         && Boolean.TRUE.equals(e.get("verified")))
                 .map(e -> (String) e.get("email"))
                 .findFirst()
-                .orElseThrow(() ->
-                        new OAuth2AuthenticationException("GitHub email not found"));
+                .orElseThrow(() -> new OAuth2AuthenticationException("GitHub email not found"));
     }
 }
