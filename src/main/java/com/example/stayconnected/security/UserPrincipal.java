@@ -6,11 +6,6 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +13,7 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-public class UserPrincipal implements UserDetails, OAuth2User, OidcUser {
+public class UserPrincipal implements UserDetails {
 
     private UUID id;
     private String username;
@@ -55,30 +50,5 @@ public class UserPrincipal implements UserDetails, OAuth2User, OidcUser {
     @Override
     public boolean isEnabled() {
         return this.isActive;
-    }
-
-    @Override
-    public String getName() {
-        return this.username;
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
-
-    @Override
-    public Map<String, Object> getClaims() {
-        return Map.of();
-    }
-
-    @Override
-    public OidcUserInfo getUserInfo() {
-        return null;
-    }
-
-    @Override
-    public OidcIdToken getIdToken() {
-        return null;
     }
 }

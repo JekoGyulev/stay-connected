@@ -5,6 +5,7 @@ import com.example.stayconnected.handler.CustomAuthenticationFailureHandler;
 import com.example.stayconnected.handler.CustomAuthenticationSuccessHandler;
 import com.example.stayconnected.security.oauth2.CustomGoogleOAuth2UserService;
 import com.example.stayconnected.security.oauth2.CustomOAuth2UserService;
+import com.example.stayconnected.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -23,13 +24,16 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
     private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+    private final OAuth2AuthenticationSuccessHandler  oAuth2AuthenticationSuccessHandler;
     private final CustomOAuth2UserService  customOAuth2UserService;
     private final CustomGoogleOAuth2UserService customGoogleOAuth2UserService;
 
+
     @Autowired
-    public WebConfiguration(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler, CustomAuthenticationFailureHandler customAuthenticationFailureHandler, CustomOAuth2UserService customOAuth2UserService, CustomGoogleOAuth2UserService customGoogleOAuth2UserService) {
+    public WebConfiguration(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler, CustomAuthenticationFailureHandler customAuthenticationFailureHandler, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler, CustomOAuth2UserService customOAuth2UserService, CustomGoogleOAuth2UserService customGoogleOAuth2UserService) {
         this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
         this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
         this.customOAuth2UserService = customOAuth2UserService;
         this.customGoogleOAuth2UserService = customGoogleOAuth2UserService;
     }
@@ -54,9 +58,9 @@ public class WebConfiguration implements WebMvcConfigurer {
                         .loginPage("/auth/login")
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
-                                .oidcUserService(customGoogleOAuth2UserService))
-                        .successHandler(customAuthenticationSuccessHandler)
-                        .failureHandler(customAuthenticationFailureHandler)
+                                .oidcUserService(customGoogleOAuth2UserService)
+                        )
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
                 )
                 .logout( logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))

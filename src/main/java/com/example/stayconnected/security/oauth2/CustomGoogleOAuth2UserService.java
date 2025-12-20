@@ -22,26 +22,7 @@ public class CustomGoogleOAuth2UserService extends OidcUserService {
 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
-
-        OidcUser oidcUser = super.loadUser(userRequest);
-
-        String email = oidcUser.getEmail();
-
-        if (email == null || email.isEmpty()) {
-            throw new OAuth2AuthenticationException("Email not found from Google account");
-        }
-
-        User user = this.userService.getUserByEmail(email);
-
-        return new UserPrincipal(
-                user.getId(),
-                user.getUsername(),
-                user.getPassword(),
-                user.getEmail(),
-                user.isActive(),
-                user.getRole()
-        );
-
+        return super.loadUser(userRequest);
     }
 
 
