@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -37,6 +38,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String email = oAuth2User.getAttribute("email");
 
         User user = this.userService.getUserByEmail(email);
+
+        user.setLastLoggedIn(LocalDateTime.now());
+
+        this.userService.saveUser(user);
 
         UserPrincipal userPrincipal = new UserPrincipal(
             user.getId(),
