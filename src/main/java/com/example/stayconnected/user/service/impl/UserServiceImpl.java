@@ -231,6 +231,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return this.userRepository.findAllByUsernameContainingIgnoreCase(username);
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        return this.userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("No account found for email [%s]".formatted(email)));
+    }
+
     private User initUser(RegisterRequest request) {
         return User.builder()
                 .username(request.getUsername())
@@ -255,6 +261,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                                     user.getId(),
                                     user.getUsername(),
                                     user.getPassword(),
+                                    user.getEmail(),
                                     user.isActive(),
                                     user.getRole()
         );

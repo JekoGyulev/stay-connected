@@ -110,6 +110,7 @@ public class UserControllerAPITest {
                user.getId(),
                 user.getUsername(),
                 user.getPassword(),
+                user.getEmail(),
                 user.isActive(),
                 user.getRole()
         );
@@ -608,6 +609,7 @@ public class UserControllerAPITest {
                 UUID.randomUUID(),
                 "Jeko777",
                 "Password123",
+                "zhekogyulev@gmail.com",
                 true,
                 UserRole.ADMIN
         );
@@ -618,6 +620,7 @@ public class UserControllerAPITest {
                 UUID.randomUUID(),
                 "Jeko777",
                 "Password123",
+                "zhekogyulev@gmail.com",
                 true,
                 UserRole.USER
         );

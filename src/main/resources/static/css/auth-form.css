@@ -190,3 +190,97 @@
     color: var(--primary-hover);
     text-decoration: underline;
 }
+
+
+.github-signin-container {
+    background-color: #000;
+    transition: background-color 0.3s ease;
+    border-radius: 14px;
+    border: none;
+    margin-top: 15px;
+}
+
+.github-signin-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    position:relative;
+}
+
+.github-signin-btn:hover {
+    background-color: #333;
+}
+
+.github-signin-btn .github-icon, .google-signin-btn .google.icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 8px;
+}
+
+.github-signin-btn span, .google-signin-btn span {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+/* OR Divider */
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    color: #6b7280; /* soft gray */
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #e5e7eb;
+}
+
+.divider span {
+    padding: 0 12px;
+    text-transform: uppercase;
+}
+
+
+.google-signin-container {
+    text-align: center;
+    border-radius: 14px;
+}
+
+.google-signin-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #ffffff;
+    color: #444;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.google-signin-btn:hover {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+}

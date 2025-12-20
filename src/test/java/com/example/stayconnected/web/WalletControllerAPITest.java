@@ -141,6 +141,7 @@ public class WalletControllerAPITest {
                 UUID.randomUUID(),
                 "Jeko777",
                 "Password123",
+                "zhekogyulev@gmail.com",
                 true,
                 UserRole.ADMIN
         );
@@ -151,6 +152,7 @@ public class WalletControllerAPITest {
                 UUID.randomUUID(),
                 "Jeko777",
                 "Password123",
+                "zhekogyulev@gmail.com",
                 true,
                 UserRole.USER
         );

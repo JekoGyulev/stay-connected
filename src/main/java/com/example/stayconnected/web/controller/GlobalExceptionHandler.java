@@ -2,6 +2,7 @@ package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.utils.exception.*;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -43,6 +44,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ModelAndView handleLeftoverExceptions(Exception e) {
         return new ModelAndView("/error/internal-server-error");
+    }
+
+    @ExceptionHandler(OAuth2AuthenticationException.class)
+    public ModelAndView handleOAuth2AuthenticationException(Exception e) {
+        return new ModelAndView("/error/oauth-error-page");
     }
 
 

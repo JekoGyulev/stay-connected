@@ -85,6 +85,7 @@ public class IndexControllerAPITest {
                                                     user.getId(),
                                                     user.getUsername(),
                                                     user.getPassword(),
+                                                    user.getEmail(),
                                                     user.isActive(),
                                                     user.getRole()
                                             ))
@@ -119,6 +120,7 @@ public class IndexControllerAPITest {
                 UUID.randomUUID(),
                 "Jeko777",
                 "Password123",
+                "zhekogyulev@gmail.com",
                 true,
                 UserRole.USER
         );

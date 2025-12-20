@@ -1,12 +1,11 @@
 package com.example.stayconnected.user.service;
 
-import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
+
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.web.dto.user.*;
-import jakarta.validation.Valid;
+
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,4 +36,6 @@ public interface UserService {
     List<User> getFilteredUsers(FilterUserRequest filterUserRequest);
 
     List<User> getUsersBySearchUsername(String username);
+
+    User getUserByEmail(String email);
 }
