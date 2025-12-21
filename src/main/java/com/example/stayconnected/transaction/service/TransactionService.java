@@ -6,6 +6,7 @@ import com.example.stayconnected.transaction.model.Transaction;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.web.dto.transaction.FilterTransactionRequest;
+import org.springframework.data.domain.Page;
 
 
 import java.math.BigDecimal;
@@ -24,9 +25,9 @@ public interface TransactionService {
 
     List<Transaction> getLastThreeTransactions(Wallet wallet);
 
-    List<Transaction> getTransactionsByUserId(UUID userId);
+    Page<Transaction> getTransactionsByUserId(UUID userId, int pageNumber, int pageSize);
 
-    List<Transaction> getFilteredTransactions(UUID userId, FilterTransactionRequest request);
+    Page<Transaction> getFilteredTransactions(UUID userId, FilterTransactionRequest request, int pageNumber, int pageSize);
 
     List<Transaction> getAllTransactions();
 

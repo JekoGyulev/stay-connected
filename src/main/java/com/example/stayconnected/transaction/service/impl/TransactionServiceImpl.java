@@ -9,6 +9,8 @@ import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.web.dto.transaction.FilterTransactionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -63,12 +65,16 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> getTransactionsByUserId(UUID userId) {
-        return this.transactionRepository.findAllByOwner_IdOrderByCreatedOnDesc(userId);
+    public Page<Transaction> getTransactionsByUserId(UUID userId, int pageNumber, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        return this.transactionRepository.findAllByOwner_IdOrderByCreatedOnDesc(userId, pageRequest);
     }
 
+
     @Override
-    public List<Transaction> getFilteredTransactions(UUID userId, FilterTransactionRequest request) {
+    public Page<Transaction> getFilteredTransactions(UUID userId,
+                                                     FilterTransactionRequest request,
+                                                     int pageNumber, int pageSize) {
 
         String typeStr = request.getTransactionType();
         String statusStr = request.getTransactionStatus();
@@ -76,25 +82,32 @@ public class TransactionServiceImpl implements TransactionService {
         boolean typeFilter = typeStr != null && !typeStr.equals("ALL");
         boolean statusFilter = statusStr != null && !statusStr.equals("ALL");
 
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
         if (!typeFilter && !statusFilter) {
-            return this.transactionRepository.findAllByOwner_IdOrderByCreatedOnDesc(userId);
+            return this.transactionRepository.findAllByOwner_IdOrderByCreatedOnDesc(userId, pageRequest);
         }
 
         if (typeFilter && statusFilter) {
             TransactionType transactionType = TransactionType.valueOf(typeStr);
             TransactionStatus transactionStatus = TransactionStatus.valueOf(statusStr);
+
             return this.transactionRepository.findAllByStatusAndTypeAndOwner_IdOrderByCreatedOnDesc(
-                    transactionStatus, transactionType, userId
+                    transactionStatus, transactionType, userId,
+                    pageRequest
             );
         }
 
         if (typeFilter) {
             TransactionType transactionType = TransactionType.valueOf(typeStr);
-            return this.transactionRepository.findAllByTypeAndOwner_IdOrderByCreatedOnDesc(transactionType, userId);
+            return this.transactionRepository
+                    .findAllByTypeAndOwner_IdOrderByCreatedOnDesc(transactionType, userId, pageRequest);
         }
 
         TransactionStatus transactionStatus = TransactionStatus.valueOf(statusStr);
-        return this.transactionRepository.findAllByStatusAndOwner_IdOrderByCreatedOnDesc(transactionStatus, userId);
+
+        return this.transactionRepository
+                .findAllByStatusAndOwner_IdOrderByCreatedOnDesc(transactionStatus, userId, pageRequest);
     }
 
     @Override

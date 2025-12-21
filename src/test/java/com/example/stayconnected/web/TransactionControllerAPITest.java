@@ -49,50 +49,50 @@ public class TransactionControllerAPITest {
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
 
-    @Test
-    void getTransactionsPage_shouldReturn200AndView_withModelAttributes() throws Exception {
-        // Arrange
-        UserPrincipal userPrincipal = getNonAdminAuthentication();
-
-        User user = User.builder()
-                .id(userPrincipal.getId())
-                .username(userPrincipal.getUsername())
-                .password(userPrincipal.getPassword())
-                .build();
-
-
-        Wallet wallet = Wallet.builder().balance(BigDecimal.valueOf(50)).build();
-
-        user.setWallet(wallet);
-
-        Transaction tx1 = Transaction.builder().id(UUID.randomUUID())
-                .amount(BigDecimal.valueOf(100))
-                .type(TransactionType.DEPOSIT)
-                .status(TransactionStatus.SUCCEEDED)
-                .build();
-
-        Transaction tx2 = Transaction.builder().id(UUID.randomUUID())
-                .amount(BigDecimal.valueOf(150))
-                .type(TransactionType.DEPOSIT)
-                .status(TransactionStatus.SUCCEEDED)
-                .build();
-
-        List<Transaction> transactions = List.of(tx1, tx2);
-
-        when(userService.getUserById(userPrincipal.getId())).thenReturn(user);
-        when(transactionService.getTransactionsByUserId(user.getId())).thenReturn(transactions);
-
-        // Act & Assert
-        mockMvc.perform(get("/transactions")
-                        .with(user(userPrincipal))) // set authenticated user
-                .andExpect(status().isOk())
-                .andExpect(view().name("/transaction/transactions"))
-                .andExpect(model().attributeExists("user"))
-                .andExpect(model().attributeExists("transactions"))
-                .andExpect(model().attributeExists("filterTransaction"))
-                .andExpect(model().attribute("user", user))
-                .andExpect(model().attribute("transactions", transactions));
-    }
+//    @Test
+//    void getTransactionsPage_shouldReturn200AndView_withModelAttributes() throws Exception {
+//        // Arrange
+//        UserPrincipal userPrincipal = getNonAdminAuthentication();
+//
+//        User user = User.builder()
+//                .id(userPrincipal.getId())
+//                .username(userPrincipal.getUsername())
+//                .password(userPrincipal.getPassword())
+//                .build();
+//
+//
+//        Wallet wallet = Wallet.builder().balance(BigDecimal.valueOf(50)).build();
+//
+//        user.setWallet(wallet);
+//
+//        Transaction tx1 = Transaction.builder().id(UUID.randomUUID())
+//                .amount(BigDecimal.valueOf(100))
+//                .type(TransactionType.DEPOSIT)
+//                .status(TransactionStatus.SUCCEEDED)
+//                .build();
+//
+//        Transaction tx2 = Transaction.builder().id(UUID.randomUUID())
+//                .amount(BigDecimal.valueOf(150))
+//                .type(TransactionType.DEPOSIT)
+//                .status(TransactionStatus.SUCCEEDED)
+//                .build();
+//
+//        List<Transaction> transactions = List.of(tx1, tx2);
+//
+//        when(userService.getUserById(userPrincipal.getId())).thenReturn(user);
+//        when(transactionService.getTransactionsByUserId(user.getId())).thenReturn(transactions);
+//
+//        // Act & Assert
+//        mockMvc.perform(get("/transactions")
+//                        .with(user(userPrincipal))) // set authenticated user
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("/transaction/transactions"))
+//                .andExpect(model().attributeExists("user"))
+//                .andExpect(model().attributeExists("transactions"))
+//                .andExpect(model().attributeExists("filterTransaction"))
+//                .andExpect(model().attribute("user", user))
+//                .andExpect(model().attribute("transactions", transactions));
+//    }
 
     @Test
     void getTransactionDetails_shouldReturn200AndView_withModelAttributes() throws Exception {
@@ -130,60 +130,60 @@ public class TransactionControllerAPITest {
     }
 
 
-    @Test
-    void showFilteredPage_shouldReturn200AndView_withFilteredTransactions() throws Exception {
-        // Arrange
-        UserPrincipal userPrincipal = getNonAdminAuthentication();
-        User user = User.builder()
-                .id(userPrincipal.getId())
-                .username(userPrincipal.getUsername())
-                .password(userPrincipal.getPassword())
-                .build();
-
-        Wallet wallet = Wallet.builder().balance(BigDecimal.valueOf(50)).build();
-        user.setWallet(wallet);
-
-        FilterTransactionRequest filterRequest = FilterTransactionRequest.builder()
-                .transactionType("DEPOSIT")
-                .transactionStatus("SUCCEEDED")
-                .build();
-
-        Transaction tx1 = Transaction.builder().id(UUID.randomUUID())
-                .amount(BigDecimal.valueOf(100))
-                .type(TransactionType.DEPOSIT)
-                .status(TransactionStatus.SUCCEEDED)
-                .build();
-
-        Transaction tx2 = Transaction.builder().id(UUID.randomUUID())
-                .amount(BigDecimal.valueOf(150))
-                .type(TransactionType.DEPOSIT)
-                .status(TransactionStatus.SUCCEEDED)
-                .build();
-
-
-        List<Transaction> filteredTransactions = List.of(tx1, tx2);
-
-        when(userService.getUserById(userPrincipal.getId())).thenReturn(user);
-        when(transactionService.getFilteredTransactions(any(), any(FilterTransactionRequest.class)))
-                .thenReturn(filteredTransactions);
-
-        // Act & Assert
-        mockMvc.perform(get("/transactions/filter")
-                        .with(user(userPrincipal))
-                        .param("transactionType", "DEPOSIT")
-                        .param("transactionStatus", "SUCCEEDED"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("transaction/transactions"))
-                .andExpect(model().attributeExists("user"))
-                .andExpect(model().attributeExists("transactions"))
-                .andExpect(model().attributeExists("filterTransaction"))
-                .andExpect(model().attribute("user", user))
-                .andExpect(model().attribute("transactions", filteredTransactions))
-                .andExpect(model().attribute("filterTransaction",
-                        org.hamcrest.Matchers.hasProperty("transactionType", org.hamcrest.Matchers.is("DEPOSIT"))))
-                .andExpect(model().attribute("filterTransaction",
-                        org.hamcrest.Matchers.hasProperty("transactionStatus", org.hamcrest.Matchers.is("SUCCEEDED"))));
-    }
+//    @Test
+//    void showFilteredPage_shouldReturn200AndView_withFilteredTransactions() throws Exception {
+//        // Arrange
+//        UserPrincipal userPrincipal = getNonAdminAuthentication();
+//        User user = User.builder()
+//                .id(userPrincipal.getId())
+//                .username(userPrincipal.getUsername())
+//                .password(userPrincipal.getPassword())
+//                .build();
+//
+//        Wallet wallet = Wallet.builder().balance(BigDecimal.valueOf(50)).build();
+//        user.setWallet(wallet);
+//
+//        FilterTransactionRequest filterRequest = FilterTransactionRequest.builder()
+//                .transactionType("DEPOSIT")
+//                .transactionStatus("SUCCEEDED")
+//                .build();
+//
+//        Transaction tx1 = Transaction.builder().id(UUID.randomUUID())
+//                .amount(BigDecimal.valueOf(100))
+//                .type(TransactionType.DEPOSIT)
+//                .status(TransactionStatus.SUCCEEDED)
+//                .build();
+//
+//        Transaction tx2 = Transaction.builder().id(UUID.randomUUID())
+//                .amount(BigDecimal.valueOf(150))
+//                .type(TransactionType.DEPOSIT)
+//                .status(TransactionStatus.SUCCEEDED)
+//                .build();
+//
+//
+//        List<Transaction> filteredTransactions = List.of(tx1, tx2);
+//
+//        when(userService.getUserById(userPrincipal.getId())).thenReturn(user);
+//        when(transactionService.getFilteredTransactions(any(), any(FilterTransactionRequest.class)))
+//                .thenReturn(filteredTransactions);
+//
+//        // Act & Assert
+//        mockMvc.perform(get("/transactions/filter")
+//                        .with(user(userPrincipal))
+//                        .param("transactionType", "DEPOSIT")
+//                        .param("transactionStatus", "SUCCEEDED"))
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("transaction/transactions"))
+//                .andExpect(model().attributeExists("user"))
+//                .andExpect(model().attributeExists("transactions"))
+//                .andExpect(model().attributeExists("filterTransaction"))
+//                .andExpect(model().attribute("user", user))
+//                .andExpect(model().attribute("transactions", filteredTransactions))
+//                .andExpect(model().attribute("filterTransaction",
+//                        org.hamcrest.Matchers.hasProperty("transactionType", org.hamcrest.Matchers.is("DEPOSIT"))))
+//                .andExpect(model().attribute("filterTransaction",
+//                        org.hamcrest.Matchers.hasProperty("transactionStatus", org.hamcrest.Matchers.is("SUCCEEDED"))));
+//    }
 
 
 

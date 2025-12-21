@@ -3,14 +3,18 @@ package com.example.stayconnected.transaction.repository;
 import com.example.stayconnected.transaction.enums.TransactionStatus;
 import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.transaction.model.Transaction;
-import jakarta.validation.Valid;
+
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+
 import java.math.BigDecimal;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -19,14 +23,14 @@ import java.util.UUID;
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
     List<Transaction> findAllBySenderOrReceiverOrderByCreatedOnDesc(String sender, String receiver);
 
-    List<Transaction> findAllByOwner_IdOrderByCreatedOnDesc(UUID userId);
+    Page<Transaction> findAllByOwner_IdOrderByCreatedOnDesc(UUID userId, Pageable pageable);
 
-    List<Transaction> findAllByStatusAndTypeAndOwner_IdOrderByCreatedOnDesc
-            (TransactionStatus status, TransactionType type, UUID userId);
+    Page<Transaction> findAllByStatusAndTypeAndOwner_IdOrderByCreatedOnDesc
+            (TransactionStatus status, TransactionType type, UUID userId, Pageable pageable);
 
-    List<Transaction> findAllByTypeAndOwner_IdOrderByCreatedOnDesc(TransactionType transactionType, UUID userId);
+    Page<Transaction> findAllByTypeAndOwner_IdOrderByCreatedOnDesc(TransactionType transactionType, UUID userId, Pageable pageable);
 
-    List<Transaction> findAllByStatusAndOwner_IdOrderByCreatedOnDesc(TransactionStatus transactionStatus, UUID userId);
+    Page<Transaction> findAllByStatusAndOwner_IdOrderByCreatedOnDesc(TransactionStatus transactionStatus, UUID userId, Pageable pageable);
 
     List<Transaction> findAllByStatus(TransactionStatus transactionStatus);
 

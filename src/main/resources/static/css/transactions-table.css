@@ -249,6 +249,11 @@
     font-family: inherit;
 }
 
+a.disabled {
+    pointer-events: none;
+    color: #bbbaba;
+}
+
 .pagination-btn:hover:not(:disabled) {
     background: var(--primary);
     color: white;

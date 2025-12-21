@@ -97,6 +97,8 @@
         </div>
 
         <!-- Filters -->
+        <div id="transactions-table-id"></div>
+
         <form th:action="@{/transactions/filter}" th:method="GET" th:object="${filterTransaction}">
 
             <div class="transactions-filters">
@@ -130,7 +132,9 @@
 
         <!-- Transactions Table -->
         <div class="transactions-table-wrapper">
-            <table class="transactions-table">
+
+            <table class="transactions-table" >
+
                 <thead>
                 <tr>
                     <th>Transaction ID</th>
@@ -229,15 +233,38 @@
 
         <!-- Pagination -->
         <div class="transactions-pagination">
-            <button class="pagination-btn" disabled>Previous</button>
+            <a class="pagination-btn"
+                    th:if="${currentPage > 0}"
+                    th:href="${baseUrl} + '?pageNumber=' + ${currentPage - 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#transactions-table-id'"
+               style="text-decoration: none"
+            >Previous</a>
+
+            <a class="pagination-btn disabled"
+               th:if="${currentPage == 0}"
+               style="text-decoration: none"
+            >Previous</a>
+
             <div class="pagination-pages">
-                <button class="pagination-page active">1</button>
-                <button class="pagination-page">2</button>
-                <button class="pagination-page">3</button>
-                <span class="pagination-dots">...</span>
-                <button class="pagination-page">10</button>
+                <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:text="${i + 1}"
+                        th:href="${baseUrl} + '?pageNumber=' + ${i} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#transactions-table-id'"
+                        th:classappend="${i == currentPage} ? ' active' : ''"
+                   class="pagination-page"
+                   style="text-decoration: none"
+                ></a>
             </div>
-            <button class="pagination-btn">Next</button>
+
+            <a class="pagination-btn"
+                    th:if="${currentPage < totalPages - 1}"
+               th:href="${baseUrl} + '?pageNumber=' + ${currentPage + 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#transactions-table-id'"
+               style="text-decoration: none"
+            >Next</a>
+
+            <a class="pagination-btn disabled"
+                    th:if="${currentPage + 1 == totalPages}"
+                    style="text-decoration: none"
+            >Next</a>
+
         </div>
     </div>
 </main>
