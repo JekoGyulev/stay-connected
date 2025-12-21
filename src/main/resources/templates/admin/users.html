@@ -92,6 +92,8 @@
             <p style="margin: 10px 0 20px 0">View all users and their information</p>
         </div>
 
+        <div id="users-table-id"></div>
+
         <div style="
                                     display: flex;
                                     justify-content: space-between;
@@ -101,6 +103,7 @@
                                     flex-wrap: wrap;
 
             ">
+
             <!-- Filters -->
             <form th:action="@{/users/table/filter}" th:method="GET" th:object="${filterUsersRequest}">
                 <div class="transactions-filters">
@@ -213,15 +216,39 @@
 
         <!-- Pagination -->
         <div class="transactions-pagination">
-            <button class="pagination-btn" disabled>Previous</button>
+
+            <a      th:if="${currentPage > 0}"
+                    th:href="${baseUrl} + '?pageNumber=' + ${currentPage - 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#users-table-id'"
+                    style="text-decoration: none"
+                    class="pagination-btn">Previous</a>
+
+
+            <a      th:if="${currentPage == 0}"
+                    style="text-decoration: none"
+                    class="pagination-btn disabled">Previous</a>
+
             <div class="pagination-pages">
-                <button class="pagination-page active">1</button>
-                <button class="pagination-page">2</button>
-                <button class="pagination-page">3</button>
-                <span class="pagination-dots">...</span>
-                <button class="pagination-page">10</button>
+                <a
+                        th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:text="${i + 1}"
+                        th:href="${baseUrl} + '?pageNumber=' + ${i} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#users-table-id'"
+                        th:classappend="${i == currentPage} ? ' active' : ''"
+                        style="text-decoration: none"
+                        class="pagination-page">
+                </a>
             </div>
-            <button class="pagination-btn">Next</button>
+
+
+            <a      th:if="${currentPage < totalPages - 1}"
+                    th:href="${baseUrl} + '?pageNumber=' + ${currentPage + 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#users-table-id'"
+                    style="text-decoration: none"
+                    class="pagination-btn">Next</a>
+
+
+            <a      th:if="${currentPage + 1 == totalPages}"
+                    style="text-decoration: none"
+                    class="pagination-btn disabled">Next</a>
+
         </div>
     </div>
 </main>

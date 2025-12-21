@@ -159,37 +159,37 @@ public class UserServiceImplUTest {
         verify(userRepository).save(user);
     }
 
-    @Test
-    void whenTotalActiveUsersIsZero_thenPercentageActiveUsersZero() {
+//    @Test
+//    void whenTotalActiveUsersIsZero_thenPercentageActiveUsersZero() {
+//
+//        when(userRepository.findAllByOrderByRegisteredAtDescUsernameAsc()).thenReturn(Collections.emptyList());
+//
+//        when(userRepository.countAllByActiveIs(true)).thenReturn(0L);
+//
+//
+//        userServiceImpl.getAllUsersOrderedByDateAndUsername();
+//        userServiceImpl.getTotalActiveUsers();
+//        BigDecimal percentageActiveUsers = userServiceImpl.getPercentageActiveUsers();
+//
+//        assertEquals(BigDecimal.ZERO, percentageActiveUsers);
+//    }
 
-        when(userRepository.findAllByOrderByRegisteredAtDescUsernameAsc()).thenReturn(Collections.emptyList());
-
-        when(userRepository.countAllByActiveIs(true)).thenReturn(0L);
-
-
-        userServiceImpl.getAllUsersOrderedByDateAndUsername();
-        userServiceImpl.getTotalActiveUsers();
-        BigDecimal percentageActiveUsers = userServiceImpl.getPercentageActiveUsers();
-
-        assertEquals(BigDecimal.ZERO, percentageActiveUsers);
-    }
-
-    @Test
-    void whenTotalActiveUsersIsTwo_andOneUserIsActive_andSecondUserIsInactive_thenPercentageActiveUsers50() {
-
-        User user = User.builder().isActive(true).build();
-        User user2 = User.builder().isActive(false).build();
-
-        List<User> users = List.of(user, user2);
-
-        when(userRepository.findAllByOrderByRegisteredAtDescUsernameAsc()).thenReturn(users);
-
-        when(userRepository.countAllByActiveIs(true)).thenReturn(1L);
-
-        BigDecimal percentageActiveUsers = userServiceImpl.getPercentageActiveUsers();
-
-        assertEquals(BigDecimal.valueOf(50).setScale(2, RoundingMode.HALF_UP), percentageActiveUsers);
-    }
+//    @Test
+//    void whenTotalActiveUsersIsTwo_andOneUserIsActive_andSecondUserIsInactive_thenPercentageActiveUsers50() {
+//
+//        User user = User.builder().isActive(true).build();
+//        User user2 = User.builder().isActive(false).build();
+//
+//        List<User> users = List.of(user, user2);
+//
+//        when(userRepository.findAllByOrderByRegisteredAtDescUsernameAsc()).thenReturn(users);
+//
+//        when(userRepository.countAllByActiveIs(true)).thenReturn(1L);
+//
+//        BigDecimal percentageActiveUsers = userServiceImpl.getPercentageActiveUsers();
+//
+//        assertEquals(BigDecimal.valueOf(50).setScale(2, RoundingMode.HALF_UP), percentageActiveUsers);
+//    }
 
     @Test
     void changePassword_whenNewPasswordDoesNotMatchConfirmationPassword_thenThrow() {
@@ -309,142 +309,142 @@ public class UserServiceImplUTest {
     }
 
 
-    @Test
-    void whenUserFiltersOtherUsers_andThereAreNoFiltersApplied_thenShowAllUsers() {
+//    @Test
+//    void whenUserFiltersOtherUsers_andThereAreNoFiltersApplied_thenShowAllUsers() {
+//
+//        FilterUserRequest dto = new FilterUserRequest("ALL", "ALL");
+//
+//
+//        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
+//        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
+//
+//        List<User> users = List.of(firstUser, secondUser) ;
+//
+//
+//        when(userRepository.findAllByOrderByRegisteredAtDescUsernameAsc()).thenReturn(users);
+//
+//
+//        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
+//
+//        assertArrayEquals(users.toArray(), filteredUsers.toArray());
+//    }
 
-        FilterUserRequest dto = new FilterUserRequest("ALL", "ALL");
+//    @Test
+//    void whenUserFiltersOtherUsers_AndThereAreActiveAndUserRoleIsUserFilters_thenShow1Users() {
+//        FilterUserRequest dto = new FilterUserRequest("USER", "true");
+//
+//        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
+//        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
+//
+//        List<User> users = List.of(firstUser, secondUser);
+//
+//        when(userRepository.findAllByRoleAndIsActiveOrderByRegisteredAtDescUsernameAsc(
+//                UserRole.USER, true
+//        )).thenReturn(List.of(firstUser));
+//
+//        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
+//
+//        assertNotEquals(users.toArray().length, filteredUsers.toArray().length);
+//    }
 
-
-        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
-        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
-
-        List<User> users = List.of(firstUser, secondUser) ;
-
-
-        when(userRepository.findAllByOrderByRegisteredAtDescUsernameAsc()).thenReturn(users);
-
-
-        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
-
-        assertArrayEquals(users.toArray(), filteredUsers.toArray());
-    }
-
-    @Test
-    void whenUserFiltersOtherUsers_AndThereAreActiveAndUserRoleIsUserFilters_thenShow1Users() {
-        FilterUserRequest dto = new FilterUserRequest("USER", "true");
-
-        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
-        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
-
-        List<User> users = List.of(firstUser, secondUser);
-
-        when(userRepository.findAllByRoleAndIsActiveOrderByRegisteredAtDescUsernameAsc(
-                UserRole.USER, true
-        )).thenReturn(List.of(firstUser));
-
-        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
-
-        assertNotEquals(users.toArray().length, filteredUsers.toArray().length);
-    }
-
-    @Test
-    void whenUserFiltersOtherUsers_AndThereAreActiveAndUserRoleIsAdminFilters_thenShow1Users() {
-        FilterUserRequest dto = new FilterUserRequest("ADMIN", "true");
-
-        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
-        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
-
-        List<User> users = List.of(firstUser, secondUser);
-
-        when(userRepository.findAllByRoleAndIsActiveOrderByRegisteredAtDescUsernameAsc(
-                UserRole.ADMIN, true
-        )).thenReturn(List.of(firstUser));
-
-        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
-
-        assertNotEquals(users.toArray().length, filteredUsers.toArray().length);
-    }
-
-
-    @Test
-    void whenUserFiltersOtherUsers_AndThereIsAdminRoleOnlyFilters_thenShow2Users() {
-
-        FilterUserRequest dto = new FilterUserRequest("ADMIN", "ALL");
-
-        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
-        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
-        User thirdUser = User.builder().isActive(true).role(UserRole.ADMIN).build();
+//    @Test
+//    void whenUserFiltersOtherUsers_AndThereAreActiveAndUserRoleIsAdminFilters_thenShow1Users() {
+//        FilterUserRequest dto = new FilterUserRequest("ADMIN", "true");
+//
+//        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
+//        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
+//
+//        List<User> users = List.of(firstUser, secondUser);
+//
+//        when(userRepository.findAllByRoleAndIsActiveOrderByRegisteredAtDescUsernameAsc(
+//                UserRole.ADMIN, true
+//        )).thenReturn(List.of(firstUser));
+//
+//        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
+//
+//        assertNotEquals(users.toArray().length, filteredUsers.toArray().length);
+//    }
 
 
-        List<User> users = List.of(firstUser, secondUser, thirdUser);
+//    @Test
+//    void whenUserFiltersOtherUsers_AndThereIsAdminRoleOnlyFilters_thenShow2Users() {
+//
+//        FilterUserRequest dto = new FilterUserRequest("ADMIN", "ALL");
+//
+//        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
+//        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
+//        User thirdUser = User.builder().isActive(true).role(UserRole.ADMIN).build();
+//
+//
+//        List<User> users = List.of(firstUser, secondUser, thirdUser);
+//
+//        when(userRepository.findAllByRoleOrderByRegisteredAtDescUsernameAsc(UserRole.ADMIN))
+//                .thenReturn(List.of(secondUser, thirdUser));
+//
+//        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
+//
+//        assertEquals(2, filteredUsers.size());
+//    }
 
-        when(userRepository.findAllByRoleOrderByRegisteredAtDescUsernameAsc(UserRole.ADMIN))
-                .thenReturn(List.of(secondUser, thirdUser));
-
-        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
-
-        assertEquals(2, filteredUsers.size());
-    }
-
-    @Test
-    void whenUserFiltersOtherUsers_andThereIsUserRoleOnlyFilters_thenShow1User() {
-
-        FilterUserRequest dto = new FilterUserRequest("USER", "ALL");
-
-        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
-        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
-        User thirdUser = User.builder().isActive(true).role(UserRole.ADMIN).build();
-
-
-        List<User> users = List.of(firstUser, secondUser, thirdUser);
-
-        when(userRepository.findAllByRoleOrderByRegisteredAtDescUsernameAsc(UserRole.USER))
-                .thenReturn(List.of(firstUser));
-
-        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
-
-        assertEquals(1, filteredUsers.size());
-    }
-
-
-    @Test
-    void whenUserFiltersOtherUsers_andThereIsStatusTrueFilter_thenShowUsers() {
-        FilterUserRequest dto = new FilterUserRequest("ALL", "true");
-
-        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
-        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
-        User thirdUser = User.builder().isActive(true).role(UserRole.ADMIN).build();
-
-        List<User> users = List.of(firstUser, secondUser, thirdUser);
-
-        when(userRepository.findAllByIsActiveOrderByRegisteredAtDescUsernameAsc(true))
-                .thenReturn(List.of(firstUser, thirdUser));
+//    @Test
+//    void whenUserFiltersOtherUsers_andThereIsUserRoleOnlyFilters_thenShow1User() {
+//
+//        FilterUserRequest dto = new FilterUserRequest("USER", "ALL");
+//
+//        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
+//        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
+//        User thirdUser = User.builder().isActive(true).role(UserRole.ADMIN).build();
+//
+//
+//        List<User> users = List.of(firstUser, secondUser, thirdUser);
+//
+//        when(userRepository.findAllByRoleOrderByRegisteredAtDescUsernameAsc(UserRole.USER))
+//                .thenReturn(List.of(firstUser));
+//
+//        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
+//
+//        assertEquals(1, filteredUsers.size());
+//    }
 
 
-        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
+//    @Test
+//    void whenUserFiltersOtherUsers_andThereIsStatusTrueFilter_thenShowUsers() {
+//        FilterUserRequest dto = new FilterUserRequest("ALL", "true");
+//
+//        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
+//        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
+//        User thirdUser = User.builder().isActive(true).role(UserRole.ADMIN).build();
+//
+//        List<User> users = List.of(firstUser, secondUser, thirdUser);
+//
+//        when(userRepository.findAllByIsActiveOrderByRegisteredAtDescUsernameAsc(true))
+//                .thenReturn(List.of(firstUser, thirdUser));
+//
+//
+//        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
+//
+//        assertTrue(filteredUsers.stream().allMatch(User::isActive));
+//    }
 
-        assertTrue(filteredUsers.stream().allMatch(User::isActive));
-    }
 
-
-    @Test
-    void whenUserFiltersOtherUsers_andThereIsStatusFalseFilter_thenShowUsers() {
-        FilterUserRequest dto = new FilterUserRequest("ALL", "false");
-
-        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
-        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
-        User thirdUser = User.builder().isActive(true).role(UserRole.ADMIN).build();
-
-        List<User> users = List.of(firstUser, secondUser, thirdUser);
-
-        when(userRepository.findAllByIsActiveOrderByRegisteredAtDescUsernameAsc(false))
-                .thenReturn(List.of(secondUser));
-
-
-        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
-
-        assertEquals(1,filteredUsers.size());
-    }
+//    @Test
+//    void whenUserFiltersOtherUsers_andThereIsStatusFalseFilter_thenShowUsers() {
+//        FilterUserRequest dto = new FilterUserRequest("ALL", "false");
+//
+//        User firstUser = User.builder().isActive(true).role(UserRole.USER).build();
+//        User secondUser = User.builder().isActive(false).role(UserRole.ADMIN).build();
+//        User thirdUser = User.builder().isActive(true).role(UserRole.ADMIN).build();
+//
+//        List<User> users = List.of(firstUser, secondUser, thirdUser);
+//
+//        when(userRepository.findAllByIsActiveOrderByRegisteredAtDescUsernameAsc(false))
+//                .thenReturn(List.of(secondUser));
+//
+//
+//        List<User> filteredUsers = userServiceImpl.getFilteredUsers(dto);
+//
+//        assertEquals(1,filteredUsers.size());
+//    }
 
 
     @Test

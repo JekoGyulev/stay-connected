@@ -2,6 +2,8 @@ package com.example.stayconnected.user.repository;
 
 import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,20 +19,20 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByUsername(String username);
 
-    List<User> findAllByOrderByRegisteredAtDescUsernameAsc();
+    Page<User> findAllByOrderByRegisteredAtDescUsernameAsc(Pageable pageable);
 
     @Query("SELECT COUNT(u) FROM User u WHERE u.isActive = :active")
     long countAllByActiveIs(@Param(value = "active") boolean active);
 
     long countAllByRegisteredAtBetween(LocalDateTime registeredAtAfter, LocalDateTime registeredAtBefore);
 
-    List<User> findAllByRoleAndIsActiveOrderByRegisteredAtDescUsernameAsc(UserRole role, boolean isActive);
+    Page<User> findAllByRoleAndIsActiveOrderByRegisteredAtDescUsernameAsc(UserRole role, boolean isActive, Pageable pageable);
 
-    List<User> findAllByRoleOrderByRegisteredAtDescUsernameAsc(UserRole role);
+    Page<User> findAllByRoleOrderByRegisteredAtDescUsernameAsc(UserRole role, Pageable pageable);
 
-    List<User> findAllByIsActiveOrderByRegisteredAtDescUsernameAsc(boolean isActive);
+    Page<User> findAllByIsActiveOrderByRegisteredAtDescUsernameAsc(boolean isActive, Pageable pageable);
 
     Optional<User> findByEmail(String email);
 
-    List<User> findAllByUsernameContainingIgnoreCase(String username);
+    List<User> findAllByUsernameContainingIgnoreCaseOrderByRegisteredAtDesc(String username);
 }

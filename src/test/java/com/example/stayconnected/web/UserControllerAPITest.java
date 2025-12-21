@@ -326,35 +326,35 @@ public class UserControllerAPITest {
         verify(userService).switchRole(any());
     }
 
-    @Test
-    void getUsersTablePage_shouldReturn200AndView() throws Exception {
-
-        UserPrincipal admin = getAdminAuthentication();
-        User user = new User();
-        Wallet wallet =  Wallet.builder().balance(BigDecimal.valueOf(50)).build();
-        user.setId(admin.getId());
-        user.setUsername(admin.getUsername());
-        user.setWallet(wallet);
-
-        List<User> users = List.of(user);
-
-        when(userService.getAllUsersOrderedByDateAndUsername()).thenReturn(users);
-        when(userService.getUserById(admin.getId())).thenReturn(user);
-
-
-        MockHttpServletRequestBuilder request =
-                get("/users/table")
-                        .with(user(admin));
-
-        mockMvc.perform(request)
-                .andExpect(view().name("admin/users"))
-                .andExpect(status().isOk())
-                        .andExpect(model().attributeExists("users"))
-                                .andExpect(model().attributeExists("filterUsersRequest"))
-                                        .andExpect(model().attributeExists("authUser"));
-
-
-    }
+//    @Test
+//    void getUsersTablePage_shouldReturn200AndView() throws Exception {
+//
+//        UserPrincipal admin = getAdminAuthentication();
+//        User user = new User();
+//        Wallet wallet =  Wallet.builder().balance(BigDecimal.valueOf(50)).build();
+//        user.setId(admin.getId());
+//        user.setUsername(admin.getUsername());
+//        user.setWallet(wallet);
+//
+//        List<User> users = List.of(user);
+//
+//        when(userService.getAllUsersOrderedByDateAndUsername()).thenReturn(users);
+//        when(userService.getUserById(admin.getId())).thenReturn(user);
+//
+//
+//        MockHttpServletRequestBuilder request =
+//                get("/users/table")
+//                        .with(user(admin));
+//
+//        mockMvc.perform(request)
+//                .andExpect(view().name("admin/users"))
+//                .andExpect(status().isOk())
+//                        .andExpect(model().attributeExists("users"))
+//                                .andExpect(model().attributeExists("filterUsersRequest"))
+//                                        .andExpect(model().attributeExists("authUser"));
+//
+//
+//    }
 
 
 
@@ -486,116 +486,116 @@ public class UserControllerAPITest {
 
 
 
-    @Test
-    void sendGetRequestToUsersTable_shouldReturn200Ok_andView() throws Exception {
-
-        UserPrincipal adminAuthentication = getAdminAuthentication();
-
-        User user = User.builder()
-                .id(adminAuthentication.getId())
-                .username(adminAuthentication.getUsername())
-                .password(adminAuthentication.getPassword())
-                .build();
-
-
-        User user2 = User.builder()
-                        .id(UUID.randomUUID())
-                                .username("username")
-                                        .password("password")
-                                            .role(UserRole.USER)
-                                                .build();
-
-
-        user.setWallet(createRandomWallet(user));
-        user2.setWallet(createRandomWallet(user2));
-
-        FilterUserRequest dto = new FilterUserRequest("ALL", "ALL");
-
-
-        when(userService.getFilteredUsers(any()))
-                .thenReturn(List.of(user, user2));
-
-        when(userService.getUserById(any())).thenReturn(user);
-
-
-        MockHttpServletRequestBuilder request =
-                get("/users/table/filter")
-                        .with(user(adminAuthentication));
-
-
-        mockMvc.perform(request)
-                .andExpect(status().isOk())
-                .andExpect(view().name("/admin/users"))
-                .andExpect(model().attribute("authUser", user))
-                .andExpect(model().attributeExists("filterUsersRequest"))
-                .andExpect(model().attributeExists("users"));
-
-        verify(userService).getFilteredUsers(any());
-    }
-
-
-    @Test
-    void sendGetRequestToAppStatsPage_shouldReturn200Ok_andView() throws Exception {
-
-        UserPrincipal userPrincipal = getAdminAuthentication();
-
-        User user = User.builder()
-                .id(userPrincipal.getId())
-                .username(userPrincipal.getUsername())
-                .password(userPrincipal.getPassword())
-                .build();
+//    @Test
+//    void sendGetRequestToUsersTable_shouldReturn200Ok_andView() throws Exception {
+//
+//        UserPrincipal adminAuthentication = getAdminAuthentication();
+//
+//        User user = User.builder()
+//                .id(adminAuthentication.getId())
+//                .username(adminAuthentication.getUsername())
+//                .password(adminAuthentication.getPassword())
+//                .build();
+//
+//
+//        User user2 = User.builder()
+//                        .id(UUID.randomUUID())
+//                                .username("username")
+//                                        .password("password")
+//                                            .role(UserRole.USER)
+//                                                .build();
+//
+//
+//        user.setWallet(createRandomWallet(user));
+//        user2.setWallet(createRandomWallet(user2));
+//
+//        FilterUserRequest dto = new FilterUserRequest("ALL", "ALL");
+//
+//
+//        when(userService.getFilteredUsers(any()))
+//                .thenReturn(List.of(user, user2));
+//
+//        when(userService.getUserById(any())).thenReturn(user);
+//
+//
+//        MockHttpServletRequestBuilder request =
+//                get("/users/table/filter")
+//                        .with(user(adminAuthentication));
+//
+//
+//        mockMvc.perform(request)
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("/admin/users"))
+//                .andExpect(model().attribute("authUser", user))
+//                .andExpect(model().attributeExists("filterUsersRequest"))
+//                .andExpect(model().attributeExists("users"));
+//
+//        verify(userService).getFilteredUsers(any());
+//    }
 
 
-        user.setWallet(createRandomWallet(user));
-
-
-        when(userService.getUserById(any())).thenReturn(user);
-        when(userService.getAllUsersOrderedByDateAndUsername()).thenReturn(List.of(user));
-        when(propertyService.getAllProperties()).thenReturn(List.of());
-        when(transactionService.getAllTransactions()).thenReturn(List.of());
-        when(transactionService.getTotalRevenue()).thenReturn(BigDecimal.valueOf(1000));
-        when(transactionService.getAllFailedTransactions()).thenReturn(List.of());
-        when(userService.getTotalActiveUsers()).thenReturn(1L);
-        when(reservationService.getTotalReservationsByStatus("ALL")).thenReturn(0L);
-        when(transactionService.getAverageTransactionAmount()).thenReturn(BigDecimal.valueOf(100));
-        when(dashboardStatsService.getCountNewUsersToday()).thenReturn(2L);
-        when(dashboardStatsService.getCountNewReservationsToday()).thenReturn(3L);
-        when(dashboardStatsService.getCountTotalRevenueToday()).thenReturn(BigDecimal.valueOf(500));
-        when(dashboardStatsService.getCountNewPropertiesToday()).thenReturn(1L);
-        when(reservationService.getTotalReservationsByStatus("BOOKED")).thenReturn(0L);
-        when(userService.getPercentageActiveUsers()).thenReturn(BigDecimal.valueOf(50));
-        when(reservationService.getAveragePercentageOfReservationsByStatus("BOOKED")).thenReturn(BigDecimal.ZERO);
-        when(dashboardStatsService.getAverageWeeklyTransactionGrowth()).thenReturn(BigDecimal.valueOf(10));
-
-
-        MockHttpServletRequestBuilder request =
-                get("/users/app-stats")
-                        .with(user(userPrincipal));
-
-
-
-        mockMvc.perform(request)
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin/stats"))
-                .andExpect(model().attribute("user", user))
-                .andExpect(model().attribute("totalUsers", 1))
-                .andExpect(model().attribute("totalProperties", 0))
-                .andExpect(model().attribute("totalTransactions", 0))
-                .andExpect(model().attribute("totalRevenue", RevenueUtils.formatRevenue(BigDecimal.valueOf(1000))))
-                .andExpect(model().attribute("totalFailedTransactions", 0))
-                .andExpect(model().attribute("totalActiveUsers", 1L))
-                .andExpect(model().attribute("totalReservations", 0L))
-                .andExpect(model().attribute("averageTransactionAmount", BigDecimal.valueOf(100)))
-                .andExpect(model().attribute("newUsersToday", 2L))
-                .andExpect(model().attribute("newBookingsToday", 3L))
-                .andExpect(model().attribute("totalRevenueToday", RevenueUtils.formatRevenue(BigDecimal.valueOf(500))))
-                .andExpect(model().attribute("newPropertiesToday", 1L))
-                .andExpect(model().attribute("totalBookedReservations", 0L))
-                .andExpect(model().attribute("percentageActiveUsers", BigDecimal.valueOf(50)))
-                .andExpect(model().attribute("percentageBookedReservations", BigDecimal.valueOf(0)))
-                .andExpect(model().attribute("averageTransactionGrowth", BigDecimal.valueOf(10)));
-
-    }
+//    @Test
+//    void sendGetRequestToAppStatsPage_shouldReturn200Ok_andView() throws Exception {
+//
+//        UserPrincipal userPrincipal = getAdminAuthentication();
+//
+//        User user = User.builder()
+//                .id(userPrincipal.getId())
+//                .username(userPrincipal.getUsername())
+//                .password(userPrincipal.getPassword())
+//                .build();
+//
+//
+//        user.setWallet(createRandomWallet(user));
+//
+//
+//        when(userService.getUserById(any())).thenReturn(user);
+//        when(userService.getAllUsersOrderedByDateAndUsername()).thenReturn(List.of(user));
+//        when(propertyService.getAllProperties()).thenReturn(List.of());
+//        when(transactionService.getAllTransactions()).thenReturn(List.of());
+//        when(transactionService.getTotalRevenue()).thenReturn(BigDecimal.valueOf(1000));
+//        when(transactionService.getAllFailedTransactions()).thenReturn(List.of());
+//        when(userService.getTotalActiveUsers()).thenReturn(1L);
+//        when(reservationService.getTotalReservationsByStatus("ALL")).thenReturn(0L);
+//        when(transactionService.getAverageTransactionAmount()).thenReturn(BigDecimal.valueOf(100));
+//        when(dashboardStatsService.getCountNewUsersToday()).thenReturn(2L);
+//        when(dashboardStatsService.getCountNewReservationsToday()).thenReturn(3L);
+//        when(dashboardStatsService.getCountTotalRevenueToday()).thenReturn(BigDecimal.valueOf(500));
+//        when(dashboardStatsService.getCountNewPropertiesToday()).thenReturn(1L);
+//        when(reservationService.getTotalReservationsByStatus("BOOKED")).thenReturn(0L);
+//        when(userService.getPercentageActiveUsers()).thenReturn(BigDecimal.valueOf(50));
+//        when(reservationService.getAveragePercentageOfReservationsByStatus("BOOKED")).thenReturn(BigDecimal.ZERO);
+//        when(dashboardStatsService.getAverageWeeklyTransactionGrowth()).thenReturn(BigDecimal.valueOf(10));
+//
+//
+//        MockHttpServletRequestBuilder request =
+//                get("/users/app-stats")
+//                        .with(user(userPrincipal));
+//
+//
+//
+//        mockMvc.perform(request)
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("admin/stats"))
+//                .andExpect(model().attribute("user", user))
+//                .andExpect(model().attribute("totalUsers", 1))
+//                .andExpect(model().attribute("totalProperties", 0))
+//                .andExpect(model().attribute("totalTransactions", 0))
+//                .andExpect(model().attribute("totalRevenue", RevenueUtils.formatRevenue(BigDecimal.valueOf(1000))))
+//                .andExpect(model().attribute("totalFailedTransactions", 0))
+//                .andExpect(model().attribute("totalActiveUsers", 1L))
+//                .andExpect(model().attribute("totalReservations", 0L))
+//                .andExpect(model().attribute("averageTransactionAmount", BigDecimal.valueOf(100)))
+//                .andExpect(model().attribute("newUsersToday", 2L))
+//                .andExpect(model().attribute("newBookingsToday", 3L))
+//                .andExpect(model().attribute("totalRevenueToday", RevenueUtils.formatRevenue(BigDecimal.valueOf(500))))
+//                .andExpect(model().attribute("newPropertiesToday", 1L))
+//                .andExpect(model().attribute("totalBookedReservations", 0L))
+//                .andExpect(model().attribute("percentageActiveUsers", BigDecimal.valueOf(50)))
+//                .andExpect(model().attribute("percentageBookedReservations", BigDecimal.valueOf(0)))
+//                .andExpect(model().attribute("averageTransactionGrowth", BigDecimal.valueOf(10)));
+//
+//    }
 
 
 

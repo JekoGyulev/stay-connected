@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -96,8 +98,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Cacheable(value = "users")
-    public List<User> getAllUsersOrderedByDateAndUsername() {
-        return this.userRepository.findAllByOrderByRegisteredAtDescUsernameAsc();
+    public Page<User> getAllUsersOrderedByDateAndUsername(int pageNumber, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        return this.userRepository.findAllByOrderByRegisteredAtDescUsernameAsc(pageRequest);
     }
 
     @Override
@@ -177,7 +180,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public BigDecimal getPercentageActiveUsers() {
 
-        long totalUsers = getAllUsersOrderedByDateAndUsername().size();
+        long totalUsers = getAllUsers();
+
 
         if (totalUsers == 0) {
             return BigDecimal.ZERO;
@@ -190,7 +194,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<User> getFilteredUsers(FilterUserRequest filterUserRequest) {
+    public Page<User> getFilteredUsers(int pageNumber, int pageSize, FilterUserRequest filterUserRequest) {
 
         String strRole = filterUserRequest.getUserRole();
         String strStatus = filterUserRequest.getUserStatus();
@@ -198,8 +202,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         boolean roleFilter = strRole != null && !strRole.equals("ALL");
         boolean statusFilter = strStatus != null && !strStatus.equals("ALL");
 
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
         if (!roleFilter && !statusFilter) {
-            return this.getAllUsersOrderedByDateAndUsername();
+            return this.getAllUsersOrderedByDateAndUsername(pageNumber, pageSize);
         }
 
         if (roleFilter &&  statusFilter) {
@@ -209,32 +215,38 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             return this.userRepository.findAllByRoleAndIsActiveOrderByRegisteredAtDescUsernameAsc(
                     userRole,
-                    isActive
+                    isActive,
+                    pageRequest
             );
         }
 
         if (roleFilter) {
             UserRole userRole = UserRole.valueOf(strRole);
-            return this.userRepository.findAllByRoleOrderByRegisteredAtDescUsernameAsc(userRole);
+            return this.userRepository.findAllByRoleOrderByRegisteredAtDescUsernameAsc(userRole, pageRequest);
         }
 
 
         boolean isActive = strStatus.equals("true");
 
         return this.userRepository.findAllByIsActiveOrderByRegisteredAtDescUsernameAsc(
-            isActive
+            isActive, pageRequest
         );
     }
 
     @Override
     public List<User> getUsersBySearchUsername(String username) {
-        return this.userRepository.findAllByUsernameContainingIgnoreCase(username);
+        return this.userRepository.findAllByUsernameContainingIgnoreCaseOrderByRegisteredAtDesc(username);
     }
 
     @Override
     public User getUserByEmail(String email) {
         return this.userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("No account found for email [%s]".formatted(email)));
+    }
+
+    @Override
+    public long getAllUsers() {
+        return this.userRepository.count();
     }
 
     private User initUser(RegisterRequest request) {

@@ -18,6 +18,7 @@ import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import com.example.stayconnected.web.dto.user.UpdatePhotoRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -152,15 +153,58 @@ public class UserController {
 
     @GetMapping("/table")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView getUsersTablePage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        List<User> users = this.userService.getAllUsersOrderedByDateAndUsername();
+    public ModelAndView getUsersTablePage(  @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                                            @RequestParam(value = "pageSize", defaultValue = "4") int pageSize,
+                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        Page<User> users = this.userService.getAllUsersOrderedByDateAndUsername(pageNumber, pageSize);
+
         User authUser = this.userService.getUserById(userPrincipal.getId());
+
+        int totalPages = users.getTotalPages();
+
+        String baseUrl = "/users/table";
+        String queryParameters = "";
+
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/users");
         modelAndView.addObject("users", users);
         modelAndView.addObject("authUser", authUser);
         modelAndView.addObject("filterUsersRequest", new FilterUserRequest());
+        modelAndView.addObject("totalPages", totalPages);
+        modelAndView.addObject("currentPage", pageNumber);
+        modelAndView.addObject("pageSize", pageSize);
+        modelAndView.addObject("baseUrl", baseUrl);
+        modelAndView.addObject("queryParameters", queryParameters);
+
+        return modelAndView;
+    }
+
+    @GetMapping("/table/filter")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView getStatsFilterPage(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                                           @RequestParam(value = "pageSize", defaultValue = "4") int pageSize,
+                                           FilterUserRequest filterUserRequest,
+                                           @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        Page<User> filteredUsers = this.userService.getFilteredUsers(pageNumber, pageSize, filterUserRequest);
+
+        int totalPages = filteredUsers.getTotalPages();
+
+        String baseUrl = "/users/table/filter";
+        String queryParameters = "&userRole=%s&userStatus=%s"
+                .formatted(filterUserRequest.getUserRole(), filterUserRequest.getUserStatus());
+
+        ModelAndView modelAndView = new ModelAndView("admin/users");
+        modelAndView.addObject("authUser", userService.getUserById(userPrincipal.getId()));
+        modelAndView.addObject("filterUsersRequest", filterUserRequest);
+        modelAndView.addObject("users", filteredUsers);
+        modelAndView.addObject("totalPages", totalPages);
+        modelAndView.addObject("currentPage", pageNumber);
+        modelAndView.addObject("pageSize", pageSize);
+        modelAndView.addObject("baseUrl", baseUrl);
+        modelAndView.addObject("queryParameters", queryParameters);
 
         return modelAndView;
     }
@@ -183,20 +227,6 @@ public class UserController {
     }
 
 
-    @GetMapping("/table/filter")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView getStatsFilterPage(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                           FilterUserRequest filterUserRequest) {
-
-        List<User> filteredUsers = this.userService.getFilteredUsers(filterUserRequest);
-
-        ModelAndView modelAndView = new ModelAndView("/admin/users");
-        modelAndView.addObject("authUser", userService.getUserById(userPrincipal.getId()));
-        modelAndView.addObject("filterUsersRequest", filterUserRequest);
-        modelAndView.addObject("users", filteredUsers);
-
-        return modelAndView;
-    }
 
     @GetMapping("/app-stats")
     @PreAuthorize("hasRole('ADMIN')")
@@ -207,7 +237,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/stats");
         modelAndView.addObject("user", user);
-        modelAndView.addObject("totalUsers", this.userService.getAllUsersOrderedByDateAndUsername().size());
+        modelAndView.addObject("totalUsers", this.userService.getAllUsers());
         modelAndView.addObject("totalProperties", this.propertyService.getAllProperties().size());
         modelAndView.addObject("totalTransactions", this.transactionService.getAllTransactions().size());
         modelAndView.addObject("totalRevenue", RevenueUtils.formatRevenue(this.transactionService.getTotalRevenue()));

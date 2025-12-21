@@ -3,6 +3,7 @@ package com.example.stayconnected.user.service;
 
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.web.dto.user.*;
+import org.springframework.data.domain.Page;
 
 
 import java.math.BigDecimal;
@@ -13,7 +14,7 @@ public interface UserService {
 
     User register(RegisterRequest request);
 
-    List<User> getAllUsersOrderedByDateAndUsername();
+    Page<User> getAllUsersOrderedByDateAndUsername(int pageNumber, int pageSize);
 
     User getUserById(UUID id);
 
@@ -33,9 +34,11 @@ public interface UserService {
 
     BigDecimal getPercentageActiveUsers();
 
-    List<User> getFilteredUsers(FilterUserRequest filterUserRequest);
+    Page<User> getFilteredUsers(int pageNumber, int pageSize, FilterUserRequest filterUserRequest);
 
     List<User> getUsersBySearchUsername(String username);
 
     User getUserByEmail(String email);
+
+    long getAllUsers();
 }
