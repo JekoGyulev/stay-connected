@@ -41,6 +41,7 @@ public class TransactionController {
         Page<Transaction> transactions = this.transactionService.getTransactionsByUserId(user.getId(), pageNumber, pageSize);
 
         int totalPages = transactions.getTotalPages();
+        long totalElements = transactions.getTotalElements();
 
         String baseUrl = "/transactions";
         String queryParameters = "";
@@ -51,6 +52,7 @@ public class TransactionController {
         modelAndView.addObject("transactions", transactions);
         modelAndView.addObject("filterTransaction", new FilterTransactionRequest());
         modelAndView.addObject("totalPages", totalPages);
+        modelAndView.addObject("totalElements", totalElements);
         modelAndView.addObject("currentPage", pageNumber);
         modelAndView.addObject("pageSize", pageSize);
         modelAndView.addObject("baseUrl", baseUrl);
@@ -72,6 +74,7 @@ public class TransactionController {
                 .getFilteredTransactions(user.getId(), request, pageNumber, pageSize);
 
         int totalPages = filteredTransactions.getTotalPages();
+        long totalElements = filteredTransactions.getTotalElements();
 
 
         String baseUrl = "/transactions/filter";
@@ -83,6 +86,7 @@ public class TransactionController {
         modelAndView.addObject("filterTransaction", request);
         modelAndView.addObject("user", user);
         modelAndView.addObject("totalPages", totalPages);
+        modelAndView.addObject("totalElements", totalElements);
         modelAndView.addObject("currentPage", pageNumber);
         modelAndView.addObject("pageSize", pageSize);
         modelAndView.addObject("baseUrl", baseUrl);

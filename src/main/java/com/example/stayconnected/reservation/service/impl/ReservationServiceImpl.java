@@ -6,6 +6,7 @@ import com.example.stayconnected.event.payload.ReservationBookedEvent;
 import com.example.stayconnected.event.payload.ReservationCancelledEvent;
 import com.example.stayconnected.reservation.client.ReservationClient;
 import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
+import com.example.stayconnected.reservation.client.dto.PageResponse;
 import com.example.stayconnected.reservation.client.dto.ReservationResponse;
 import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.user.model.User;
@@ -51,9 +52,35 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<ReservationResponse> getReservationsByUserId(UUID userId) {
-        ResponseEntity<List<ReservationResponse>> reservationHistoryForUser = this.reservationClient.getReservationHistoryForUser(userId);
-        return reservationHistoryForUser.getBody() != null ? reservationHistoryForUser.getBody() : Collections.emptyList();
+    public PageResponse<ReservationResponse> getReservationsByUserId(UUID userId, int pageNumber, int pageSize) {
+
+        PageResponse<ReservationResponse> reservationHistoryForUser =
+                this.reservationClient.getReservationHistoryForUser(pageNumber, pageSize, userId);
+
+
+        List<ReservationResponse> content = reservationHistoryForUser.getContent();
+
+        if (content == null) {
+            reservationHistoryForUser.setContent(Collections.emptyList());
+        }
+
+        return reservationHistoryForUser;
+    }
+
+    @Override
+    public PageResponse<ReservationResponse> getReservationsByUserIdAndReservationStatus(UUID userId, String status, int pageNumber, int pageSize) {
+
+        PageResponse<ReservationResponse> reservationHistoryForUserByReservationStatus =
+                this.reservationClient.getReservationHistoryForUserByReservationStatus(pageNumber, pageSize, userId, status);
+
+
+        List<ReservationResponse> content = reservationHistoryForUserByReservationStatus.getContent();
+
+        if (content == null) {
+            reservationHistoryForUserByReservationStatus.setContent(Collections.emptyList());
+        }
+
+        return reservationHistoryForUserByReservationStatus;
     }
 
     @Override

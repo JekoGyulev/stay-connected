@@ -4,15 +4,14 @@ import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.model.PropertyImage;
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
+import com.example.stayconnected.reservation.client.dto.PageResponse;
 import com.example.stayconnected.reservation.client.dto.ReservationResponse;
 import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.review.model.Review;
 import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.security.UserPrincipal;
-import com.example.stayconnected.transaction.service.TransactionService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
-import com.example.stayconnected.utils.ReservationUtils;
 import com.example.stayconnected.web.dto.DtoMapper;
 import com.example.stayconnected.web.dto.property.PropertyViewDTO;
 import com.example.stayconnected.web.dto.reservation.ReservationViewDTO;
@@ -40,16 +39,14 @@ public class ReservationController {
     private final UserService userService;
     private final PropertyService propertyService;
     private final ReviewService reviewService;
-    private final TransactionService transactionService;
 
 
     @Autowired
-    public ReservationController(ReservationService reservationService, UserService userService, PropertyService propertyService, ReviewService reviewService, TransactionService transactionService) {
+    public ReservationController(ReservationService reservationService, UserService userService, PropertyService propertyService, ReviewService reviewService) {
         this.reservationService = reservationService;
         this.userService = userService;
         this.propertyService = propertyService;
         this.reviewService = reviewService;
-        this.transactionService = transactionService;
     }
 
 
@@ -116,14 +113,18 @@ public class ReservationController {
     }
 
     @GetMapping("/user/table")
-    public ModelAndView getReservationsByUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ModelAndView getReservationsByUser(
+                                                @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                                                @RequestParam(value = "pageSize", defaultValue = "3") int pageSize,
+                                                @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
         User user = this.userService.getUserById(userPrincipal.getId());
 
 
-        List<ReservationResponse> reservationResponses = this.reservationService.getReservationsByUserId(userPrincipal.getId());
+        PageResponse<ReservationResponse> reservationResponses = this.reservationService
+                .getReservationsByUserId(userPrincipal.getId(), pageNumber, pageSize);
 
-        List<ReservationViewDTO> reservationViewDTOs = reservationResponses.stream()
+        List<ReservationViewDTO> reservationViewDTOs = reservationResponses.getContent().stream()
                 .map(response -> {
                     Property property = this.propertyService.getById(response.getPropertyId());
                     PropertyViewDTO propertyViewDTO = DtoMapper.viewFromProperty(property);
@@ -131,6 +132,14 @@ public class ReservationController {
                     return DtoMapper.fromPropertyViewAndResponse(propertyViewDTO, response);
                 })
                 .toList();
+
+
+        String baseUrl = "/reservations/user/table";
+
+        int totalPages = reservationResponses.getTotalPages();
+        long totalElements = reservationResponses.getTotalElements();
+
+
 
 
         ModelAndView modelAndView = new ModelAndView();
@@ -138,6 +147,11 @@ public class ReservationController {
         modelAndView.addObject("user", user);
         modelAndView.addObject("reservations", reservationViewDTOs);
         modelAndView.addObject("filter", "all");
+        modelAndView.addObject("totalPages", totalPages);
+        modelAndView.addObject("totalElements", totalElements);
+        modelAndView.addObject("currentPage", pageNumber);
+        modelAndView.addObject("pageSize", pageSize);
+        modelAndView.addObject("baseUrl", baseUrl);
 
 
 
@@ -145,15 +159,21 @@ public class ReservationController {
     }
 
     @GetMapping("/user/table/booked")
-    public ModelAndView getBookedReservationsByUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ModelAndView getBookedReservationsByUser(
+            @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "3") int pageSize,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
         User user = this.userService.getUserById(userPrincipal.getId());
 
-        List<ReservationResponse> bookedReservationsOnly = ReservationUtils.getBookedReservationsOnly(
-                this.reservationService.getReservationsByUserId(userPrincipal.getId())
+        PageResponse<ReservationResponse> bookedReservationsPageOnly = this.reservationService.getReservationsByUserIdAndReservationStatus(
+                user.getId(),
+                "BOOKED",
+                pageNumber,
+                pageSize
         );
 
-        List<ReservationViewDTO> reservationViewDTOs = bookedReservationsOnly.stream()
+        List<ReservationViewDTO> reservationViewDTOs = bookedReservationsPageOnly.getContent().stream()
                 .map(response -> {
                     Property property = this.propertyService.getById(response.getPropertyId());
                     PropertyViewDTO propertyViewDTO = DtoMapper.viewFromProperty(property);
@@ -161,26 +181,45 @@ public class ReservationController {
                     return DtoMapper.fromPropertyViewAndResponse(propertyViewDTO, response);
                 })
                 .toList();
+
+
+        String baseUrl = "/reservations/user/table/booked";
+
+        int totalPages = bookedReservationsPageOnly.getTotalPages();
+        long totalElements = bookedReservationsPageOnly.getTotalElements();
+
 
         ModelAndView modelAndView = new ModelAndView("/reservation/user-reservations");
         modelAndView.addObject("user", user);
         modelAndView.addObject("reservations", reservationViewDTOs);
         modelAndView.addObject("filter", "booked");
+        modelAndView.addObject("totalPages", totalPages);
+        modelAndView.addObject("totalElements", totalElements);
+        modelAndView.addObject("currentPage", pageNumber);
+        modelAndView.addObject("pageSize", pageSize);
+        modelAndView.addObject("baseUrl", baseUrl);
 
         return modelAndView;
     }
 
     @GetMapping("/user/table/cancelled")
-    public ModelAndView getCancelledReservationsByUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ModelAndView getCancelledReservationsByUser(
+                                                        @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                                                        @RequestParam(value = "pageSize", defaultValue = "3") int pageSize,
+                                                        @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
         User user = this.userService.getUserById(userPrincipal.getId());
 
-        List<ReservationResponse> cancelledReservationsOnly = ReservationUtils.getCancelledReservationsOnly(
-                this.reservationService.getReservationsByUserId(userPrincipal.getId())
-        );
+        PageResponse<ReservationResponse> cancelledReservationsOnly = this.reservationService
+                .getReservationsByUserIdAndReservationStatus(
+                    user.getId(),
+                    "CANCELLED",
+                    pageNumber,
+                    pageSize
+                );
 
 
-        List<ReservationViewDTO> reservationViewDTOs = cancelledReservationsOnly.stream()
+        List<ReservationViewDTO> reservationViewDTOs = cancelledReservationsOnly.getContent().stream()
                 .map(response -> {
                     Property property = this.propertyService.getById(response.getPropertyId());
                     PropertyViewDTO propertyViewDTO = DtoMapper.viewFromProperty(property);
@@ -188,12 +227,23 @@ public class ReservationController {
                     return DtoMapper.fromPropertyViewAndResponse(propertyViewDTO, response);
                 })
                 .toList();
+
+
+        int totalPages = cancelledReservationsOnly.getTotalPages();
+        long totalElements = cancelledReservationsOnly.getTotalElements();
+
+        String baseUrl = "/reservations/user/table/cancelled";
 
 
         ModelAndView modelAndView = new ModelAndView("/reservation/user-reservations");
         modelAndView.addObject("user", user);
         modelAndView.addObject("reservations", reservationViewDTOs);
         modelAndView.addObject("filter", "cancelled");
+        modelAndView.addObject("totalPages", totalPages);
+        modelAndView.addObject("totalElements", totalElements);
+        modelAndView.addObject("currentPage", pageNumber);
+        modelAndView.addObject("pageSize", pageSize);
+        modelAndView.addObject("baseUrl", baseUrl);
 
         return modelAndView;
     }

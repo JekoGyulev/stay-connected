@@ -162,6 +162,7 @@ public class UserController {
         User authUser = this.userService.getUserById(userPrincipal.getId());
 
         int totalPages = users.getTotalPages();
+        long totalElements = users.getTotalElements();
 
         String baseUrl = "/users/table";
         String queryParameters = "";
@@ -173,6 +174,7 @@ public class UserController {
         modelAndView.addObject("authUser", authUser);
         modelAndView.addObject("filterUsersRequest", new FilterUserRequest());
         modelAndView.addObject("totalPages", totalPages);
+        modelAndView.addObject("totalElements", totalElements);
         modelAndView.addObject("currentPage", pageNumber);
         modelAndView.addObject("pageSize", pageSize);
         modelAndView.addObject("baseUrl", baseUrl);
@@ -191,6 +193,7 @@ public class UserController {
         Page<User> filteredUsers = this.userService.getFilteredUsers(pageNumber, pageSize, filterUserRequest);
 
         int totalPages = filteredUsers.getTotalPages();
+        long totalElements = filteredUsers.getTotalElements();
 
         String baseUrl = "/users/table/filter";
         String queryParameters = "&userRole=%s&userStatus=%s"
@@ -201,6 +204,7 @@ public class UserController {
         modelAndView.addObject("filterUsersRequest", filterUserRequest);
         modelAndView.addObject("users", filteredUsers);
         modelAndView.addObject("totalPages", totalPages);
+        modelAndView.addObject("totalElements", totalElements);
         modelAndView.addObject("currentPage", pageNumber);
         modelAndView.addObject("pageSize", pageSize);
         modelAndView.addObject("baseUrl", baseUrl);

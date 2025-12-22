@@ -1,6 +1,7 @@
 package com.example.stayconnected.reservation.client;
 
 import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
+import com.example.stayconnected.reservation.client.dto.PageResponse;
 import com.example.stayconnected.reservation.client.dto.ReservationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,18 @@ public interface ReservationClient {
     ResponseEntity<Long> getTotalReservationsByStatus(@RequestParam(value = "status") String status);
 
     @GetMapping
-    ResponseEntity<List<ReservationResponse>> getReservationHistoryForUser(@RequestParam("userId") UUID userId);
+    PageResponse<ReservationResponse> getReservationHistoryForUser(
+            @RequestParam(value = "pageNumber") int pageNumber,
+            @RequestParam(value = "pageSize") int pageSize,
+            @RequestParam("userId") UUID userId);
+
+    @GetMapping("/status")
+    PageResponse<ReservationResponse> getReservationHistoryForUserByReservationStatus(
+            @RequestParam(value = "pageNumber") int pageNumber,
+            @RequestParam(value = "pageSize") int pageSize,
+            @RequestParam(value = "userId") UUID userId,
+            @RequestParam(value = "reservationStatus") String reservationStatus
+    );
 
     @PutMapping("/cancellation")
     ResponseEntity<ReservationResponse> cancelReservation(@RequestParam("reservationId") UUID id);

@@ -1,6 +1,7 @@
 package com.example.stayconnected.reservation.service;
 
 import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
+import com.example.stayconnected.reservation.client.dto.PageResponse;
 import com.example.stayconnected.reservation.client.dto.ReservationResponse;
 
 
@@ -14,7 +15,9 @@ public interface ReservationService {
 
     long getTotalReservationsByStatus(String status);
 
-    List<ReservationResponse> getReservationsByUserId(UUID userId);
+    PageResponse<ReservationResponse> getReservationsByUserId(UUID userId, int pageNumber, int pageSize);
+
+    PageResponse<ReservationResponse> getReservationsByUserIdAndReservationStatus(UUID userId, String status, int pageNumber, int pageSize);
 
     void cancel(UUID reservationId, UUID userId);
 
