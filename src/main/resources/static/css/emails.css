@@ -321,6 +321,85 @@
     margin-bottom: 1.5rem;
 }
 
+.emails-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 2rem 1.5rem;
+}
+
+.pagination-btn {
+    padding: 0.625rem 1.25rem;
+    background: white;
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    color: var(--foreground);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+a.disabled {
+    pointer-events: none;
+    color: #bbbaba;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pagination-pages {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination-page {
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    color: var(--foreground);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.pagination-page:hover {
+    background: var(--accent-bg);
+    border-color: var(--primary);
+}
+
+.pagination-page.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(255, 56, 92, 0.2);
+}
+
+.pagination-dots {
+    color: var(--muted);
+    padding: 0 0.25rem;
+}
+
 /* Responsive Notifications */
 @media (max-width: 768px) {
     .notifications-header {
@@ -351,6 +430,18 @@
 
     .notification-actions {
         align-self: flex-end;
+    }
+
+    .emails-pagination {
+        flex-wrap: wrap;
+        padding: 1.5rem 1rem;
+    }
+
+    .pagination-pages {
+        order: -1;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 1rem;
     }
 }
 

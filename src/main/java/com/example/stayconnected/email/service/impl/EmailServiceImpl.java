@@ -3,6 +3,7 @@ package com.example.stayconnected.email.service.impl;
 import com.example.stayconnected.email.client.EmailClient;
 import com.example.stayconnected.email.client.dto.EmailResponse;
 import com.example.stayconnected.email.service.EmailService;
+import com.example.stayconnected.reservation.client.dto.PageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,28 +21,23 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public List<EmailResponse> getAllEmailsByUserId(UUID userId) {
-        return this.emailClient.getAllEmailsByUserId(userId);
+    public PageResponse<EmailResponse> getAllEmailsByUserId(int pageNumber, int pageSize, UUID userId) {
+        return this.emailClient.getAllEmailsByUserId(pageNumber, pageSize, userId);
     }
 
     @Override
-    public List<EmailResponse> getAllEmailsBySubjectContainingAndUserId(String search, UUID userId) {
-        return this.emailClient.getAllEmailsBySubjectContainingAndUserId(search, userId);
+    public PageResponse<EmailResponse> getAllEmailsBySubjectContainingAndUserId(int pageNumber, int pageSize, String search, UUID userId) {
+        return this.emailClient.getAllEmailsBySubjectContainingAndUserId(pageNumber, pageSize, search, userId);
     }
 
     @Override
-    public List<EmailResponse> getAllSentEmails(List<EmailResponse> emailResponses) {
-        return emailResponses
-                .stream()
-                .filter(response -> response.getEmailStatus().equals("SENT"))
-                .toList();
+    public PageResponse<EmailResponse> getAllEmailsByStatus(int pageNumber, int pageSize, UUID userId, String status) {
+        return this.emailClient.getAllEmailsByUserIdAndStatusSorted(pageNumber, pageSize, userId, status);
     }
 
+
     @Override
-    public List<EmailResponse> getAllFailedEmails(List<EmailResponse> emailResponses) {
-        return emailResponses
-                .stream()
-                .filter(response -> response.getEmailStatus().equals("FAILED"))
-                .toList();
+    public long getTotalCountEmailsByUserIdAndStatus(UUID userId, String emailStatus) {
+        return this.emailClient.getTotalCountEmailsByUserIdAndStatus(userId, emailStatus).getBody();
     }
 }

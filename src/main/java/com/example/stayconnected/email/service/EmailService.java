@@ -1,17 +1,18 @@
 package com.example.stayconnected.email.service;
 
 import com.example.stayconnected.email.client.dto.EmailResponse;
+import com.example.stayconnected.reservation.client.dto.PageResponse;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface EmailService {
 
-    List<EmailResponse> getAllEmailsByUserId(UUID userId);
+    PageResponse<EmailResponse> getAllEmailsByUserId(int pageNumber, int pageSize, UUID userId);
 
-    List<EmailResponse> getAllEmailsBySubjectContainingAndUserId(String search, UUID userId);
+    PageResponse<EmailResponse> getAllEmailsBySubjectContainingAndUserId(int pageNumber, int pageSize, String search, UUID userId);
 
-    List<EmailResponse> getAllSentEmails(List<EmailResponse> emailResponses);
+    PageResponse<EmailResponse> getAllEmailsByStatus(int pageNumber, int pageSize, UUID userId, String status);
 
-    List<EmailResponse> getAllFailedEmails(List<EmailResponse> emailResponses);
+    long getTotalCountEmailsByUserIdAndStatus(UUID userId, String emailStatus);
 }

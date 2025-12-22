@@ -175,7 +175,9 @@
         Note: The view button opens Gmail. If you have multiple accounts, select the one that received this email.
     </p>
 
+
     <div class="notifications-list">
+
         <div class="notification-card "
              th:each="email : ${emails}"
              th:classappend="${email.status == 'SENT'} ? ' notification-sent' : ' notification-failed'">
@@ -194,6 +196,8 @@
                     <line x1="9" y1="9" x2="15" y2="15"></line>
                 </svg>
             </div>
+
+            <div id="notifications-table-id"></div>
 
             <div class="notification-content">
 
@@ -240,6 +244,50 @@
             </div>
 
         </div>
+    </div>
+
+    <p th:unless="${emails.isEmpty()}" th:text="${(currentPage * pageSize + 1) + ' – ' +
+            T(java.lang.Math).min(
+                (currentPage + 1) * pageSize,
+                totalElements.intValue()
+            )
+            + ' of ' + totalElements}"
+       style="text-align: center; margin-top: 1rem; color: var(--muted)">
+    </p>
+
+    <div th:unless="${emails.isEmpty()}" class="emails-pagination">
+
+        <a      th:if="${currentPage > 0}"
+                th:href="${baseUrl} + '?pageNumber=' + ${currentPage - 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#notifications-table-id'"
+                style="text-decoration: none"
+                class="pagination-btn">Previous</a>
+
+
+        <a      th:if="${currentPage == 0}"
+                style="text-decoration: none"
+                class="pagination-btn disabled">Previous</a>
+
+        <div class="pagination-pages">
+            <a
+                    th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:text="${i + 1}"
+                    th:href="${baseUrl} + '?pageNumber=' + ${i} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#notifications-table-id'"
+                    th:classappend="${i == currentPage} ? ' active' : ''"
+                    style="text-decoration: none"
+                    class="pagination-page">
+            </a>
+        </div>
+
+
+        <a      th:if="${currentPage < totalPages - 1}"
+                th:href="${baseUrl} + '?pageNumber=' + ${currentPage + 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#notifications-table-id'"
+                style="text-decoration: none"
+                class="pagination-btn">Next</a>
+
+
+        <a      th:if="${currentPage + 1 == totalPages}"
+                style="text-decoration: none"
+                class="pagination-btn disabled">Next</a>
 
     </div>
 
