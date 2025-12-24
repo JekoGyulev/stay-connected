@@ -170,6 +170,10 @@
             </div>
 
         </article>
+        <form class="property-block new-property" th:method="GET" th:action="@{/properties/create}">
+            <button type="submit"></button>
+        </form>
+
     </div>
 
     <p style="text-align: center" th:if="${properties.isEmpty()}">No available properties found.</p>

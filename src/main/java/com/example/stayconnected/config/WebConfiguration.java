@@ -3,7 +3,7 @@ package com.example.stayconnected.config;
 
 import com.example.stayconnected.handler.CustomAuthenticationFailureHandler;
 import com.example.stayconnected.handler.CustomAuthenticationSuccessHandler;
-import com.example.stayconnected.security.oauth2.CustomGoogleOidcUserService;
+import com.example.stayconnected.security.oauth2.CustomOidcUserService;
 import com.example.stayconnected.security.oauth2.CustomOAuth2UserService;
 import com.example.stayconnected.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +26,16 @@ public class WebConfiguration implements WebMvcConfigurer {
     private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
     private final OAuth2AuthenticationSuccessHandler  oAuth2AuthenticationSuccessHandler;
     private final CustomOAuth2UserService  customOAuth2UserService;
-    private final CustomGoogleOidcUserService customGoogleOidcUserService;
+    private final CustomOidcUserService customOidcUserService;
 
 
     @Autowired
-    public WebConfiguration(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler, CustomAuthenticationFailureHandler customAuthenticationFailureHandler, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler, CustomOAuth2UserService customOAuth2UserService, CustomGoogleOidcUserService customGoogleOidcUserService) {
+    public WebConfiguration(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler, CustomAuthenticationFailureHandler customAuthenticationFailureHandler, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler, CustomOAuth2UserService customOAuth2UserService, CustomOidcUserService customOidcUserService) {
         this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
         this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
         this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
         this.customOAuth2UserService = customOAuth2UserService;
-        this.customGoogleOidcUserService = customGoogleOidcUserService;
+        this.customOidcUserService = customOidcUserService;
     }
 
     @Bean
@@ -58,7 +58,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                         .loginPage("/auth/login")
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
-                                .oidcUserService(customGoogleOidcUserService)
+                                .oidcUserService(customOidcUserService)
                         )
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                 )

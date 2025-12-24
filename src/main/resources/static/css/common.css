@@ -37,6 +37,14 @@ body {
 
     /* Spacing */
     --radius: 12px;
+
+    /* New Card Styling */
+    --new-card-bg: rgba(255, 56, 92, 0.06);
+    --new-card-bg-hover: rgba(255, 56, 92, 0.12);
+
+    --new-card-border: rgba(255, 56, 92, 0.25);
+    --new-card-text: var(--muted);
+    --new-card-text-hover: var(--primary);
 }
 
 

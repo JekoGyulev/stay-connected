@@ -142,6 +142,50 @@
     color: var(--muted);
 }
 
+
+.property-block.new-property {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: var(--radius);
+    background-color: var(--new-card-bg);
+    border: 2px dashed var(--new-card-border);
+
+    font-size: 24px;
+    color: var(--new-card-text);
+
+    cursor: pointer;
+    transition:
+            background-color 0.3s ease,
+            color 0.3s ease,
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
+}
+
+.property-block.new-property button {
+    height: 100%;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: currentColor;
+    cursor: pointer;
+}
+
+.property-block.new-property:hover {
+    background-color: var(--new-card-bg-hover);
+    color: var(--new-card-text-hover);
+    transform: scale(1.03);
+    box-shadow: var(--shadow-soft);
+}
+
+.property-block.new-property button::after {
+    content: "+";
+    font-size: 36px;
+    font-weight: 600;
+    color: currentColor;
+}
+
 @media (max-width: 768px) {
 
     .properties-grid {
