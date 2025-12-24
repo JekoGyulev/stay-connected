@@ -3,16 +3,22 @@ package com.example.stayconnected.web.controller;
 
 import com.example.stayconnected.email.client.dto.EmailResponse;
 import com.example.stayconnected.email.service.EmailService;
+import com.example.stayconnected.property.model.Property;
+import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.reservation.client.dto.PageResponse;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
 import com.example.stayconnected.web.dto.DtoMapper;
+import com.example.stayconnected.web.dto.email.ContactHostRequest;
 import com.example.stayconnected.web.dto.email.EmailViewDTO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,12 +32,63 @@ public class NotificationController {
 
     private final EmailService emailService;
     private final UserService userService;
+    private final PropertyService propertyService;
 
 
     @Autowired
-    public NotificationController(EmailService emailService, UserService userService) {
+    public NotificationController(EmailService emailService, UserService userService, PropertyService propertyService) {
         this.emailService = emailService;
         this.userService = userService;
+        this.propertyService = propertyService;
+    }
+
+    @GetMapping("/contact-host")
+    public ModelAndView showContactHostPage(
+            @RequestParam(value = "propertyId") UUID propertyId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        User user = this.userService.getUserById(userPrincipal.getId());
+
+        Property property = this.propertyService.getById(propertyId);
+
+        ContactHostRequest request = new ContactHostRequest();
+        request.setPropertyId(propertyId);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("user/contact-host");
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("property", property);
+        modelAndView.addObject("propertyOwner", property.getOwner());
+        modelAndView.addObject("contactHostRequest", request);
+
+
+
+        return modelAndView;
+    }
+
+    @PostMapping("/create")
+    public ModelAndView createContactHost(@Valid ContactHostRequest contactHostRequest,
+                                          BindingResult bindingResult,
+                                          @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        Property property = this.propertyService.getById(contactHostRequest.getPropertyId());
+        User user = this.userService.getUserById(userPrincipal.getId());
+
+        if (bindingResult.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("user/contact-host");
+            modelAndView.addObject("property", property);
+            modelAndView.addObject("propertyOwner", property.getOwner());
+            modelAndView.addObject("user", user);
+
+            return modelAndView;
+        }
+
+
+        this.emailService.publishInquiry(contactHostRequest, user, property);
+
+
+        return new ModelAndView("redirect:/properties/" +  contactHostRequest.getPropertyId());
     }
 
     @GetMapping

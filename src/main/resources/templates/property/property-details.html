@@ -228,8 +228,6 @@
 
                 <h2>Select dates</h2>
 
-                <!--TODO: IMPLEMENT THE CALENDAR-->
-
                 <p class="calendar-subtitle">Add your travel dates for exact pricing</p>
                 <div class="calendar-container">
                     <div class="calendar-header">
@@ -245,7 +243,7 @@
                         <div class="calendar-day-header">Thu</div>
                         <div class="calendar-day-header">Fri</div>
                         <div class="calendar-day-header">Sat</div>
-                        <!-- Calendar days will be generated here -->
+
                         <div class="calendar-day empty"></div>
                         <div class="calendar-day empty"></div>
                         <div class="calendar-day empty"></div>
@@ -396,28 +394,37 @@
 
             <section class="details-section">
                 <h2>Meet your host</h2>
+
                 <div class="host-card">
+
                     <div class="host-card-header">
                         <img th:src="${propertyOwner.profilePictureUrl}" alt="Sarah Anderson" class="host-avatar-large">
+
                         <div class="host-info">
                             <h3 th:text="${propertyOwner.username}"></h3>
                             <p th:text="'Joined in ' + ${#temporals.format(propertyOwner.registeredAt, 'MMMM yyyy' )}"
                                class="host-joined"></p>
                         </div>
+
                     </div>
 
                     <div class="host-details">
+
                         <div class="host-detail-item">
                             <span class="host-detail-icon">💬</span>
                             <span>Response rate: 100%</span>
                         </div>
+
                         <div class="host-detail-item">
                             <span class="host-detail-icon">⚡</span>
                             <span>Response time: within an hour</span>
                         </div>
+
                     </div>
+
                     <p th:text="'Hello, everyone! I am ' + ${#strings.concat(propertyOwner.firstName, ' ',propertyOwner.lastName)} + '. It is nice to meet you! 😁. Please feel free, if you have any questions, to contact me at:  ' + ${propertyOwner.email}" class="host-description"></p>
-                    <button th:if="${propertyOwner.id != authUser.id}" class="btn btn-outline btn-lg">Contact host</button>
+
+                    <a th:if="${propertyOwner.id != authUser.id}" th:href="@{/notifications/contact-host(propertyId=${property.id})}" class="btn btn-outline btn-lg">Contact host</a>
                 </div>
             </section>
         </div>
