@@ -12,7 +12,7 @@ public interface ReviewService {
 
     List<Review> getAllReviewsByPropertyWithId(UUID id);
 
-    void addReview(UUID userId, UUID propertyId, CreateReviewRequest request);
+    Review addReview(UUID userId, UUID propertyId, CreateReviewRequest request);
 
     void deleteReview(Review review);
 

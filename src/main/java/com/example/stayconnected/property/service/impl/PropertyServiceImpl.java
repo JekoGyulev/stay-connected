@@ -1,5 +1,7 @@
 package com.example.stayconnected.property.service.impl;
 
+import com.example.stayconnected.aop.annotations.LogCreation;
+import com.example.stayconnected.aop.annotations.LogDeletion;
 import com.example.stayconnected.location.model.Location;
 import com.example.stayconnected.location.service.LocationService;
 import com.example.stayconnected.property.enums.CategoryType;
@@ -15,7 +17,6 @@ import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
 import com.example.stayconnected.web.dto.property.EditPropertyRequest;
 import com.example.stayconnected.web.dto.property.FilterPropertyRequest;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,7 +31,6 @@ import java.util.UUID;
 
 
 @Service
-@Slf4j
 public class PropertyServiceImpl implements PropertyService {
 
     private final PropertyRepository propertyRepository;
@@ -63,6 +63,7 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     @CacheEvict(value = "properties", allEntries = true)
     @Transactional
+    @LogCreation(entity = "property")
     public Property createProperty(CreatePropertyRequest createPropertyRequest, User owner) {
 
         Location location = this.locationService.createLocation(createPropertyRequest.getLocation());
@@ -87,9 +88,6 @@ public class PropertyServiceImpl implements PropertyService {
                 this.propertyImageService.createPropertyImage(file, property);
             }
         }
-
-        log.info("Successfully added property with id [%s] and title [%s]"
-                .formatted(property.getId(), property.getTitle()));
 
         return property;
     }
@@ -126,14 +124,10 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     @Transactional
     @CacheEvict(value = "properties", allEntries = true)
+    @LogDeletion(entity = "property")
     public void deleteProperty(Property property) {
-
         this.reviewService.deleteAllReviewsForProperty(property.getId());
-
         this.propertyRepository.deleteById(property.getId());
-
-        log.info("Successfully deleted property with id [%s]"
-                .formatted(property.getId().toString()));
     }
 
     @Override
@@ -160,9 +154,6 @@ public class PropertyServiceImpl implements PropertyService {
         property.setAmenities(editPropertyRequest.getAmenities());
 
         this.propertyRepository.save(property);
-
-        log.info("Successfully edited property with id [%s] and title [%s]"
-                .formatted(property.getId(), property.getTitle()));
     }
 
     @Override

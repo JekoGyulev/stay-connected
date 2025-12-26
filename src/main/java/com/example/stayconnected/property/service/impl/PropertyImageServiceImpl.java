@@ -1,5 +1,6 @@
 package com.example.stayconnected.property.service.impl;
 
+import com.example.stayconnected.aop.annotations.LogCreation;
 import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.model.PropertyImage;
 import com.example.stayconnected.property.repository.PropertyImageRepository;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.UUID;
 
 
 @Service
@@ -27,7 +27,8 @@ public class PropertyImageServiceImpl implements PropertyImageService {
     }
 
     @Override
-    public void createPropertyImage(MultipartFile image, Property property) {
+    @LogCreation(entity = "property image")
+    public PropertyImage createPropertyImage(MultipartFile image, Property property) {
 
         try {
 
@@ -51,8 +52,7 @@ public class PropertyImageServiceImpl implements PropertyImageService {
 
             this.propertyImageRepository.save(propertyImage);
 
-            log.info("Successfully created image with id [%s] for property with id [%s]"
-                    .formatted(propertyImage.getId(), property.getId()));
+            return propertyImage;
 
         } catch (IOException e) {
             log.error("Failed to save image", e);
