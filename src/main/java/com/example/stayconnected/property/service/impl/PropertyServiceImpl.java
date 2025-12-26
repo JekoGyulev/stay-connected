@@ -1,5 +1,6 @@
 package com.example.stayconnected.property.service.impl;
 
+import com.example.stayconnected.aop.annotations.LogCreation;
 import com.example.stayconnected.location.model.Location;
 import com.example.stayconnected.location.service.LocationService;
 import com.example.stayconnected.property.enums.CategoryType;
@@ -63,6 +64,7 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     @CacheEvict(value = "properties", allEntries = true)
     @Transactional
+    @LogCreation(entity = "property")
     public Property createProperty(CreatePropertyRequest createPropertyRequest, User owner) {
 
         Location location = this.locationService.createLocation(createPropertyRequest.getLocation());
@@ -87,9 +89,6 @@ public class PropertyServiceImpl implements PropertyService {
                 this.propertyImageService.createPropertyImage(file, property);
             }
         }
-
-        log.info("Successfully added property with id [%s] and title [%s]"
-                .formatted(property.getId(), property.getTitle()));
 
         return property;
     }

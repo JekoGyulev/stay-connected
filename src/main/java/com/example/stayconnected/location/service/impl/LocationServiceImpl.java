@@ -1,5 +1,6 @@
 package com.example.stayconnected.location.service.impl;
 
+import com.example.stayconnected.aop.annotations.LogCreation;
 import com.example.stayconnected.web.dto.location.CityStatsDTO;
 import com.example.stayconnected.location.model.Location;
 import com.example.stayconnected.location.repository.LocationRepository;
@@ -24,15 +25,13 @@ public class LocationServiceImpl implements LocationService {
 
 
     @Override
+    @LogCreation(entity = "location")
     public Location createLocation(LocationRequest locationRequest) {
         Location location = Location.builder().city(locationRequest.getCity())
                 .country(locationRequest.getCountry())
                 .address(locationRequest.getAddress()).build();
 
         this.locationRepository.save(location);
-
-        log.info("Location successfully created with country [%s], city [%s], address [%s]"
-                .formatted(location.getCountry(), location.getCity(), location.getAddress()));
 
         return location;
     }

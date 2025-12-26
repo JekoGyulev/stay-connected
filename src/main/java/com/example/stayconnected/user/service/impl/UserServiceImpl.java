@@ -1,5 +1,6 @@
 package com.example.stayconnected.user.service.impl;
 
+import com.example.stayconnected.aop.annotations.LogCreation;
 import com.example.stayconnected.event.PasswordChangedEventPublisher;
 import com.example.stayconnected.event.UserRegisteredEventPublisher;
 import com.example.stayconnected.event.payload.PasswordChangedEvent;
@@ -60,6 +61,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     @CacheEvict(value = "users", allEntries = true)
+    @LogCreation(entity = "user")
     public User register(RegisterRequest request) {
 
         if (this.userRepository.findByUsername(request.getUsername()).isPresent()) {
@@ -79,10 +81,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Wallet wallet = this.walletService.createWallet(user);
 
         user.setWallet(wallet);
-
-        log.info("Successfully registered user with id [%s] and username [%s]"
-                .formatted(user.getId(), user.getUsername()));
-
 
         UserRegisteredEvent event = UserRegisteredEvent
                 .builder()

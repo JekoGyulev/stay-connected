@@ -1,5 +1,6 @@
 package com.example.stayconnected.transaction.service.impl;
 
+import com.example.stayconnected.aop.annotations.LogCreation;
 import com.example.stayconnected.transaction.enums.TransactionStatus;
 import com.example.stayconnected.transaction.enums.TransactionType;
 import com.example.stayconnected.transaction.model.Transaction;
@@ -30,6 +31,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @LogCreation(entity = "transaction")
     public Transaction persistTransaction(User owner, String sender, String receiver, BigDecimal amount, BigDecimal balanceLeft, TransactionType transactionType, TransactionStatus transactionStatus, String description, String reasonForFailure) {
         return this.transactionRepository.save(Transaction.builder()
                 .owner(owner)

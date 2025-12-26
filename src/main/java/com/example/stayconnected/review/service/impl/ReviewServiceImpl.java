@@ -1,5 +1,6 @@
 package com.example.stayconnected.review.service.impl;
 
+import com.example.stayconnected.aop.annotations.LogCreation;
 import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.repository.PropertyRepository;
 import com.example.stayconnected.review.model.Review;
@@ -48,7 +49,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void addReview(UUID userId, UUID propertyId, CreateReviewRequest request) {
+    @LogCreation(entity = "review")
+    public Review addReview(UUID userId, UUID propertyId, CreateReviewRequest request) {
 
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new UserDoesNotExist("User not found"));
@@ -72,8 +74,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         this.propertyRepository.save(property);
 
-        log.info("Successfully added review with id [%s] from user with id [%s] to property with id [%s]"
-                .formatted(review.getId(), user.getId(), property.getId()));
+        return review;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.stayconnected.wallet.service.impl;
 
+import com.example.stayconnected.aop.annotations.LogCreation;
 import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
@@ -81,14 +82,10 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
+    @LogCreation(entity = "wallet")
     public Wallet createWallet(User user) {
         Wallet wallet = Wallet.builder().balance(BigDecimal.valueOf(50)).owner(user).build();
-
         this.walletRepository.save(wallet);
-
-        log.info("Successfully created a wallet with id [%s] for user id [%s]"
-                .formatted(wallet.getId(), user.getId()));
-
         return wallet;
     }
 
