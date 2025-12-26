@@ -62,7 +62,6 @@ public class WalletActionLoggingAspect {
 
         log.info("Successfully reversed earning of %.2f for owner of property with id [%s] "
                 .formatted(totalPrice, propertyId));
-
     }
 
 }

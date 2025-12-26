@@ -17,7 +17,6 @@ import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
 import com.example.stayconnected.web.dto.property.EditPropertyRequest;
 import com.example.stayconnected.web.dto.property.FilterPropertyRequest;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,7 +31,6 @@ import java.util.UUID;
 
 
 @Service
-@Slf4j
 public class PropertyServiceImpl implements PropertyService {
 
     private final PropertyRepository propertyRepository;
@@ -156,9 +154,6 @@ public class PropertyServiceImpl implements PropertyService {
         property.setAmenities(editPropertyRequest.getAmenities());
 
         this.propertyRepository.save(property);
-
-        log.info("Successfully edited property with id [%s] and title [%s]"
-                .formatted(property.getId(), property.getTitle()));
     }
 
     @Override
