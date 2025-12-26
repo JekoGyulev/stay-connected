@@ -14,7 +14,6 @@ import com.example.stayconnected.wallet.model.Wallet;
 import com.example.stayconnected.wallet.repository.WalletRepository;
 import com.example.stayconnected.wallet.service.WalletService;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Slf4j
 public class WalletServiceImpl implements WalletService {
 
     private static final String STAY_CONNECTED = "STAY_CONNECTED";
@@ -50,18 +48,11 @@ public class WalletServiceImpl implements WalletService {
     @Transactional
     public Transaction topUp(UUID walletId, BigDecimal amount, TransactionType transactionType) {
         Wallet wallet = this.walletRepository.findById(walletId)
-                .orElseThrow(
-                        () -> new WalletDoesNotExist("Wallet with such id [%s] does not exist"
-                                .formatted(walletId))
-                );
+                .orElseThrow(() -> new WalletDoesNotExist("Wallet with such id [%s] does not exist".formatted(walletId)));
 
         wallet.setBalance(wallet.getBalance().add(amount));
 
         this.walletRepository.save(wallet);
-
-        log.info("Successfully added %.2f to wallet with id [%s]. Current balance: %.2f"
-                .formatted(amount, wallet.getId(), wallet.getBalance()));
-
 
         String description = (transactionType == TransactionType.DEPOSIT)
                 ? TOP_UP_FORMAT_DESCRIPTION.formatted(amount)
@@ -120,10 +111,6 @@ public class WalletServiceImpl implements WalletService {
                 null
         );
 
-
-        log.info("Successfully exchanged money [%.2f] between wallet with id [%s] and wallet with id [%s]"
-                .formatted(createReservationRequest.getTotalPrice(), reserverWallet.getId(), propertyOwnerWallet.getId()));
-
     }
 
     @Override
@@ -148,9 +135,6 @@ public class WalletServiceImpl implements WalletService {
                 REFUND_FORMAT_DESCRIPTION.formatted(totalPrice),
                 null
         );
-
-        log.info("Successfully refunded amount [%.2f] for wallet with id [%s]"
-                .formatted(totalPrice, wallet.getId()));
 
     }
 
@@ -178,11 +162,6 @@ public class WalletServiceImpl implements WalletService {
                   EARNING_REVERSAL.formatted(totalPrice),
                  null
         );
-
-        log.info("Successfully reversed earning of [%.2f] for property owner wallet with id [%s]. New balance: %.2f"
-                .formatted(totalPrice, propertyOwnerWallet.getId(), propertyOwnerWallet.getBalance()));
-
-
     }
 
 

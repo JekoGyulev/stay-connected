@@ -13,7 +13,6 @@ import com.example.stayconnected.utils.exception.PropertyDoesNotExist;
 import com.example.stayconnected.utils.exception.UserDoesNotExist;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Slf4j
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
