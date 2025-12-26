@@ -1,6 +1,7 @@
 package com.example.stayconnected.review.service.impl;
 
 import com.example.stayconnected.aop.annotations.LogCreation;
+import com.example.stayconnected.aop.annotations.LogDeletion;
 import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.repository.PropertyRepository;
 import com.example.stayconnected.review.model.Review;
@@ -89,6 +90,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @LogDeletion(entity = "review")
     public void deleteReview(Review review) {
 
         Property property = review.getProperty();
@@ -99,9 +101,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         property.setAverageRating(newAverageRating);
         this.propertyRepository.save(property);
-
-        log.info("Successfully deleted review of property with id [%s]"
-                .formatted(review.getProperty().getId()));
     }
     @Override
     public List<Review> getLast5ReviewsForProperty(UUID propertyId) {

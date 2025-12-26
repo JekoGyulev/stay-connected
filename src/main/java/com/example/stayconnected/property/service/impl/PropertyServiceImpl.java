@@ -1,6 +1,7 @@
 package com.example.stayconnected.property.service.impl;
 
 import com.example.stayconnected.aop.annotations.LogCreation;
+import com.example.stayconnected.aop.annotations.LogDeletion;
 import com.example.stayconnected.location.model.Location;
 import com.example.stayconnected.location.service.LocationService;
 import com.example.stayconnected.property.enums.CategoryType;
@@ -125,14 +126,10 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     @Transactional
     @CacheEvict(value = "properties", allEntries = true)
+    @LogDeletion(entity = "property")
     public void deleteProperty(Property property) {
-
         this.reviewService.deleteAllReviewsForProperty(property.getId());
-
         this.propertyRepository.deleteById(property.getId());
-
-        log.info("Successfully deleted property with id [%s]"
-                .formatted(property.getId().toString()));
     }
 
     @Override
