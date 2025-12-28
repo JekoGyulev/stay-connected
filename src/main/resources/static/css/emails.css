@@ -331,7 +331,6 @@
 
 .pagination-btn {
     padding: 0.625rem 1.25rem;
-    background: white;
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
     color: var(--foreground);
@@ -372,7 +371,6 @@ a.disabled {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: white;
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
     color: var(--foreground);

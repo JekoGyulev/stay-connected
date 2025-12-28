@@ -32,7 +32,7 @@
     font-size: 0.9375rem;
     border: 2px solid var(--card-border);
     border-radius: var(--radius);
-    background: var(--background);
+    background: var(--accent-bg);
     color: var(--foreground);
     transition: all 0.2s ease;
 }
