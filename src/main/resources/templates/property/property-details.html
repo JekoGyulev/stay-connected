@@ -455,12 +455,12 @@
                     <div class="booking-dates">
                         <div class="booking-date-input">
                             <label>CHECK-IN</label>
-                            <input  th:field="*{startDate}" id="checkInInput" type="text">
+                            <input style="background: var(--card-bg)"  th:field="*{startDate}" id="checkInInput" type="text">
                             <p class="alert-warning" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></p>
                         </div>
                         <div class="booking-date-input">
                             <label>CHECKOUT</label>
-                            <input th:field="*{endDate}" id="checkOutInput" type="text">
+                            <input style="background: var(--card-bg)" th:field="*{endDate}" id="checkOutInput" type="text">
                             <p class="alert-warning" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></p>
                         </div>
                     </div>
@@ -510,6 +510,7 @@
 <script src="/js/initMaps.js"></script>
 <script src="/js/highlightStars.js"></script>
 <script src="/js/calendar.js"></script>
+<script src="/js/darkmode.js"></script>
 <script>
     let deleteButton = document.querySelector(".delete-property-btn");
 

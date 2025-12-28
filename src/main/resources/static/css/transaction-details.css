@@ -92,7 +92,7 @@
 }
 
 .transaction-details-card {
-    background: white;
+    background: var(--card-bg);
     border-radius: calc(12px + 4px);
     padding: 2rem;
     box-shadow: 0 10px 40px -10px rgba(255, 56, 92, 0.15);
@@ -104,7 +104,6 @@
 .transaction-details-card h2 {
     font-size: 1.25rem;
     margin-bottom: 1.5rem;
-    color: #222222;
 }
 
 .detail-row {
@@ -125,7 +124,6 @@
 }
 
 .detail-value {
-    color: #222222;
     font-weight: 500;
     font-size: 0.95rem;
 }

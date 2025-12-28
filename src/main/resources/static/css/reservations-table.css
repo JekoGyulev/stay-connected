@@ -50,7 +50,6 @@
 
 /* Table Container */
 .table-container {
-    background: var(--card-bg);
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow-soft);
@@ -63,9 +62,9 @@
 .reservations-table {
     width: 100%;
     border-collapse: collapse;
+    background: var(--card-bg);
 }
 .reservations-wrapper {
-    background: white;
     border-radius: calc(var(--radius) + 4px);
     box-shadow: var(--shadow-soft);
     border: 1px solid var(--card-border);
@@ -80,7 +79,8 @@
     padding: 1rem 1.25rem;
     text-align: left;
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.5px;
     color: var(--foreground);
     border-bottom: 1px solid var(--card-border);
     white-space: nowrap;
@@ -128,8 +128,8 @@
 }
 
 .status-booked {
-    background: #E8F5E9;
-    color: #2E7D32;
+    background: #d1fae5;
+    color: #065f46;
 }
 
 .status-cancelled {
@@ -215,7 +215,6 @@
 
 .pagination-btn {
     padding: 0.625rem 1.25rem;
-    background: white;
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
     color: var(--foreground);
@@ -256,7 +255,6 @@ a.disabled {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: white;
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
     color: var(--foreground);

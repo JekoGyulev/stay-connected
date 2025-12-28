@@ -32,7 +32,7 @@
 }
 
 .stat-card {
-    background: white;
+    background: var(--card-bg);
     border-radius: calc(var(--radius) + 4px);
     padding: 1.75rem;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
@@ -132,7 +132,7 @@
 }
 
 .secondary-stat-card {
-    background: white;
+    background: var(--card-bg);
     border-radius: calc(var(--radius) + 4px);
     padding: 1.75rem;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
@@ -216,7 +216,7 @@
 
 /* Quick Stats Row */
 .quick-stats-row {
-    background: white;
+    background: var(--card-bg);
     border-radius: calc(var(--radius) + 4px);
     padding: 1.75rem;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
