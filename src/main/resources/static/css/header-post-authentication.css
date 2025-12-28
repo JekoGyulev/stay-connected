@@ -15,6 +15,42 @@
     align-items: center;
     gap: 0.75rem;
 }
+/* Settings Button */
+.settings-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.settings-button:hover {
+    background: var(--accent-bg);
+    border-color: var(--primary);
+    transform: rotate(45deg);
+}
+
+.settings-button svg {
+    width: 30px;
+    height: 30px;
+    transition: all 0.3s ease;
+}
+
+.settings-button svg path {
+    fill: var(--muted);
+    transition: fill 0.3s ease;
+}
+
+.settings-button:hover svg path {
+    fill: var(--primary);
+}
+
+
 
 
 .nav-container {

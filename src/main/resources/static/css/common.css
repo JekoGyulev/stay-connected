@@ -47,6 +47,43 @@ body {
     --new-card-text-hover: var(--primary);
 }
 
+/*.dark-mode {*/
+
+/*    !* Colors - Airbnb Pink Theme *!*/
+/*    --primary: #FF385C;*/
+/*    --primary-hover: #E31C5F;*/
+/*    --primary-glow: #FF5A7D;*/
+
+/*    --background: #121212;      !* Main app background *!*/
+/*    --foreground: #EDEDED;      !* Primary text *!*/
+
+/*    --card-bg: #1E1E1E;         !* Cards / sections *!*/
+/*    --card-border: #2A2A2A;     !* Subtle separation *!*/
+
+/*    --muted: #A0A0A0;           !* Secondary text *!*/
+/*    --accent-bg: #1A1A1A;       !* Soft accent background *!*/
+
+
+/*    !* Gradients *!*/
+/*    --gradient-primary: linear-gradient(135deg, #FF385C, #FF5A7D);*/
+/*    --gradient-hero: linear-gradient(180deg, #FFFFFF, #FFF9FA);*/
+
+/*    !* Shadows *!*/
+/*    --shadow-soft: 0 10px 40px -10px rgba(255, 56, 92, 0.15);*/
+/*    --shadow-hover: 0 20px 50px -15px rgba(255, 56, 92, 0.25);*/
+
+/*    !* Spacing *!*/
+/*    --radius: 12px;*/
+
+/*    !* New Card Styling *!*/
+/*    --new-card-bg: rgba(255, 56, 92, 0.06);*/
+/*    --new-card-bg-hover: rgba(255, 56, 92, 0.12);*/
+
+/*    --new-card-border: rgba(255, 56, 92, 0.25);*/
+/*    --new-card-text: var(--muted);*/
+/*    --new-card-text-hover: var(--primary);*/
+/*}*/
+
 
 .alert-warning {
     font-family: 'Poppins', sans-serif;
