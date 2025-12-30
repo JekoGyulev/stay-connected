@@ -10,6 +10,8 @@
     border-bottom: 1px solid var(--card-border);
 }
 
+
+
 .auth-buttons {
     display: flex;
     align-items: center;
@@ -49,7 +51,54 @@
 .settings-button:hover svg path {
     fill: var(--primary);
 }
+/* Wallet item in nav */
+.wallet-item {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
 
+.wallet-item a {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* space between icon and balance */
+    padding: 0.5rem 0;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    color: var(--foreground);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.wallet-item a:hover {
+    color: var(--primary);
+}
+
+/* Style the wallet SVG */
+.wallet-item svg {
+    width: 22px;
+    height: 22px;
+    transition: transform 0.3s ease;
+    fill: var(--primary); /* fallback if your SVG uses currentColor */
+}
+
+.wallet-item a:hover svg {
+    transform: scale(1.1); /* small zoom effect on hover */
+}
+
+/* Balance text */
+.wallet-item span {
+    display: inline-block;
+    font-weight: 500;
+    color: var(--foreground);
+    transition: color 0.3s ease;
+    padding-top: 3px;
+
+}
+
+.wallet-item a:hover span {
+    color: var(--primary);
+}
 
 
 
