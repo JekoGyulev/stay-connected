@@ -381,13 +381,67 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.toggle-switch input:checked + .toggle-slider {
+
+
+
+.toggle-switch input[type="checkbox"]:checked ~ .toggle-slider {
     background: var(--primary);
 }
 
-.toggle-switch input:checked + .toggle-slider::before {
-    transform: translateX(22px);
+.toggle-switch input[type="checkbox"]:checked ~ .toggle-slider::before {
+    transform: translateX(100%);
 }
+
+.amount-cell {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.amount-cell.positive {
+    color: #10b981;
+    white-space: nowrap;
+}
+
+/* Settings Action */
+.settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-save {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-save:hover {
+    background: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn-cancel {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.btn-cancel:hover {
+    background-color: #e5e7eb;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
 
 /* Frequency Options */
 .frequency-options {

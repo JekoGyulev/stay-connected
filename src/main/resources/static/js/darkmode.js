@@ -1,13 +1,11 @@
 
     const root = document.documentElement;
-    const body = document.getElementsByTagName("body")[0];
-
     const themeOptions = document.querySelectorAll('input[name="theme"]');
 
 
     function applySystemTheme() {
         const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        body.classList.toggle("dark-mode", prefersDarkMode);
+        root.classList.toggle("dark-mode", prefersDarkMode);
     }
 
 

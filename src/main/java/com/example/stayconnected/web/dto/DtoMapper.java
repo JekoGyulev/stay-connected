@@ -1,17 +1,21 @@
 package com.example.stayconnected.web.dto;
 
 import com.example.stayconnected.email.client.dto.EmailResponse;
+import com.example.stayconnected.notification_preference.client.dto.NotificationPreferenceResponse;
 import com.example.stayconnected.property.model.Property;
 
 import com.example.stayconnected.reservation.client.dto.ReservationResponse;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.web.dto.email.EmailViewDTO;
+import com.example.stayconnected.web.dto.email.UpsertNotificationPreferenceRequest;
 import com.example.stayconnected.web.dto.location.LocationRequest;
 import com.example.stayconnected.web.dto.property.EditPropertyRequest;
 import com.example.stayconnected.web.dto.property.PropertyViewDTO;
 import com.example.stayconnected.web.dto.reservation.ReservationViewDTO;
 import com.example.stayconnected.web.dto.user.ProfileEditRequest;
 import lombok.experimental.UtilityClass;
+
+import java.util.UUID;
 
 @UtilityClass
 public class DtoMapper {
@@ -74,4 +78,14 @@ public class DtoMapper {
     }
 
 
+    public static UpsertNotificationPreferenceRequest fromPreferenceResponse(NotificationPreferenceResponse preferenceResponse, UUID userId) {
+
+        return UpsertNotificationPreferenceRequest.builder()
+                .userId(userId)
+                .passwordChangeEnabled(preferenceResponse.isPasswordChangeEnabled())
+                .bookingCancellationEnabled(preferenceResponse.isBookingCancellationEnabled())
+                .notificationsEnabled(preferenceResponse.isNotificationsEnabled())
+                .bookingConfirmationEnabled(preferenceResponse.isBookingConfirmationEnabled())
+                .build();
+    }
 }

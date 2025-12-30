@@ -80,7 +80,7 @@
                 <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
             </div>
 
-            <a class="settings-button" th:href="@{/settings}">
+            <a class="settings-button" th:href="@{/settings/appearance}">
                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 50 50">
                     <path d="M47.16,21.221l-5.91-0.966c-0.346-1.186-0.819-2.326-1.411-3.405l3.45-4.917c0.279-0.397,0.231-0.938-0.112-1.282 l-3.889-3.887c-0.347-0.346-0.893-0.391-1.291-0.104l-4.843,3.481c-1.089-0.602-2.239-1.08-3.432-1.427l-1.031-5.886 C28.607,2.35,28.192,2,27.706,2h-5.5c-0.49,0-0.908,0.355-0.987,0.839l-0.956,5.854c-1.2,0.345-2.352,0.818-3.437,1.412l-4.83-3.45 c-0.399-0.285-0.942-0.239-1.289,0.106L6.82,10.648c-0.343,0.343-0.391,0.883-0.112,1.28l3.399,4.863 c-0.605,1.095-1.087,2.254-1.438,3.46l-5.831,0.971c-0.482,0.08-0.836,0.498-0.836,0.986v5.5c0,0.485,0.348,0.9,0.825,0.985 l5.831,1.034c0.349,1.203,0.831,2.362,1.438,3.46l-3.441,4.813c-0.284,0.397-0.239,0.942,0.106,1.289l3.888,3.891 c0.343,0.343,0.884,0.391,1.281,0.112l4.87-3.411c1.093,0.601,2.248,1.078,3.445,1.424l0.976,5.861C21.3,47.647,21.717,48,22.206,48 h5.5c0.485,0,0.9-0.348,0.984-0.825l1.045-5.89c1.199-0.353,2.348-0.833,3.43-1.435l4.905,3.441 c0.398,0.281,0.938,0.232,1.282-0.111l3.888-3.891c0.346-0.347,0.391-0.894,0.104-1.292l-3.498-4.857 c0.593-1.08,1.064-2.222,1.407-3.408l5.918-1.039c0.479-0.084,0.827-0.5,0.827-0.985v-5.5C47.999,21.718,47.644,21.3,47.16,21.221z M25,32c-3.866,0-7-3.134-7-7c0-3.866,3.134-7,7-7s7,3.134,7,7C32,28.866,28.866,32,25,32z"></path>
                 </svg>
@@ -197,67 +197,89 @@
                 </div>
             </div>
 
+            <p th:if="${successfulUpdatePreferenceMessage}" th:text="${successfulUpdatePreferenceMessage} + '!'" class="amount-cell positive"></p>
 
             <!-- Notifications Panel -->
-            <div th:classappend="${isNotifications == true ? ' active' : ''}" class="settings-panel" id="notifications-panel" role="tabpanel" aria-labelledby="notifications-tab">
-                <div class="settings-section">
-                    <div class="settings-section-header">
-                        <h2>Push Notifications</h2>
-                        <p>Control what notifications you receive</p>
-                    </div>
-                    <div class="settings-options">
-                        <div class="settings-option">
-                            <div class="settings-option-info">
-                                <span class="settings-option-label">Enable push notifications</span>
-                                <span class="settings-option-description">Receive alerts on your device</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" name="push-notifications" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
+            <form th:action="@{/settings/notifications/preferences/update}" th:method="PUT" th:object="${preference}">
 
-                <div class="settings-section">
-                    <div class="settings-section-header">
-                        <h2>Email Notifications</h2>
-                        <p>Manage email updates and alerts</p>
-                    </div>
-                    <div class="settings-options">
-                        <div class="settings-option">
-                            <div class="settings-option-info">
-                                <span class="settings-option-label">Booking confirmations</span>
-                                <span class="settings-option-description">Receive confirmation emails for reservations</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" name="booking-confirmations" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
+                <div th:classappend="${isNotifications == true ? ' active' : ''}" class="settings-panel" id="notifications-panel" role="tabpanel" aria-labelledby="notifications-tab">
+
+                    <div class="settings-section">
+                        <div class="settings-section-header">
+                            <h2>Notifications</h2>
+                            <p>Control what notifications you receive</p>
                         </div>
-                        <div class="settings-option">
-                            <div class="settings-option-info">
-                                <span class="settings-option-label">Booking cancellations</span>
-                                <span class="settings-option-description">Receive emails for cancelling reservations</span>
+                        <div class="settings-options">
+                            <div class="settings-option">
+                                <div class="settings-option-info">
+                                    <span class="settings-option-label">Enable notifications</span>
+                                    <span class="settings-option-description">Receive alerts on your device</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input id="notificationsEnabled" th:field="*{notificationsEnabled}" type="checkbox" name="push-notifications">
+                                    <span class="toggle-slider"></span>
+                                </label>
                             </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" name="booking-confirmations" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="settings-option">
-                            <div class="settings-option-info">
-                                <span class="settings-option-label">Password changes</span>
-                                <span class="settings-option-description">Receive emails for changing your password</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" name="booking-confirmations">
-                                <span class="toggle-slider"></span>
-                            </label>
                         </div>
                     </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-header">
+                            <h2>Email Notifications</h2>
+                            <p>Manage email updates and alerts</p>
+                        </div>
+                        <div class="settings-options">
+                            <div class="settings-option">
+                                <div class="settings-option-info">
+                                    <span class="settings-option-label">Booking confirmations</span>
+                                    <span class="settings-option-description">Receive confirmation emails for reservations</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input id="bookingConfirmationsEnabled" th:field="*{bookingConfirmationEnabled}" type="checkbox" name="booking-confirmations" >
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-option">
+                                <div class="settings-option-info">
+                                    <span class="settings-option-label">Booking cancellations</span>
+                                    <span class="settings-option-description">Receive emails for cancelling reservations</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input id="bookingCancellationsEnabled" th:field="*{bookingCancellationEnabled}"  type="checkbox" name="booking-cancellations" >
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-option">
+                                <div class="settings-option-info">
+                                    <span class="settings-option-label">Password changes</span>
+                                    <span class="settings-option-description">Receive emails for changing your password</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input id="passwordChangeEnabled" th:field="*{passwordChangeEnabled}" type="checkbox" name="password-change">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" th:field="*{userId}">
+
+                    <div class="settings-actions">
+                        <button type="button" class="btn btn-cancel"
+                                onclick="window.location.href='/settings/notifications'">
+                            Cancel
+                        </button>
+
+
+                        <button type="submit" class="btn btn-save">
+                            Save
+                        </button>
+                    </div>
+
+
                 </div>
-            </div>
+            </form>
+
 
             <!-- About Panel -->
             <div th:classappend="${isAbout == true ? ' active' : ''}" class="settings-panel" id="about-panel" role="tabpanel" aria-labelledby="about-tab">
@@ -289,7 +311,7 @@
                                 <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </a>
-                        <a href="/terms-and-conditions.html" class="about-link">
+                        <a href="#" class="about-link">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -366,5 +388,46 @@
 
 
 <script src="/js/darkmode.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const masterToggle = document.getElementById("notificationsEnabled");
+
+
+        const secondaryToggles = [
+            document.getElementById("bookingConfirmationsEnabled"),
+            document.getElementById("bookingCancellationsEnabled"),
+            document.getElementById("passwordChangeEnabled")
+        ];
+
+
+        function syncTogglesOnClick() {
+
+            const enabled = masterToggle.checked;
+
+            secondaryToggles.forEach(toggle => {
+                toggle.disabled = !enabled;
+                toggle.checked = enabled;
+            });
+
+        }
+
+        masterToggle.addEventListener("change", syncTogglesOnClick);
+
+
+        function syncTogglesOnLoad() {
+
+            const enabled = masterToggle.checked;
+
+            secondaryToggles.forEach(toggle => {
+                toggle.disabled = !enabled;
+            })
+
+        }
+
+        syncTogglesOnLoad();
+    });
+</script>
+
 </body>
 </html>

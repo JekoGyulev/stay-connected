@@ -1,6 +1,7 @@
 package com.example.stayconnected.user.service.impl;
 
 import com.example.stayconnected.aop.annotations.LogCreation;
+import com.example.stayconnected.notification_preference.client.NotificationPreferenceClient;
 import com.example.stayconnected.event.PasswordChangedEventPublisher;
 import com.example.stayconnected.event.UserRegisteredEventPublisher;
 import com.example.stayconnected.event.payload.PasswordChangedEvent;
