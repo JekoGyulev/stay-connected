@@ -402,6 +402,105 @@
     white-space: nowrap;
 }
 
+
+#dialog {
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    border: none;
+    border-radius: var(--radius);
+    padding: 25px 30px;
+    width: 360px;
+    background-color: var(--card-bg);
+    color: var(--foreground);
+    box-shadow: var(--shadow-soft);
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+
+    /* Animation */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+#dialog::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Show modal animation */
+#dialog.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+
+/* SVG Icon container */
+.dialog-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 15px auto;
+    background: var(--accent-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    color: var(--primary);
+    transition: box-shadow 0.3s ease;
+}
+
+.dialog-icon:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Dialog text */
+#dialog p {
+    font-size: 16px;
+    color: var(--foreground);
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+/* Buttons container */
+.dialog-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Logout button */
+.logout-btn-dialog {
+    flex: 1;
+    padding: 10px 0;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.logout-btn-dialog:hover {
+    background-color: var(--primary-hover);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Cancel button */
+.cancel-btn-dialog {
+    flex: 1;
+    padding: 10px 0;
+    background-color: var(--accent-bg);
+    color: var(--foreground);
+    border: none;
+    border-radius: var(--radius);
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.cancel-btn-dialog:hover {
+    background-color: var(--new-card-bg-hover);
+}
+
 /* Settings Action */
 .settings-actions {
     display: flex;
