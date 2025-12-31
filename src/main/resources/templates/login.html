@@ -36,7 +36,7 @@
 
 
                 <div class="form-header">
-                    <h2 class="title">Log in your account</h2>
+                    <h2 class="title">[[#{login.text}]]</h2>
                 </div>
 
                 <p th:if="${successfulRegistration}" th:text="${successfulRegistration}" class="success-register" style="margin-bottom: 10px"></p>
@@ -46,13 +46,13 @@
                     <p th:if="${errorMessage}" th:text="${errorMessage}" class="alert-warning"></p>
 
                     <div class="form-group">
-                        <label for="username" class="form-label">Username</label>
+                        <label for="username" class="form-label">[[#{login.username-text}]]</label>
                         <input
                                 th:field="*{username}"
                                 type="text"
                                 id="username"
                                 class="form-input"
-                                placeholder="Enter your username"
+                                th:placeholder="#{login.enter.username}"
                         >
 
                         <p class="alert-warning" th:if="${#fields.hasErrors('username')}"
@@ -60,26 +60,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label">[[#{login.password-text}]]</label>
                         <input
                                 th:field="*{password}"
                                 type="password"
                                 id="password"
                                 class="form-input"
-                                placeholder="Enter your password"
+                                th:placeholder="#{login.enter.password}"
                         >
 
                         <p class="alert-warning" th:if="${#fields.hasErrors('password')}"
                            th:errors="*{password}"></p>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg btn-full">
-                        Log in
-                    </button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-full">[[#{login.cta.button}]]</button>
                 </form>
 
                 <div class="divider">
-                    <span>or</span>
+                    <span>[[#{login.or}]]</span>
                 </div>
 
                 <div class="google-signin-container">
@@ -89,7 +87,7 @@
                                 alt="Google Icon"
                                 class="google-icon"
                         />
-                        Sign in with Google
+                        [[#{login.sign.in.with.google}]]
                     </a>
                 </div>
 
@@ -100,15 +98,15 @@
                                 alt="GitHub Icon"
                                 class="github-icon"
                         />
-                        Sign in with GitHub
+                        [[#{login.sign.in.with.github}]]
                     </a>
                 </div>
 
 
                 <div class="footer" style="border-top: none">
                     <p class="link-text">
-                        Don't have an account?
-                        <a th:href="@{/auth/register}" class="link">Register</a>
+                        [[#{login.dont.have.account}]]
+                        <a th:href="@{/auth/register}" class="link">[[#{index.register}]]</a>
                     </p>
                 </div>
             </div>

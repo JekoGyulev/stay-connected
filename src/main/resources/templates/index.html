@@ -20,9 +20,51 @@
 
             <!-- Auth Buttons -->
             <div class="auth-buttons">
-                <a th:href="@{/auth/login}" class="btn btn-ghost">Login</a>
-                <a th:href="@{/auth/register}" class="btn btn-primary">Register</a>
+                <a th:href="@{/auth/login}" class="btn btn-ghost">[[#{index.login}]]</a>
+                <a th:href="@{/auth/register}" class="btn btn-primary">[[#{index.register}]]</a>
+
+                <div class="language-selector">
+                    <button class="language-trigger">
+                        <img th:src="
+                        @{
+                                ${  #locale.language == 'de' ? 'https://flagcdn.com/w40/de.png' :
+                                    #locale.language == 'es' ? 'https://flagcdn.com/w40/es.png' :
+                                    #locale.language == 'bg' ? 'https://flagcdn.com/w40/bg.png'
+                                    : 'https://flagcdn.com/w40/gb.png'
+                                 }
+                        }"
+                             alt="Current language" class="language-flag">
+                        <span th:text="${#locale.language.toUpperCase()}">EN</span>
+                        <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="language-dropdown">
+                        <a th:href="@{'?lang=en'}" class="language-option" th:classappend="${#locale.language == 'en' ? 'active' : ''}">
+                            <img src="https://flagcdn.com/w40/gb.png" alt="English" class="language-flag">
+                            <span class="language-name">English</span>
+                            <span class="language-code">EN</span>
+                        </a>
+                        <a th:href="@{'?lang=de'}" class="language-option" th:classappend="${#locale.language == 'de' ? 'active' : ''}">
+                            <img src="https://flagcdn.com/w40/de.png" alt="German" class="language-flag">
+                            <span class="language-name">Deutsch</span>
+                            <span class="language-code">DE</span>
+                        </a>
+                        <a th:href="@{'?lang=bg'}" class="language-option" th:classappend="${#locale.language == 'bg' ? 'active' : ''}">
+                            <img src="https://flagcdn.com/w40/bg.png" alt="Bulgarian" class="language-flag">
+                            <span class="language-name">Bulgarian</span>
+                            <span class="language-code">BG</span>
+                        </a>
+                        <a th:href="@{'?lang=es'}" class="language-option" th:classappend="${#locale.language == 'es' ? 'active' : ''}">
+                            <img src="https://flagcdn.com/w40/es.png" alt="Spanish" class="language-flag">
+                            <span class="language-name">Español</span>
+                            <span class="language-code">ES</span>
+                        </a>
+                    </div>
+                </div>
             </div>
+
+
         </div>
     </nav>
 </header>
@@ -35,12 +77,9 @@
                 Connect, Share,
                 <span class="hero-title-gradient">Stay Together</span>
             </h2>
-            <p class="hero-description">
-                Discover amazing places and connect with people around the world.
-                Your next adventure starts here.
-            </p>
+            <p class="hero-description">[[#{index.description}]]</p>
             <div class="hero-buttons">
-                <a th:href="@{/auth/register}" class="btn btn-primary btn-lg">Get Started</a>
+                <a th:href="@{/auth/register}" class="btn btn-primary btn-lg">[[#{index.get-started}]]</a>
                 <!--Need to make a page for this button-->
             </div>
         </div>
@@ -53,10 +92,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
                 </div>
-                <h3 class="feature-title">Connect Worldwide</h3>
-                <p class="feature-description">
-                    Meet amazing people from all corners of the globe and build lasting connections.
-                </p>
+                <h3 class="feature-title">[[#{index.feature-title1}]]</h3>
+                <p class="feature-description">[[#{index.feature-description1}]]</p>
             </div>
 
             <div class="feature-card">
@@ -65,10 +102,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                     </svg>
                 </div>
-                <h3 class="feature-title">Find Your Space</h3>
-                <p class="feature-description">
-                    Discover unique places that feel like home, wherever you go in the world.
-                </p>
+                <h3 class="feature-title">[[#{index.feature-title2}]]</h3>
+                <p class="feature-description">[[#{index.feature-description2}]]</p>
             </div>
 
             <div class="feature-card">
@@ -77,10 +112,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                     </svg>
                 </div>
-                <h3 class="feature-title">Stay Secure</h3>
-                <p class="feature-description">
-                    Your safety is our priority with verified profiles and secure transactions.
-                </p>
+                <h3 class="feature-title">[[#{index.feature-title3}]]</h3>
+                <p class="feature-description">[[#{index.feature-description3}]]</p>
             </div>
         </div>
     </div>
