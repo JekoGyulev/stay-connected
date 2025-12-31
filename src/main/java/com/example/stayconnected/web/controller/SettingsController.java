@@ -115,5 +115,26 @@ public class SettingsController {
         return modelAndView;
     }
 
+    @GetMapping("/language")
+    public ModelAndView showSettingsLanguagePage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        User user = this.userService.getUserById(userPrincipal.getId());
+
+        NotificationPreferenceResponse response = this.notificationPreferenceService.getNotificationPreferenceByUserId(user.getId());
+
+        UpsertNotificationPreferenceRequest request = DtoMapper.fromPreferenceResponse(response, userPrincipal.getId());
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("settings");
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("isLanguage", true);
+        modelAndView.addObject("preference", request);
+
+        return modelAndView;
+    }
+
+
+
+
 
 }

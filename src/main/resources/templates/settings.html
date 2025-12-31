@@ -80,11 +80,6 @@
                     <path d="M47.16,21.221l-5.91-0.966c-0.346-1.186-0.819-2.326-1.411-3.405l3.45-4.917c0.279-0.397,0.231-0.938-0.112-1.282 l-3.889-3.887c-0.347-0.346-0.893-0.391-1.291-0.104l-4.843,3.481c-1.089-0.602-2.239-1.08-3.432-1.427l-1.031-5.886 C28.607,2.35,28.192,2,27.706,2h-5.5c-0.49,0-0.908,0.355-0.987,0.839l-0.956,5.854c-1.2,0.345-2.352,0.818-3.437,1.412l-4.83-3.45 c-0.399-0.285-0.942-0.239-1.289,0.106L6.82,10.648c-0.343,0.343-0.391,0.883-0.112,1.28l3.399,4.863 c-0.605,1.095-1.087,2.254-1.438,3.46l-5.831,0.971c-0.482,0.08-0.836,0.498-0.836,0.986v5.5c0,0.485,0.348,0.9,0.825,0.985 l5.831,1.034c0.349,1.203,0.831,2.362,1.438,3.46l-3.441,4.813c-0.284,0.397-0.239,0.942,0.106,1.289l3.888,3.891 c0.343,0.343,0.884,0.391,1.281,0.112l4.87-3.411c1.093,0.601,2.248,1.078,3.445,1.424l0.976,5.861C21.3,47.647,21.717,48,22.206,48 h5.5c0.485,0,0.9-0.348,0.984-0.825l1.045-5.89c1.199-0.353,2.348-0.833,3.43-1.435l4.905,3.441 c0.398,0.281,0.938,0.232,1.282-0.111l3.888-3.891c0.346-0.347,0.391-0.894,0.104-1.292l-3.498-4.857 c0.593-1.08,1.064-2.222,1.407-3.408l5.918-1.039c0.479-0.084,0.827-0.5,0.827-0.985v-5.5C47.999,21.718,47.644,21.3,47.16,21.221z M25,32c-3.866,0-7-3.134-7-7c0-3.866,3.134-7,7-7s7,3.134,7,7C32,28.866,28.866,32,25,32z"></path>
                 </svg>
             </a>
-
-
-
-
-
         </div>
     </nav>
 </header>
@@ -107,6 +102,7 @@
     <div class="settings-container">
         <!-- Settings Navigation Tabs -->
         <nav class="settings-tabs" role="tablist" aria-label="Settings sections">
+
             <a th:href="@{/settings/appearance}" style="text-decoration: none"
                th:classappend="${isAppearance == true ? ' active' : ''}"
                class="settings-tab"
@@ -119,6 +115,7 @@
                 </svg>
                 <span>Appearance</span>
             </a>
+
             <a th:href="@{/settings/notifications}"
                th:classappend="${isNotifications == true ? ' active' : ''}"
                style="text-decoration: none"
@@ -128,10 +125,31 @@
                aria-controls="notifications-panel"
                data-tab="notifications">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M9.35419 21C10.0593 21.6224 10.9856 22 12 22C13.0144 22 13.9407 21.6224 14.6458 21M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 11.0902 5.22047 13.206 4.34966 14.6054C3.61513 15.7859 3.24786 16.3761 3.26132 16.5408C3.27624 16.7231 3.31486 16.7926 3.46178 16.9016C3.59446 17 4.19259 17 5.38885 17H18.6111C19.8074 17 20.4055 17 20.5382 16.9016C20.6851 16.7926 20.7238 16.7231 20.7387 16.5408C20.7521 16.3761 20.3849 15.7859 19.6503 14.6054C18.7795 13.206 18 11.0902 18 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9.35419 21C10.0593 21.6224 10.9856 22 12 22C13.0144 22 13.9407 21.6224 14.6458 21M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 11.0902 5.22047 13.206 4.34966 14.6054C3.61513 15.7859 3.24786 16.3761 3.26132 16.5408C3.27624 16.7231 3.31486 16.7926 3.46178 16.9016C3.59446 17 4.19259 17 5.38885 17H18.6111C19.8074 17 20.4055 17 20.5382 16.9016C20.6851 16.7926 20.7238 16.7231 20.7387 16.5408C20.7521 16.3761 20.3849 15.7859 19.6503 14.6054C18.7795 13.206 18 11.0902 18 8Z"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"/>
                 </svg>
                 <span>Notifications</span>
             </a>
+
+            <a th:href="@{/settings/language}"
+               th:classappend="${isLanguage == true ? ' active' : ''}"
+               style="text-decoration: none"
+               class="settings-tab"
+               role="tab"
+               aria-selected="false"
+               aria-controls="notifications-panel"
+               data-tab="notifications">
+                <svg fill="currentColor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier"
+                                                                                                stroke-width="0"></g><g id="SVGRepo_tracerCarrier"
+                                                                                                                        stroke="currentColor"
+                                                                                                                        stroke-linecap="round"
+                                                                                                                        stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>ionicons-v5-l</title><path d="M478.33,433.6l-90-218a22,22,0,0,0-40.67,0l-90,218a22,22,0,1,0,40.67,16.79L316.66,406H419.33l18.33,44.39A22,22,0,0,0,458,464a22,22,0,0,0,20.32-30.4ZM334.83,362,368,281.65,401.17,362Z"></path><path d="M267.84,342.92a22,22,0,0,0-4.89-30.7c-.2-.15-15-11.13-36.49-34.73,39.65-53.68,62.11-114.75,71.27-143.49H330a22,22,0,0,0,0-44H214V70a22,22,0,0,0-44,0V90H54a22,22,0,0,0,0,44H251.25c-9.52,26.95-27.05,69.5-53.79,108.36-31.41-41.68-43.08-68.65-43.17-68.87a22,22,0,0,0-40.58,17c.58,1.38,14.55,34.23,52.86,83.93.92,1.19,1.83,2.35,2.74,3.51-39.24,44.35-77.74,71.86-93.85,80.74a22,22,0,1,0,21.07,38.63c2.16-1.18,48.6-26.89,101.63-85.59,22.52,24.08,38,35.44,38.93,36.1a22,22,0,0,0,30.75-4.9Z"></path></g></svg>
+                <span>Language</span>
+            </a>
+
             <a th:href="@{/settings/about}"
                th:classappend="${isAbout == true ? ' active' : ''}"
                style="text-decoration: none"
@@ -149,6 +167,7 @@
                 </svg>
                 <span>About</span>
             </a>
+
             <a
                id="settingsLogout"
                style="text-decoration: none;"
@@ -297,6 +316,235 @@
                 </div>
             </form>
 
+            <!-- Language Panel -->
+            <div th:classappend="${isLanguage == true ? ' active' : ''}" class="settings-panel" id="language-panel" role="tabpanel" aria-labelledby="language-tab">
+                <div class="settings-section">
+                    <div class="settings-section-header">
+                        <h2>Language</h2>
+                        <p>Select your preferred language for StayConnected</p>
+                    </div>
+
+                    <div class="language-search">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <input type="text" placeholder="Search languages..." id="language-search-input">
+                    </div>
+
+                    <div class="language-list">
+                        <label class="language-item">
+                            <input type="radio" name="language" value="en" checked>
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/us.png" srcset="https://flagcdn.com/w80/us.png 2x" alt="English" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">English</span>
+                                    <span class="language-native">English</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="es">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/es.png" srcset="https://flagcdn.com/w80/es.png 2x" alt="Spanish" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Spanish</span>
+                                    <span class="language-native">Español</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="fr">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/fr.png" srcset="https://flagcdn.com/w80/fr.png 2x" alt="French" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">French</span>
+                                    <span class="language-native">Français</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="de">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/de.png" srcset="https://flagcdn.com/w80/de.png 2x" alt="German" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">German</span>
+                                    <span class="language-native">Deutsch</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="it">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/it.png" srcset="https://flagcdn.com/w80/it.png 2x" alt="Italian" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Italian</span>
+                                    <span class="language-native">Italiano</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="pt">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/pt.png" srcset="https://flagcdn.com/w80/pt.png 2x" alt="Portuguese" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Portuguese</span>
+                                    <span class="language-native">Português</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="nl">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/nl.png" srcset="https://flagcdn.com/w80/nl.png 2x" alt="Dutch" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Dutch</span>
+                                    <span class="language-native">Nederlands</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="ru">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/ru.png" srcset="https://flagcdn.com/w80/ru.png 2x" alt="Russian" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Russian</span>
+                                    <span class="language-native">Русский</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="ja">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/jp.png" srcset="https://flagcdn.com/w80/jp.png 2x" alt="Japanese" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Japanese</span>
+                                    <span class="language-native">日本語</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="zh">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/cn.png" srcset="https://flagcdn.com/w80/cn.png 2x" alt="Chinese" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Chinese</span>
+                                    <span class="language-native">中文</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="ko">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/kr.png" srcset="https://flagcdn.com/w80/kr.png 2x" alt="Korean" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Korean</span>
+                                    <span class="language-native">한국어</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="ar">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/sa.png" srcset="https://flagcdn.com/w80/sa.png 2x" alt="Arabic" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Arabic</span>
+                                    <span class="language-native">العربية</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="hi">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/in.png" srcset="https://flagcdn.com/w80/in.png 2x" alt="Hindi" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Hindi</span>
+                                    <span class="language-native">हिन्दी</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="tr">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/tr.png" srcset="https://flagcdn.com/w80/tr.png 2x" alt="Turkish" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Turkish</span>
+                                    <span class="language-native">Türkçe</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item">
+                            <input type="radio" name="language" value="pl">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/pl.png" srcset="https://flagcdn.com/w80/pl.png 2x" alt="Polish" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">Polish</span>
+                                    <span class="language-native">Polski</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- About Panel -->
             <div th:classappend="${isAbout == true ? ' active' : ''}" class="settings-panel" id="about-panel" role="tabpanel" aria-labelledby="about-tab">
@@ -424,6 +672,7 @@
 
 <script src="/js/darkmode.js"></script>
 <script src="/js/settings-dialog-show.js"></script>
+<script src="/js/search-language.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
