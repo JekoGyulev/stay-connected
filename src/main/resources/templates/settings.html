@@ -332,12 +332,12 @@
                     </div>
 
                     <div class="language-list">
-                        <label class="language-item">
-                            <input type="radio" name="language" value="en" checked>
+                        <label class="language-item" th:href="@{'?lang=en'}" style="text-decoration: none">
+                            <input type="radio" name="language" value="en">
                             <div class="language-content">
-                                <img src="https://flagcdn.com/w40/us.png" srcset="https://flagcdn.com/w80/us.png 2x" alt="English" class="language-flag">
+                                <img src="https://flagcdn.com/w40/gb.png" srcset="https://flagcdn.com/w80/gb.png 2x" alt="English" class="language-flag">
                                 <div class="language-text">
-                                    <span class="language-name">English</span>
+                                    <span class="language-name">English (United Kingdom)</span>
                                     <span class="language-native">English</span>
                                 </div>
                             </div>
@@ -346,14 +346,27 @@
                             </svg>
                         </label>
 
-                        <label class="language-item">
+                        <label class="language-item" th:href="@{'?lang=es'}" style="text-decoration: none">
                             <input type="radio" name="language" value="es">
                             <div class="language-content">
                                 <img src="https://flagcdn.com/w40/es.png" srcset="https://flagcdn.com/w80/es.png 2x" alt="Spanish" class="language-flag">
                                 <div class="language-text">
                                     <span class="language-name">Spanish</span>
-                                    <span class="not-supported-language">(Not supported yet)</span>
                                     <span class="language-native">Español</span>
+                                </div>
+                            </div>
+                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+
+                        <label class="language-item" th:href="@{'?lang=de'}" style="text-decoration: none">
+                            <input type="radio" name="language" value="de">
+                            <div class="language-content">
+                                <img src="https://flagcdn.com/w40/de.png" srcset="https://flagcdn.com/w80/de.png 2x" alt="German" class="language-flag">
+                                <div class="language-text">
+                                    <span class="language-name">German</span>
+                                    <span class="language-native">Deutsch</span>
                                 </div>
                             </div>
                             <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -376,19 +389,6 @@
                             </svg>
                         </label>
 
-                        <label class="language-item">
-                            <input type="radio" name="language" value="de">
-                            <div class="language-content">
-                                <img src="https://flagcdn.com/w40/de.png" srcset="https://flagcdn.com/w80/de.png 2x" alt="German" class="language-flag">
-                                <div class="language-text">
-                                    <span class="language-name">German</span>
-                                    <span class="language-native">Deutsch</span>
-                                </div>
-                            </div>
-                            <svg class="language-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </label>
 
                         <label class="language-item">
                             <input type="radio" name="language" value="it">
@@ -724,6 +724,33 @@
 
         syncTogglesOnLoad();
     });
+</script>
+
+
+<script>
+
+    const languageItems = document.querySelectorAll('.language-item');
+
+    languageItems.forEach(language => {
+
+        language.addEventListener('click', () => {
+
+            const input = language.querySelector('input[name="language"]');
+            const languageCode = input.value;
+
+            window.location.href = `?lang=${languageCode}`
+
+            localStorage.setItem("preferredLanguageCode", languageCode);
+
+        });
+
+    });
+
+
+    const languageCode = localStorage.getItem("preferredLanguageCode");
+
+    document.querySelector(`input[type="radio"][name="language"][value="${languageCode}"]`).checked = true;
+
 </script>
 
 </body>
