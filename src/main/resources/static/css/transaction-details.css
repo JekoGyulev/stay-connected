@@ -173,9 +173,9 @@
 }
 
 .transaction-actions .btn-primary {
-    background: var(--gradient-primary);
     color: white;
     box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
 }
 
 .transaction-actions .btn-primary:hover {

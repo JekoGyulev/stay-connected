@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="/css/header-post-authentication.css">
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <script>
+        (function () {
+            const theme = localStorage.getItem('theme');
+
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+            } else if (theme === 'system') {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark-mode');
+                }
+            }
+        })();
+    </script>
 </head>
 <body>
 
@@ -27,21 +41,21 @@
                 <ul class="nav-list">
 
                     <li class="nav-item">
-                        <a th:href="@{/properties}" class="nav-link">Properties</a>
+                        <a th:href="@{/properties}" class="nav-link">[[#{header.properties}]]</a>
                     </li>
 
                     <li class="nav-item">
-                        <a th:href="@{/transactions}" class="nav-link">Transactions</a>
+                        <a th:href="@{/transactions}" class="nav-link">[[#{header.transactions}]]</a>
                     </li>
 
                     <li class="nav-item dropdown">
 
-                        <a class="nav-link">Account</a>
+                        <a class="nav-link active">[[#{header.account}]]</a>
 
                         <ul class="dropdown-menu">
-                            <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">Profile</a></li>
-                            <li><a th:href="@{'/wallet'}" class="dropdown-link">Wallet</a></li>
-                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">My Bookings</a></li>
+                            <li><a th:href="@{'/users/' + ${user.id} + '/profile'}" class="dropdown-link">[[#{header.account.profile}]]</a></li>
+                            <li><a th:href="@{'/wallet'}" class="dropdown-link">[[#{header.account.wallet}]]</a></li>
+                            <li><a th:href="@{/reservations/user/table}" class="dropdown-link">[[#{header.account.my-bookings}]]</a></li>
                         </ul>
 
                     </li>
@@ -49,19 +63,19 @@
                     <!--Authorize this-->
                     <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
 
-                        <a class="nav-link active">Admin</a>
+                        <a class="nav-link">[[#{header.admin}]]</a>
 
                         <ul class="dropdown-menu">
-                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">Statistics</a></li>
-                            <li><a th:href="@{/users/table}" class="dropdown-link">Manage Users</a></li>
-                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">Manage Properties</a></li>
-                            <li><a th:href="@{/properties/create}" class="dropdown-link">Host Property</a></li>
+                            <li><a th:href="@{/users/app-stats}" class="dropdown-link">[[#{header.admin.statistics}]]</a></li>
+                            <li><a th:href="@{/users/table}" class="dropdown-link">[[#{header.admin.manage-users}]]</a></li>
+                            <li><a th:href="@{/properties/my-properties}" class="dropdown-link">[[#{header.admin.manage-properties}]]</a></li>
+                            <li><a th:href="@{/properties/create}" class="dropdown-link">[[#{header.admin.host-property}]]</a></li>
                         </ul>
 
                     </li>
 
                     <li class="nav-item">
-                        <a th:href="@{/notifications}" class="nav-link">Notifications</a>
+                        <a th:href="@{/notifications}" class="nav-link">[[#{header.notifications}]]</a>
                     </li>
 
                     <li class="nav-item wallet-item">
