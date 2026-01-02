@@ -104,8 +104,8 @@
     <!-- Wallet Header -->
     <section class="profile-header">
         <div class="container">
-            <h1 class="profile-title">My Wallet</h1>
-            <p class="profile-subtitle">Manage your balance and transactions</p>
+            <h1 class="profile-title">[[#{wallet.title}]]</h1>
+            <p class="profile-subtitle">[[#{wallet.subtitle}]]</p>
         </div>
     </section>
 
@@ -117,7 +117,7 @@
                 <div class="wallet-balance-card">
                     <div class="wallet-balance-content">
                         <div class="wallet-balance-info">
-                            <p class="wallet-balance-label">Available Balance</p>
+                            <p class="wallet-balance-label">[[#{wallet.available-balance}]]</p>
                             <h2 th:text="'€' + ${#numbers.formatDecimal(wallet.balance, 1, 2)}" class="wallet-balance-amount"></h2>
                         </div>
                         <div class="wallet-balance-icon">
@@ -131,21 +131,21 @@
                 <div class="profile-card">
 
                     <div class="profile-card-header">
-                        <h2 class="profile-card-title">Wallet Information</h2>
+                        <h2 class="profile-card-title">[[#{wallet.information}]]</h2>
                     </div>
 
                     <div class="profile-card-content">
                         <div class="profile-info-grid" style="grid-template-columns: 1fr;">
                             <div class="profile-info-item">
-                                <label class="profile-label">Wallet ID</label>
+                                <label class="profile-label">[[#{wallet.id}]]</label>
                                 <p th:text="${wallet.id}" class="profile-value"></p>
                             </div>
                             <div class="profile-info-item">
-                                <label class="profile-label">Created At</label>
+                                <label class="profile-label">[[#{wallet.created-at}]]</label>
                                 <p th:text="${#temporals.format(wallet.createdAt, 'dd MMM yyyy HH:mm')}" class="profile-value"></p>
                             </div>
                             <div class="profile-info-item">
-                                <label class="profile-label">Updated At</label>
+                                <label class="profile-label">[[#{wallet.updated-at}]]</label>
                                 <p th:text="${#temporals.format(wallet.updatedAt, 'dd MMM yyyy HH:mm')}" class="profile-value"></p>
                             </div>
                         </div>
@@ -155,10 +155,10 @@
                 <!-- Top Up Card -->
                 <div class="profile-card">
                     <div class="profile-card-header">
-                        <h2 class="profile-card-title">Top Up Balance</h2>
+                        <h2 class="profile-card-title">[[#{wallet.top-up-balance}]]</h2>
                     </div>
                     <div class="profile-card-content">
-                        <p class="wallet-topup-description">Choose an amount to add to your wallet</p>
+                        <p class="wallet-topup-description">[[#{wallet.choose-amount-top-up}]]</p>
                         <div class="wallet-topup-buttons">
                             <form th:action="@{'/wallet/top-up?amount=20'}" th:method="PATCH">
                                 <button class="wallet-topup-btn">€20</button>
@@ -183,12 +183,12 @@
                 <!-- Transaction History -->
                 <div class="profile-card">
                     <div class="profile-card-header">
-                        <h2 class="profile-card-title">Transaction History</h2>
+                        <h2 class="profile-card-title">[[#{transaction.history.title}]]</h2>
                     </div>
                     <div class="profile-card-content">
                         <div class="wallet-transactions">
 
-                            <p th:if="${transactions.isEmpty()}" class="no-transactions-message">No transactions made yet.</p>
+                            <p th:if="${transactions.isEmpty()}" class="no-transactions-message">[[#{transactions.not-made-yet}]]</p>
 
                             <div th:unless="${transactions.isEmpty()}" class="wallet-transaction-item"
                                  th:each="transaction : ${transactions}">
