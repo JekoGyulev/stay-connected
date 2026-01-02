@@ -228,15 +228,15 @@
                     </td>
 
                     <td th:if="${transaction.status.name() == 'SUCCEEDED'}">
-                        <span th:text="${transaction.status.displayName}" class="status-badge success"></span>
+                        <span class="status-badge success">[[#{transaction.table.status.succeeded}]]</span>
                     </td>
 
                     <td th:if="${transaction.status.name() == 'FAILED'}">
-                        <span th:text="${transaction.status.displayName}" class="status-badge failed"></span>
+                        <span class="status-badge failed">[[#{transaction.table.status.succeeded}]]</span>
                     </td>
 
                     <td>
-                        <a th:href="@{'/transactions/' + ${transaction.id}}" class="btn-view-details">View</a>
+                        <a th:href="@{'/transactions/' + ${transaction.id}}" class="btn-view-details">[[#{transaction.table.view}]]</a>
                     </td>
                 </tr>
 
@@ -244,12 +244,11 @@
             </table>
         </div>
 
-        <p th:text="${(currentPage * pageSize + 1) + ' – ' +
-            T(java.lang.Math).min(
-                (currentPage + 1) * pageSize,
-                totalElements.intValue()
-            )
-            + ' of ' + totalElements}"
+        <p th:text="|${currentPage * pageSize + 1} -
+             ${T(java.lang.Math).min(
+                 (currentPage + 1) * pageSize,
+                 totalElements.intValue()
+             )} #{table.of} ${totalElements}|"
            style="text-align: center; margin-top: 1rem; color: var(--muted)">
         </p>
 

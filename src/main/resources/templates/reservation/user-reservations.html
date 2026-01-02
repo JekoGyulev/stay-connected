@@ -102,8 +102,8 @@
 
     <div class="reservations-header">
         <div class="container">
-            <h1>My Reservations</h1>
-            <p class="subtitle">View and manage your bookings</p>
+            <h1>[[#{reservations.title}]]</h1>
+            <p class="subtitle">[[#{reservations.subtitle}]]</p>
         </div>
     </div>
     <div id="reservations-table-id"></div>
@@ -117,13 +117,13 @@
             <div class="filter-tabs">
                 <a th:classappend="${filter} == 'all' ? ' active' : ''"
                    th:href="@{/reservations/user/table}"
-                   class="filter-tab">All</a>
+                   class="filter-tab">[[#{reservations.tab.all}]]</a>
                 <a th:classappend="${filter} == 'booked' ? ' active' : ''"
                    th:href="@{/reservations/user/table/booked}"
-                   class="filter-tab">Booked</a>
+                   class="filter-tab">[[#{reservations.tab.booked}]]</a>
                 <a th:classappend="${filter} == 'cancelled' ? ' active' : ''"
                    th:href="@{/reservations/user/table/cancelled}"
-                   class="filter-tab">Cancelled</a>
+                   class="filter-tab">[[#{reservations.tab.cancelled}]]</a>
             </div>
 
 
@@ -131,14 +131,14 @@
                 <table class="reservations-table">
                     <thead>
                     <tr>
-                        <th>RESERVATION ID</th>
-                        <th>PROPERTY</th>
-                        <th>LOCATION</th>
-                        <th>CHECK-IN</th>
-                        <th>CHECK-OUT</th>
-                        <th>TOTAL PRICE</th>
-                        <th>STATUS</th>
-                        <th>ACTION</th>
+                        <th>[[#{reservations.table.reservation-id}]]</th>
+                        <th>[[#{reservations.table.property}]]</th>
+                        <th>[[#{reservations.table.location}]]</th>
+                        <th>[[#{reservations.table.check-in}]]</th>
+                        <th>[[#{reservations.table.check-out}]]</th>
+                        <th>[[#{reservations.table.total-price}]]</th>
+                        <th>[[#{reservations.table.status}]]</th>
+                        <th>[[#{reservations.table.action}]]</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -150,7 +150,7 @@
                             <div class="property-cell">
                                 <img th:src="${reservation.propertyViewDTO.photoUrl}" class="property-thumb"
                                      alt="Property Image">
-                                <span th:text="${reservation.propertyViewDTO.title}">Modern Beachfront Villa</span>
+                                <span th:text="${reservation.propertyViewDTO.title}"></span>
                             </div>
                         </td>
 
@@ -163,9 +163,9 @@
                         <td th:text="'€' + ${#numbers.formatDecimal(reservation.totalPrice, 1, 2)}"></td>
 
                         <td th:if="${reservation.status == 'BOOKED'}"><span
-                                class="status-badge status-booked">Booked</span></td>
+                                class="status-badge status-booked">[[#{reservations.tab.booked}]]</span></td>
 
-                        <td th:if="${reservation.status == 'CANCELLED'}"><span class="status-badge status-cancelled">Cancelled</span>
+                        <td th:if="${reservation.status == 'CANCELLED'}"><span class="status-badge status-cancelled">[[#{reservations.tab.cancelled}]]</span>
                         </td>
 
 
@@ -196,12 +196,11 @@
 
         </div>
 
-        <p th:text="${(currentPage * pageSize + 1) + ' – ' +
-            T(java.lang.Math).min(
-                (currentPage + 1) * pageSize,
-                totalElements.intValue()
-            )
-            + ' of ' + totalElements}"
+        <p th:text="|${currentPage * pageSize + 1} -
+             ${T(java.lang.Math).min(
+                 (currentPage + 1) * pageSize,
+                 totalElements.intValue()
+             )} #{table.of} ${totalElements}|"
            style="text-align: center; margin-top: 1rem; color: var(--muted)">
         </p>
 
@@ -210,12 +209,12 @@
             <a      th:if="${currentPage > 0}"
                     th:href="${baseUrl} + '?pageNumber=' + ${currentPage - 1} + '&pageSize=' + ${pageSize} + '#reservations-table-id'"
                     style="text-decoration: none"
-                    class="pagination-btn">Previous</a>
+                    class="pagination-btn">[[#{transaction.previous-button}]]</a>
 
 
             <a      th:if="${currentPage == 0}"
                     style="text-decoration: none"
-                    class="pagination-btn disabled">Previous</a>
+                    class="pagination-btn disabled">[[#{transaction.previous-button}]]</a>
 
             <div class="pagination-pages">
                 <a
@@ -232,12 +231,12 @@
             <a      th:if="${currentPage < totalPages - 1}"
                     th:href="${baseUrl} + '?pageNumber=' + ${currentPage + 1} + '&pageSize=' + ${pageSize} + '#reservations-table-id'"
                     style="text-decoration: none"
-                    class="pagination-btn">Next</a>
+                    class="pagination-btn">[[#{transaction.next-button}]]</a>
 
 
             <a      th:if="${currentPage + 1 == totalPages}"
                     style="text-decoration: none"
-                    class="pagination-btn disabled">Next</a>
+                    class="pagination-btn disabled">[[#{transaction.next-button}]]</a>
 
         </div>
     </div>
@@ -253,9 +252,9 @@
             <line x1="8" y1="2" x2="8" y2="6"></line>
             <line x1="3" y1="10" x2="21" y2="10"></line>
         </svg>
-        <h3>No reservations found</h3>
-        <p>You haven't made any reservations yet.</p>
-        <a th:href="@{/properties}" class="btn btn-primary">Browse Properties</a>
+        <h3>[[#{reservations.not-found}]]</h3>
+        <p>[[#{reservations.not-made}]]</p>
+        <a th:href="@{/properties}" class="btn btn-primary">[[#{reservations.browse}]]</a>
     </div>
 
 </main>
@@ -267,12 +266,12 @@
             <!-- Description -->
             <div class="footer-section">
                 <h3 class="footer-title">StayConnected</h3>
-                <p class="footer-description">Helping travellers find cozy and affordable stays worldwide.</p>
+                <p class="footer-description">[[#{footer.description}]]</p>
             </div>
 
             <!-- Social Media -->
             <div class="footer-section">
-                <h3 class="footer-title">Follow Us</h3>
+                <h3 class="footer-title">[[#{footer.follow-us-text}]]</h3>
                 <div class="social-links">
                     <a href="#" class="social-link">Instagram</a>
                     <a href="#" class="social-link">GitHub</a>
