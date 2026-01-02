@@ -103,8 +103,8 @@
     <!-- Profile Header -->
     <section class="profile-header">
         <div class="container">
-            <h1 class="profile-title">My Profile</h1>
-            <p class="profile-subtitle">Manage your personal information and preferences</p>
+            <h1 class="profile-title">[[#{profile.title}]]</h1>
+            <p class="profile-subtitle">[[#{profile.subtitle}]]</p>
         </div>
     </section>
 
@@ -117,13 +117,12 @@
                     <!-- Profile Picture Section -->
                     <div class="profile-card">
                         <div class="profile-card-header">
-                            <h2 class="profile-card-title">Profile Picture</h2>
+                            <h2 class="profile-card-title">[[#{profile.pfp}]]</h2>
                         </div>
                         <div class="profile-card-content">
                             <div class="profile-picture-section">
 
                                 <div class="profile-avatar">
-                                    <!-- FIX HERE USE TH:IF -->
                                     <img th:src="${#strings.isEmpty(user.profilePictureUrl) ?
                                     'https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png' : user.profilePictureUrl}"
                                          alt="Profile Picture" class="avatar-img">
@@ -135,20 +134,20 @@
                                           th:method="PATCH" th:object="${updatePhotoRequest}">
 
                                         <div class="photo-url-input-group">
-                                            <label for="photoUrl" class="photo-url-label">Photo URL</label>
+                                            <label for="photoUrl" class="photo-url-label">[[#{profile.pfp-url}]]</label>
                                             <input
                                                     th:field="*{photoURL}"
                                                     type="url"
                                                     id="photoUrl"
                                                     class="photo-url-input"
-                                                    placeholder="Paste image URL here"
+                                                    th:placeholder="#{profile.pfp-placeholder}"
                                             >
                                             <p th:if="${#fields.hasErrors('photoURL')}" th:errors="*{photoURL}"
                                                class="alert-warning"></p>
                                         </div>
 
                                         <div class="profile-picture-actions">
-                                            <button type="submit" class="btn-primary">Update Photo</button>
+                                            <button type="submit" class="btn-primary">[[#{profile.update-photo}]]</button>
                                         </div>
                                     </form>
 
@@ -160,29 +159,29 @@
                     <!-- Personal Information -->
                     <div class="profile-card">
                         <div class="profile-card-header">
-                            <h2 class="profile-card-title">Personal Information</h2>
-                            <a th:href="@{/users/profile/edit}" class="btn-edit">Edit</a>
+                            <h2 class="profile-card-title">[[#{profile.personal-information}]]</h2>
+                            <a th:href="@{/users/profile/edit}" class="btn-edit">[[#{profile.edit-button}]]</a>
                         </div>
                         <div class="profile-card-content">
                             <div class="profile-info-grid">
                                 <div class="profile-info-item">
-                                    <label class="profile-label">First Name</label>
+                                    <label class="profile-label">[[#{profile.first-name}]]</label>
                                     <p th:text="${user.firstName}" class="profile-value"></p>
                                 </div>
                                 <div class="profile-info-item">
-                                    <label class="profile-label">Last Name</label>
+                                    <label class="profile-label">[[#{profile.last-name}]]</label>
                                     <p th:text="${user.lastName}" class="profile-value"></p>
                                 </div>
                                 <div class="profile-info-item">
-                                    <label class="profile-label">Email</label>
+                                    <label class="profile-label">[[#{profile.email}]]</label>
                                     <p th:text="${user.email}" class="profile-value"></p>
                                 </div>
                                 <div class="profile-info-item">
-                                    <label class="profile-label">Username</label>
+                                    <label class="profile-label">[[#{profile.username}]]</label>
                                     <p th:text="${user.username}" class="profile-value"></p>
                                 </div>
                                 <div class="profile-info-item full-width">
-                                    <label class="profile-label">Registered at</label>
+                                    <label class="profile-label">[[#{profile.registered-at}]]</label>
                                     <p th:text="${#temporals.format(user.registeredAt, 'dd MMM yyyy')}"
                                        class="profile-value"></p>
                                 </div>
@@ -193,14 +192,14 @@
                     <!-- Security -->
                     <div class="profile-card">
                         <div class="profile-card-header">
-                            <h2 class="profile-card-title">Security</h2>
+                            <h2 class="profile-card-title">[[#{profile.security}]]</h2>
                         </div>
                         <div class="profile-card-content">
 
                             <div class="security-actions">
                                 <a th:href="@{/users/change-password}" class="security-btn"
                                    style="text-decoration: none;">
-                                    <span class="security-btn-text">Change Password</span>
+                                    <span class="security-btn-text">[[#{profile.change-password}]]</span>
                                     <span class="security-btn-arrow">→</span>
                                 </a>
                             </div>

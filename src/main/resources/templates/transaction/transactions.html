@@ -105,19 +105,17 @@
 <main class="main-content">
     <div class="transactions-container">
         <div class="transactions-header">
-            <h1>Transaction History</h1>
-            <p style="margin: 10px 0 20px 0">View all your past transactions and activities</p>
+            <h1>[[#{transaction.history.title}]]</h1>
+            <p style="margin: 10px 0 20px 0">[[#{transaction.history.subtitle}]]</p>
         </div>
 
         <!-- Filters -->
-<!--        <div id="transactions-table-id"></div>-->
-
         <form th:action="@{/transactions/filter}" th:method="GET" th:object="${filterTransaction}">
 
             <div class="transactions-filters">
                 <select th:field="*{transactionType}" class="filter-select">
 
-                    <option value="ALL">All Types</option>
+                    <option value="ALL">[[#{transaction.all-types}]]</option>
 
                     <option th:each="type : ${T(com.example.stayconnected.transaction.enums.TransactionType).values()}"
                             th:text="${type.displayName}"
@@ -126,7 +124,7 @@
 
                 <select th:field="*{transactionStatus}" class="filter-select">
 
-                    <option value="ALL">All Status</option>
+                    <option value="ALL">[[#{transaction.all-status}]]</option>
 
                     <option th:each="status: ${T(com.example.stayconnected.transaction.enums.TransactionStatus).values()}"
                             th:text="${status.displayName}"
@@ -139,7 +137,7 @@
                     <svg class="filter-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                     </svg>
-                    Filter
+                    [[#{transaction.filter}]]
                 </button>
             </div>
         </form>
@@ -152,13 +150,13 @@
 
                 <thead>
                 <tr>
-                    <th>Transaction ID</th>
-                    <th>Date & Time</th>
-                    <th>Amount</th>
-                    <th>Description</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th>[[#{transaction.table.id}]]</th>
+                    <th>[[#{transaction.table.date-and-time}]]</th>
+                    <th>[[#{transaction.table.amount}]]</th>
+                    <th>[[#{transaction.table.description}]]</th>
+                    <th>[[#{transaction.table.type}]]</th>
+                    <th>[[#{transaction.table.status}]]</th>
+                    <th>[[#{transaction.table.action}]]</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -262,12 +260,12 @@
                     th:if="${currentPage > 0}"
                     th:href="${baseUrl} + '?pageNumber=' + ${currentPage - 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#transactions-table-id'"
                style="text-decoration: none"
-            >Previous</a>
+            >[[#{transaction.previous-button}]]</a>
 
             <a class="pagination-btn disabled"
                th:if="${currentPage == 0}"
                style="text-decoration: none"
-            >Previous</a>
+            >[[#{transaction.previous-button}]]</a>
 
             <div class="pagination-pages">
                 <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
@@ -283,12 +281,12 @@
                     th:if="${currentPage < totalPages - 1}"
                th:href="${baseUrl} + '?pageNumber=' + ${currentPage + 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#transactions-table-id'"
                style="text-decoration: none"
-            >Next</a>
+            >[[#{transaction.next-button}]]</a>
 
             <a class="pagination-btn disabled"
                     th:if="${currentPage + 1 == totalPages}"
                     style="text-decoration: none"
-            >Next</a>
+            >[[#{transaction.next-button}]]</a>
 
         </div>
     </div>
