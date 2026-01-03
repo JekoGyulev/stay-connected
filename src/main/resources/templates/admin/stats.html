@@ -104,8 +104,8 @@
 
 <main class="statistics-container">
     <div class="statistics-header">
-        <h1 class="statistics-title">Analytics & Statistics</h1>
-        <p class="statistics-subtitle">Overview of your platform performance</p>
+        <h1 class="statistics-title">[[#{stats.title}]]</h1>
+        <p class="statistics-subtitle">[[#{stats.subtitle}]]</p>
     </div>
 
     <!-- Main Stats Grid -->
@@ -121,7 +121,7 @@
 
             <div class="stat-content">
 
-                <p class="stat-label">Total Users</p>
+                <p class="stat-label">[[#{stats.total-users}]]</p>
 
                 <h2 th:text="${totalUsers}" class="stat-value"></h2>
 
@@ -141,7 +141,7 @@
 
             <div class="stat-content">
 
-                <p class="stat-label">Total Bookings</p>
+                <p class="stat-label">[[#{stats.total-bookings}]]</p>
 
                 <h2 th:text="${totalReservations}" class="stat-value"></h2>
             </div>
@@ -158,7 +158,7 @@
 
             <div class="stat-content">
 
-                <p class="stat-label">Total Transactions</p>
+                <p class="stat-label">[[#{stats.total-transactions}]]</p>
 
                 <h2 th:text="${totalTransactions}" class="stat-value"></h2>
             </div>
@@ -172,7 +172,7 @@
                 </svg>
             </div>
             <div class="stat-content">
-                <p class="stat-label">Total Properties</p>
+                <p class="stat-label">[[#{stats.total-properties}]]</p>
                 <h2 th:text="${totalProperties}" class="stat-value"></h2>
             </div>
         </div>
@@ -185,7 +185,7 @@
                 </svg>
             </div>
             <div class="stat-content">
-                <p class="stat-label">Total Revenue</p>
+                <p class="stat-label">[[#{stats.total-revenue}]]</p>
                 <h2 class="stat-value" th:text="${totalRevenue}"></h2>
             </div>
         </div>
@@ -197,7 +197,7 @@
                 </svg>
             </div>
             <div class="stat-content">
-                <p class="stat-label">Failed Transactions</p>
+                <p class="stat-label">[[#{stats.total-failed-transactions}]]</p>
                 <h2 th:text="${totalFailedTransactions}" class="stat-value"></h2>
             </div>
         </div>
@@ -208,7 +208,7 @@
     <div class="secondary-stats-grid">
         <div class="secondary-stat-card">
             <div class="secondary-stat-header">
-                <h3 class="secondary-stat-title">Active Users</h3>
+                <h3 class="secondary-stat-title">[[#{stats.total-active-users}]]</h3>
                 <svg class="secondary-stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
@@ -227,7 +227,7 @@
         <div class="secondary-stat-card">
 
             <div class="secondary-stat-header">
-                <h3 class="secondary-stat-title">Booked Reservations</h3>
+                <h3 class="secondary-stat-title">[[#{stats.total-booked-reservations}]]</h3>
                 <svg class="secondary-stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
@@ -247,7 +247,7 @@
         <div class="secondary-stat-card">
 
             <div class="secondary-stat-header">
-                <h3 class="secondary-stat-title">Average Transaction</h3>
+                <h3 class="secondary-stat-title">[[#{stats.average-transaction}]]</h3>
                 <svg class="secondary-stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                 </svg>
@@ -257,7 +257,7 @@
 
 
             <p th:if="${averageTransactionGrowth == null}"
-               class="secondary-stat-description">No previous data</p>
+               class="secondary-stat-description">[[#{stats.no-previous-data}]]</p>
 
             <p      th:if="${averageTransactionGrowth != null} and ${averageTransactionAmount < 0}"
                     th:text="${#numbers.formatDecimal(averageTransactionGrowth, 1, 2)} + '%' + ' from last week'"
@@ -276,19 +276,19 @@
     <!-- Quick Stats Row -->
     <div class="quick-stats-row">
         <div class="quick-stat-item">
-            <span class="quick-stat-label">New Users Today</span>
+            <span class="quick-stat-label">[[#{stats.new-users}]]</span>
             <span th:text="'+' + ${newUsersToday}" class="quick-stat-value"></span>
         </div>
         <div class="quick-stat-item">
-            <span class="quick-stat-label">Today's Bookings</span>
+            <span class="quick-stat-label">[[#{stats.new-bookings}]]</span>
             <span th:text="'+' + ${newBookingsToday}" class="quick-stat-value"></span>
         </div>
         <div class="quick-stat-item">
-            <span class="quick-stat-label">Today's Transactions</span>
+            <span class="quick-stat-label">[[#{stats.new-transactions}]]</span>
             <span th:text="'+' + ${totalRevenueToday}" class="quick-stat-value"></span>
         </div>
         <div class="quick-stat-item">
-            <span class="quick-stat-label">Today's Properties</span>
+            <span class="quick-stat-label">[[#{stats.new-properties}]]</span>
             <span th:text="'+' + ${newPropertiesToday}" class="quick-stat-value"></span>
         </div>
     </div>
