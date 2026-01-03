@@ -104,8 +104,8 @@
 
 <div class="container">
     <div class="transactions-header">
-        <h1>Manage Properties</h1>
-        <p style="margin: 10px 0 20px 0" class="subtitle">Manage your hosted properties</p>
+        <h1>[[#{manage.properties.title}]]</h1>
+        <p style="margin: 10px 0 20px 0" class="subtitle">[[#{manage.properties.subtitle}]]</p>
     </div>
 
     <p th:if="${message != null}" th:text="${message}" class="amount-cell positive"></p>
@@ -137,7 +137,7 @@
                 <div class="property-footer">
                     <div class="property-price">
                         <span th:text="'€' + ${property.pricePerNight}" class="price-amount"></span>
-                        <span class="price-period">/ night</span>
+                        <span class="price-period">[[#{manage.properties.per-night}]]</span>
                     </div>
 
                 </div>
@@ -186,6 +186,7 @@
             </div>
 
         </article>
+
         <form class="property-block new-property" th:method="GET" th:action="@{/properties/create}">
             <button type="submit"></button>
         </form>

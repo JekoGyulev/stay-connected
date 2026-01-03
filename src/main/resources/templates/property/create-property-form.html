@@ -106,8 +106,8 @@
 <div class="container">
 
     <div class="transactions-header">
-        <h1>Create Property</h1>
-        <p style="margin: 10px 0 20px 0">Enter the property information to add it to your listings.</p>
+        <h1>[[#{create.property-title}]]</h1>
+        <p style="margin: 10px 0 20px 0">[[#{create.property-subtitle}]]</p>
     </div>
 
 
@@ -119,24 +119,24 @@
         <section class="form-section">
             <h2 class="section-title">
                 <span class="icon">🏠</span>
-                Basic Information
+                [[#{create.property-basic-info}]]
             </h2>
 
             <div class="form-group">
-                <label for="title">Property Title *</label>
-                <input th:field="*{title}" type="text" id="title" name="title" placeholder="Cozy apartment in downtown">
+                <label for="title">[[#{create.property.title}]]</label>
+                <input th:field="*{title}" type="text" id="title" name="title" th:placeholder="#{create.property.title.placeholder}">
                 <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="alert-warning"></p>
             </div>
 
             <div class="form-group">
-                <label for="description">Description *</label>
-                <textarea th:field="*{description}" id="description" name="description" rows="5" placeholder="Describe your property..."></textarea>
+                <label for="description">[[#{create.property.description}]]</label>
+                <textarea th:field="*{description}" id="description" name="description" rows="5" th:placeholder="#{create.property.description.placeholder}"></textarea>
                 <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="alert-warning"></p>
             </div>
 
             <div class="form-group">
 
-                <label>Property Type *</label>
+                <label>[[#{create.property.type}]]</label>
 
                 <div class="radio-grid">
                     <label class="radio-card"
@@ -156,11 +156,11 @@
         <section class="form-section">
             <h2 class="section-title">
                 <span class="icon">📍</span>
-                Location
+                [[#{create.property.location}]]
             </h2>
 
             <div class="form-group">
-                <label for="address">Street Address</label>
+                <label for="address">[[#{create.property.street-address}]]</label>
                 <input th:field="*{location.address}"
                        type="text" id="address" name="address" placeholder="123 Main Street">
 
@@ -169,14 +169,14 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="city">City</label>
+                    <label for="city">[[#{create.property.city}]]</label>
                     <input th:field="*{location.city}"
                            type="text" id="city" name="city" placeholder="Pleven">
 
                     <p th:if="${#fields.hasErrors('location.city')}" th:errors="*{location.city}" class="alert-warning"></p>
                 </div>
                 <div class="form-group">
-                    <label for="country">Country</label>
+                    <label for="country">[[#{create.property.country}]]</label>
                     <input th:field="*{location.country}"
                             type="text" id="country" name="country" placeholder="Bulgaria">
 
@@ -190,11 +190,11 @@
         <section class="form-section">
             <h2 class="section-title">
                 <span class="icon">💰</span>
-                Pricing
+                [[#{create.property.pricing}]]
             </h2>
 
             <div class="form-group">
-                <label for="price">Price per night *</label>
+                <label for="price">[[#{create.property.price-per-night}]]</label>
                 <div class="input-with-icon">
                     <span class="input-icon">€</span>
                     <input th:field="*{pricePerNight}" type="number" id="price" name="price" placeholder="150"
@@ -209,7 +209,7 @@
         <section class="form-section">
             <h2 class="section-title">
                 <span class="icon">✨</span>
-                Amenities
+                [[#{create.property.amenities}]]
             </h2>
 
             <div class="checkbox-grid">
@@ -264,14 +264,14 @@
         <section class="form-section">
             <h2 class="section-title">
                 <span class="icon">📸</span>
-                Photos
+                [[#{create.property.photos}]]
             </h2>
 
             <div class="upload-area">
                 <label for="photos" class="upload-label">
                     <div class="upload-icon">📤</div>
-                    <p class="upload-text">Click to upload your photos</p>
-                    <p class="upload-hint">Supports: JPG, PNG, WEBP</p>
+                    <p class="upload-text">[[#{create.property.upload-photos}]]</p>
+                    <p class="upload-hint">[[#{create.property.supports-photos}]]</p>
                 </label>
                 <input th:field="*{images}" type="file" id="photos" name="photos" multiple accept="image/*">
 
@@ -287,8 +287,8 @@
 
         <!-- Submit Buttons -->
         <div class="form-actions">
-            <a th:href="@{/properties/my-properties}" type="button" class="btn btn-outline">Cancel</a>
-            <button type="submit" class="btn btn-primary">Create</button>
+            <a th:href="@{/properties/my-properties}" type="button" class="btn btn-outline">[[#{profile.edit-cancel}]]</a>
+            <button type="submit" class="btn btn-primary">[[#{create.button}]]</button>
         </div>
     </form>
 </div>
