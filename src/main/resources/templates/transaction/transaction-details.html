@@ -109,7 +109,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
-                    Back to Wallet
+                    [[#{transaction.details.back}]]
                 </a>
             </div>
 
@@ -129,10 +129,10 @@
 
             <!-- Transaction Status -->
             <div class="transaction-status-text">
-                <h1 th:if="${transaction.status.name() == 'SUCCEEDED'}">Transaction Successful</h1>
-                <h1 th:if="${transaction.status.name() == 'FAILED'}">Transaction Failed</h1>
-                <p th:if="${transaction.status.name() == 'SUCCEEDED'}">Your transaction has been completed successfully</p>
-                <p th:if="${transaction.status.name() == 'FAILED'}">Your transaction has unfortunately failed</p>
+                <h1 th:if="${transaction.status.name() == 'SUCCEEDED'}">[[#{transaction.details.successful}]]</h1>
+                <h1 th:if="${transaction.status.name() == 'FAILED'}">[[#{transaction.details.failed}]]</h1>
+                <p th:if="${transaction.status.name() == 'SUCCEEDED'}">[[#{transaction.details.subtitle.successful}]]</p>
+                <p th:if="${transaction.status.name() == 'FAILED'}">[[#{transaction.details.subtitle.failed}]]</p>
             </div>
 
             <!-- Amount -->
@@ -147,39 +147,39 @@
 
             <!-- Transaction Details Card -->
             <div class="transaction-details-card">
-                <h2>Transaction Details</h2>
+                <h2>[[#{transaction.details}]]</h2>
 
                 <div class="detail-row">
-                    <span class="detail-label">Transaction ID</span>
+                    <span class="detail-label">[[#{transaction.details.id}]]</span>
                     <span th:text="${transaction.id}" class="detail-value"></span>
                 </div>
 
                 <div class="detail-row">
-                    <span class="detail-label">Transaction Description</span>
+                    <span class="detail-label">[[#{transaction.details.description}]]</span>
                     <span th:if="${transaction.status.name() == 'SUCCEEDED'}" th:text="${transaction.description}" class="detail-value"></span>
                     <span th:if="${transaction.status.name() == 'FAILED'}" th:text="${transaction.reasonForFailure}" class="detail-value"></span>
                 </div>
 
 
                 <div class="detail-row">
-                    <span class="detail-label">Date & Time</span>
+                    <span class="detail-label">[[#{transaction.details.date&time}]]</span>
                     <span th:text="${#temporals.format(transaction.createdOn, 'dd MMM yyyy HH:mm')}" class="detail-value"></span>
                 </div>
 
                 <div class="detail-row">
-                    <span class="detail-label">Transaction Status</span>
-                    <span th:if="${transaction.status.name() == 'SUCCEEDED'}" th:text="${transaction.status.displayName}" class="status-badge success"></span>
-                    <span th:if="${transaction.status.name() == 'FAILED'}" th:text="${transaction.status.displayName}" class="status-badge failed"></span>
+                    <span class="detail-label">[[#{transaction.details.status}]]</span>
+                    <span th:if="${transaction.status.name() == 'SUCCEEDED'}" class="status-badge success">[[#{transaction.table.status.succeeded}]]</span>
+                    <span th:if="${transaction.status.name() == 'FAILED'}" class="status-badge failed">[[#{transaction.table.status.failed}]]</span>
                 </div>
 
                 <div class="detail-row">
-                    <span class="detail-label">Transaction Type</span>
+                    <span class="detail-label">[[#{transaction.details.type}]]</span>
                     <span th:text="${transaction.type.displayName}" class="detail-value"></span>
                 </div>
 
                 <div class="detail-row">
-                    <span class="detail-label">Balance After</span>
-                    <span th:text="${'€' + #numbers.formatDecimal(transaction.balanceLeft, 1,2)}" class="detail-value">€285.50</span>
+                    <span class="detail-label">[[#{transaction.details.balance-after}]]</span>
+                    <span th:text="${'€' + #numbers.formatDecimal(transaction.balanceLeft, 1,2)}" class="detail-value"></span>
                 </div>
             </div>
 
@@ -191,7 +191,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
                     </svg>
-                    Download PDF
+                    [[#{transaction.details.download-as-pdf}]]
                 </button>
 
             </div>
