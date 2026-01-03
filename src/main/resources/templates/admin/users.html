@@ -104,8 +104,8 @@
 <main class="main-content">
     <div class="transactions-container">
         <div class="transactions-header">
-            <h1>Users Table</h1>
-            <p style="margin: 10px 0 20px 0">View all users and their information</p>
+            <h1>[[#{users.table.title}]]</h1>
+            <p style="margin: 10px 0 20px 0">[[#{users.table.subtitle}]]</p>
         </div>
 
         <div style="
@@ -124,7 +124,7 @@
 
                     <select class="filter-select" th:field="*{userRole}">
 
-                        <option th:value="ALL">Role</option>
+                        <option th:value="ALL">[[#{users.table.role}]]</option>
 
                         <option th:each="role : ${T(com.example.stayconnected.user.enums.UserRole).values()}"
                                 th:value="${role.name()}"
@@ -135,7 +135,7 @@
 
                     <select class="filter-select" th:field="*{userStatus}">
 
-                        <option th:value="ALL">Status</option>
+                        <option th:value="ALL">[[#{users.table.status}]]</option>
 
                         <option th:value="true">Active</option>
                         <option th:value="false">Inactive</option>
@@ -146,7 +146,7 @@
                         <svg class="filter-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                         </svg>
-                        Filter
+                        [[#{transaction.filter}]]
                     </button>
                 </div>
             </form>
@@ -159,7 +159,7 @@
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
                 <form th:action="@{'/users/table/search'}" th:method="GET" >
-                    <input type="text" name="username" placeholder="Search by username..." class="search-input">
+                    <input type="text" name="search" th:placeholder="#{users.table.search-placeholder}" class="search-input">
                 </form>
             </div>
 
@@ -171,14 +171,14 @@
             <table class="transactions-table">
                 <thead>
                 <tr>
-                    <th>User ID</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Registered</th>
-                    <th>Switch Role</th>
-                    <th>Switch Status</th>
+                    <th>[[#{users.table.user-id}]]</th>
+                    <th>[[#{users.table.username}]]</th>
+                    <th>[[#{users.table.email}]]</th>
+                    <th>[[#{users.table.role}]]</th>
+                    <th>[[#{users.table.status}]]</th>
+                    <th>[[#{users.table.registered}]]</th>
+                    <th>[[#{users.table.switch-role}]]</th>
+                    <th>[[#{users.table.switch-status}]]</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -202,7 +202,7 @@
                     <td>
                         <form th:action="@{'/users/' + ${user.id} + '/role'}" th:method="patch">
                             <button class="profile-actions-button">
-                                <p>Switch</p>
+                                <p>[[#{users.table.switch}]]</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                      class="bi bi-toggle-on" viewBox="0 0 16 16">
                                     <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"></path>
@@ -214,7 +214,7 @@
                     <td>
                         <form th:action="@{'/users/' + ${user.id} + '/status'}" th:method="patch">
                             <button class="profile-actions-button">
-                                <p>Switch</p>
+                                <p>[[#{users.table.switch}]]</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                      class="bi bi-toggle-on" viewBox="0 0 16 16">
                                     <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"></path>
@@ -229,26 +229,26 @@
             </table>
         </div>
 
-        <p th:text="${(currentPage * pageSize + 1) + ' – ' +
-            T(java.lang.Math).min(
-                (currentPage + 1) * pageSize,
-                totalElements.intValue()
-            )
-            + ' of ' + totalElements}"
+        <p th:text="|${currentPage * pageSize + 1} -
+             ${T(java.lang.Math).min(
+                 (currentPage + 1) * pageSize,
+                 totalElements.intValue()
+             )} #{table.of} ${totalElements}|"
            style="text-align: center; margin-top: 1rem; color: var(--muted)">
         </p>
+
         <!-- Pagination -->
         <div class="transactions-pagination">
 
             <a      th:if="${currentPage > 0}"
                     th:href="${baseUrl} + '?pageNumber=' + ${currentPage - 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#users-table-id'"
                     style="text-decoration: none"
-                    class="pagination-btn">Previous</a>
+                    class="pagination-btn">[[#{transaction.previous-button}]]</a>
 
 
             <a      th:if="${currentPage == 0}"
                     style="text-decoration: none"
-                    class="pagination-btn disabled">Previous</a>
+                    class="pagination-btn disabled">[[#{transaction.previous-button}]]</a>
 
             <div class="pagination-pages">
                 <a
@@ -265,12 +265,12 @@
             <a      th:if="${currentPage < totalPages - 1}"
                     th:href="${baseUrl} + '?pageNumber=' + ${currentPage + 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#users-table-id'"
                     style="text-decoration: none"
-                    class="pagination-btn">Next</a>
+                    class="pagination-btn">[[#{transaction.next-button}]]</a>
 
 
             <a      th:if="${currentPage + 1 == totalPages}"
                     style="text-decoration: none"
-                    class="pagination-btn disabled">Next</a>
+                    class="pagination-btn disabled">[[#{transaction.next-button}]]</a>
 
         </div>
     </div>

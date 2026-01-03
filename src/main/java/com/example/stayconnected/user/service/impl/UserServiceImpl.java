@@ -233,8 +233,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<User> getUsersBySearchUsername(String username) {
-        return this.userRepository.findAllByUsernameContainingIgnoreCaseOrderByRegisteredAtDesc(username);
+    public Page<User> getUsersBySearchUsernameOrEmail(String search, int pageNumber, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
+        return this.userRepository.findAllByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrderByRegisteredAtDesc(search, pageRequest);
     }
 
     @Override

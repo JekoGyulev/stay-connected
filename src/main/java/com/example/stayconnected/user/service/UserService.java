@@ -36,7 +36,7 @@ public interface UserService {
 
     Page<User> getFilteredUsers(int pageNumber, int pageSize, FilterUserRequest filterUserRequest);
 
-    List<User> getUsersBySearchUsername(String username);
+    Page<User> getUsersBySearchUsernameOrEmail(String search, int pageNumber, int pageSize);
 
     User getUserByEmail(String email);
 

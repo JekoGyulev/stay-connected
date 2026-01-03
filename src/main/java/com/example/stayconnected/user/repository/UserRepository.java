@@ -2,6 +2,7 @@ package com.example.stayconnected.user.repository;
 
 import com.example.stayconnected.user.enums.UserRole;
 import com.example.stayconnected.user.model.User;
+import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,5 +35,13 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByEmail(String email);
 
-    List<User> findAllByUsernameContainingIgnoreCaseOrderByRegisteredAtDesc(String username);
+    @Query(
+        """
+            SELECT u FROM User u
+            WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :search, '%'))
+               OR LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%'))
+            ORDER BY u.registeredAt DESC
+        """
+    )
+    Page<User> findAllByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrderByRegisteredAtDesc(String search, Pageable pageable);
 }

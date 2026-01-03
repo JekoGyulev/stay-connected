@@ -215,17 +215,28 @@ public class UserController {
 
     @GetMapping("/table/search")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView getUsersTableSearchPage(@RequestParam(value = "username") String username,
+    public ModelAndView getUsersTableSearchPage(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                                                @RequestParam(value = "pageSize", defaultValue = "4") int pageSize,
+                                                @RequestParam(value = "search") String search,
                                                 @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
         User authUser = this.userService.getUserById(userPrincipal.getId());
-        List<User> users = this.userService.getUsersBySearchUsername(username);
+        Page<User> users = this.userService.getUsersBySearchUsernameOrEmail(search, pageNumber, pageSize);
+
+        String baseUrl = "/users/table/search";
+        String queryParameters = "&search=%s".formatted(search);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/users");
         modelAndView.addObject("users", users);
         modelAndView.addObject("authUser", authUser);
         modelAndView.addObject("filterUsersRequest", new FilterUserRequest());
+        modelAndView.addObject("totalPages", users.getTotalPages());
+        modelAndView.addObject("totalElements", users.getTotalElements());
+        modelAndView.addObject("currentPage", pageNumber);
+        modelAndView.addObject("pageSize", pageSize);
+        modelAndView.addObject("baseUrl", baseUrl);
+        modelAndView.addObject("queryParameters", queryParameters);
 
         return modelAndView;
     }
