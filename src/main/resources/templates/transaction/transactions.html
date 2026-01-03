@@ -244,7 +244,7 @@
             </table>
         </div>
 
-        <p th:text="|${currentPage * pageSize + 1} -
+        <p th:if="${totalElements != 0}" th:text="|${currentPage * pageSize + 1} -
              ${T(java.lang.Math).min(
                  (currentPage + 1) * pageSize,
                  totalElements.intValue()
@@ -253,7 +253,7 @@
         </p>
 
         <!-- Pagination -->
-        <div class="transactions-pagination">
+        <div th:if="${totalElements != 0}" class="transactions-pagination">
 
             <a class="pagination-btn"
                     th:if="${currentPage > 0}"
@@ -288,6 +288,11 @@
             >[[#{transaction.next-button}]]</a>
 
         </div>
+
+        <p   th:if="${totalElements == 0}"
+             style="text-align: center; margin-top: 3rem; color: var(--muted); font-weight: 400">
+            [[#{transactions.table.no-transactions-found}]]
+        </p>
     </div>
 </main>
 
