@@ -110,24 +110,24 @@
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                     <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
-                Email Notifications
+                [[#{emails.title}]]
             </h1>
 
-            <p class="notifications-subtitle">Stay updated with your booking confirmations and alerts</p>
+            <p class="notifications-subtitle">[[#{emails.subtitle}]]</p>
         </div>
 
         <div class="notifications-stats">
             <div class="stat-card">
                 <span th:text="${countTotalEmails}" class="stat-number"></span>
-                <span class="stat-label">Total</span>
+                <span class="stat-label">[[#{emails.total}]]</span>
             </div>
             <div class="stat-card stat-sent">
                 <span th:text="${countSentEmails}" class="stat-number"></span>
-                <span class="stat-label">Sent</span>
+                <span class="stat-label">[[#{emails.total-sent}]]</span>
             </div>
             <div class="stat-card stat-failed">
                 <span th:text="${countFailedEmails}"  class="stat-number"></span>
-                <span class="stat-label">Failed</span>
+                <span class="stat-label">[[#{emails.total-failed}]]</span>
             </div>
         </div>
 
@@ -146,7 +146,7 @@
                         <rect x="14" y="14" width="7" height="7"></rect>
                         <rect x="3" y="14" width="7" height="7"></rect>
                     </svg>
-                    <p>All</p>
+                    <p>[[#{emails.all}]]</p>
                 </div>
             </a>
 
@@ -157,7 +157,7 @@
                         <path d="M22 2L11 13"></path>
                         <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
                     </svg>
-                    <p>Sent</p>
+                    <p>[[#{emails.sent}]]</p>
                 </div>
             </a>
 
@@ -169,7 +169,7 @@
                         <line x1="15" y1="9" x2="9" y2="15"></line>
                         <line x1="9" y1="9" x2="15" y2="15"></line>
                     </svg>
-                    <p>Failed</p>
+                    <p>[[#{emails.failed}]]</p>
                 </div>
             </a>
 
@@ -181,14 +181,14 @@
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
             <form th:action="@{'/notifications/search'}" th:method="GET" >
-                <input type="text" name="value" placeholder="Search notifications..." class="search-input">
+                <input type="text" name="value" th:placeholder="#{emails.search-placeholder}" class="search-input">
             </form>
         </div>
 
     </div>
 
     <p class="notification-preview" style="margin-bottom: 15px">
-        Note: The view button opens Gmail. If you have multiple accounts, select the one that received this email.
+        [[#{emails.preview}]]
     </p>
 
 
@@ -219,12 +219,12 @@
 
                 <div class="notification-header">
                     <h3 th:text="${email.subject}" class="notification-subject"></h3>
-                    <span th:if="${email.status == 'SENT'}" class="notification-badge badge-sent">Sent</span>
-                    <span th:if="${email.status == 'FAILED'}" class="notification-badge badge-failed">Failed</span>
+                    <span th:if="${email.status == 'SENT'}" class="notification-badge badge-sent">[[#{emails.sent.status}]]</span>
+                    <span th:if="${email.status == 'FAILED'}" class="notification-badge badge-failed">[[#{emails.failed.status}]]</span>
                 </div>
 
-                <p th:if="${email.status == 'SENT'}" class="notification-preview">Click the view button to see more...</p>
-                <p th:if="${email.status == 'FAILED'}" class="notification-preview">Failed to sent...</p>
+                <p th:if="${email.status == 'SENT'}" class="notification-preview">[[#{emails.see-more}]]</p>
+                <p th:if="${email.status == 'FAILED'}" class="notification-preview">[[#{emails.failed-to-sent}]]</p>
 
                 <div class="notification-meta">
 
@@ -236,10 +236,10 @@
                         <p th:text="${#temporals.format(email.createdAt, 'dd MMM yyyy')}"></p>
                     </div>
 
-                    <span th:if="${email.trigger == 'BOOK_RESERVATION'}" class="notification-type">Booking Confirmation</span>
-                    <span th:if="${email.trigger == 'CANCEL_RESERVATION'}" class="notification-type">Booking Cancellation</span>
-                    <span th:if="${email.trigger == 'REGISTER'}" class="notification-type">Registration</span>
-                    <span th:if="${email.trigger == 'CHANGE_PASSWORD'}" class="notification-type">Password Change</span>
+                    <span th:if="${email.trigger == 'BOOK_RESERVATION'}" class="notification-type">[[#{emails.trigger-1}]]</span>
+                    <span th:if="${email.trigger == 'CANCEL_RESERVATION'}" class="notification-type">[[#{emails.trigger-2}]]</span>
+                    <span th:if="${email.trigger == 'REGISTER'}" class="notification-type">[[#{emails.trigger-3}]]</span>
+                    <span th:if="${email.trigger == 'CHANGE_PASSWORD'}" class="notification-type">[[#{emails.trigger-4}]]</span>
                 </div>
 
             </div>
@@ -262,12 +262,11 @@
         </div>
     </div>
 
-    <p th:unless="${emails.isEmpty()}" th:text="${(currentPage * pageSize + 1) + ' – ' +
-            T(java.lang.Math).min(
-                (currentPage + 1) * pageSize,
-                totalElements.intValue()
-            )
-            + ' of ' + totalElements}"
+    <p th:if="${totalElements != 0}" th:text="|${currentPage * pageSize + 1} -
+             ${T(java.lang.Math).min(
+                 (currentPage + 1) * pageSize,
+                 totalElements.intValue()
+             )} #{table.of} ${totalElements}|"
        style="text-align: center; margin-top: 1rem; color: var(--muted)">
     </p>
 
@@ -276,12 +275,12 @@
         <a      th:if="${currentPage > 0}"
                 th:href="${baseUrl} + '?pageNumber=' + ${currentPage - 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#notifications-table-id'"
                 style="text-decoration: none"
-                class="pagination-btn">Previous</a>
+                class="pagination-btn">[[#{transaction.previous-button}]]</a>
 
 
         <a      th:if="${currentPage == 0}"
                 style="text-decoration: none"
-                class="pagination-btn disabled">Previous</a>
+                class="pagination-btn disabled">[[#{transaction.previous-button}]]</a>
 
         <div class="pagination-pages">
             <a
@@ -298,12 +297,12 @@
         <a      th:if="${currentPage < totalPages - 1}"
                 th:href="${baseUrl} + '?pageNumber=' + ${currentPage + 1} + '&pageSize=' + ${pageSize} + ${queryParameters} + '#notifications-table-id'"
                 style="text-decoration: none"
-                class="pagination-btn">Next</a>
+                class="pagination-btn">[[#{transaction.next-button}]]</a>
 
 
         <a      th:if="${currentPage + 1 == totalPages}"
                 style="text-decoration: none"
-                class="pagination-btn disabled">Next</a>
+                class="pagination-btn disabled">[[#{transaction.next-button}]]</a>
 
     </div>
 
@@ -313,8 +312,8 @@
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
             <polyline points="22,6 12,13 2,6"></polyline>
         </svg>
-        <h3>No notifications found</h3>
-        <p>You don't have any notifications matching this filter.</p>
+        <h3>[[#{emails.not-found}]]</h3>
+        <p>[[#{emails.problem-description}]]</p>
     </div>
 </main>
 
