@@ -117,10 +117,11 @@
 
 
             <div class="property-actions">
-                <a th:if="${authUser.id == propertyOwner.id}" th:href="@{'/properties/' + ${property.id} + '/edit'}" class="edit-property-btn" style="text-decoration: none">Edit</a>
+                <a th:if="${authUser.id == propertyOwner.id}" th:href="@{'/properties/' + ${property.id} + '/edit'}"
+                   class="edit-property-btn" style="text-decoration: none">[[#{property.details.edit-button}]]</a>
 
                 <form th:if="${authUser.id == propertyOwner.id}" th:action="@{'/properties/' + ${property.id} + '/delete'}" th:method="DELETE">
-                        <button type="submit" class="delete-property-btn">Delete</button>
+                        <button type="submit" class="delete-property-btn">[[#{property.details.delete-button}]]</button>
                 </form>
             </div>
         </div>
@@ -130,7 +131,7 @@
             <div class="property-rating">
                 <span class="rating-star">★</span>
                 <span th:text="${property.averageRating}" class="rating-value"></span>
-                <span th:text="'(' + ${countReviews} + ' reviews)'" class="rating-count"></span>
+                <span th:text="'(' + ${countReviews} + ' ' + #{property.details.reviews-count} + ')'" class="rating-count"></span>
             </div>
             <span th:text="'📍' + ${property.location.city} + ', ' + ${property.location.country}"
                   class="property-location-link"></span>
@@ -169,29 +170,29 @@
                 <div class="feature-item">
                     <span class="feature-icon">🏠</span>
                     <div>
-                        <h3>Entire home</h3>
-                        <p th:text="'You will have the ' + ${#strings.toLowerCase(property.categoryType.displayName)} + ' to yourself.'"></p>
+                        <h3>[[#{property.details.feature-1}]]</h3>
+                        <p th:text="#{property.details.feature-1.description}"></p>
                     </div>
                 </div>
                 <div class="feature-item">
                     <span class="feature-icon">✨</span>
                     <div>
-                        <h3>Enhanced Clean</h3>
-                        <p>This host committed to enhanced cleaning process.</p>
+                        <h3>[[#{property.details.feature-2}]]</h3>
+                        <p>[[#{property.details.feature-2.description}]]</p>
                     </div>
                 </div>
                 <div class="feature-item">
                     <span class="feature-icon">🔑</span>
                     <div>
-                        <h3>Self check-in</h3>
-                        <p>Check yourself in with the keypad.</p>
+                        <h3>[[#{property.details.feature-3}]]</h3>
+                        <p>[[#{property.details.feature-3.description}]]</p>
                     </div>
                 </div>
                 <div class="feature-item">
                     <span class="feature-icon">📅</span>
                     <div>
-                        <h3>Free cancellation</h3>
-                        <p>Get a full refund if you change your mind.</p>
+                        <h3>[[#{property.details.feature-4}]]</h3>
+                        <p>[[#{property.details.feature-4.description}]]</p>
                     </div>
                 </div>
             </section>
@@ -200,7 +201,7 @@
 
 
             <section class="details-section">
-                <h2>About this place</h2>
+                <h2>[[#{property.details.about-place}]]</h2>
                 <p th:text="${property.description}" class="property-description">
 
                 </p>
@@ -210,7 +211,7 @@
 
 
             <section class="details-section">
-                <h2>What this place offers</h2>
+                <h2>[[#{property.details.what-offers}]]</h2>
                 <div class="amenities-grid">
 
                     <div th:each="amenity : ${property.amenities}" class="amenity-item">
@@ -224,16 +225,16 @@
                         <span th:if="${amenity == 'wifi'}" class="amenity-icon">📶</span>
                         <span th:if="${amenity == 'pool'}" class="amenity-icon">🏊</span>
                         <span th:if="${amenity == 'dryer'}" class="amenity-icon">👕</span>
-                        <span th:if="${amenity == 'hot_tub'}">Hot Tub</span>
-                        <span th:if="${amenity == 'heating'}">Heating</span>
-                        <span th:if="${amenity == 'gym'}">Gym</span>
-                        <span th:if="${amenity == 'washer'}">Washer</span>
-                        <span th:if="${amenity == 'kitchen'}">Kitchen</span>
-                        <span th:if="${amenity == 'air_conditioning'}">Air conditioning</span>
-                        <span th:if="${amenity == 'parking'}">Free parking</span>
-                        <span th:if="${amenity == 'wifi'}">Wifi</span>
-                        <span th:if="${amenity == 'pool'}">Pool</span>
-                        <span th:if="${amenity == 'dryer'}">Dryer</span>
+                        <span th:if="${amenity == 'hot_tub'}">[[#{property.details.hot-tub}]]</span>
+                        <span th:if="${amenity == 'heating'}">[[#{property.details.heating}]]</span>
+                        <span th:if="${amenity == 'gym'}">[[#{property.details.gym}]]</span>
+                        <span th:if="${amenity == 'washer'}">[[#{property.details.washer]]</span>
+                        <span th:if="${amenity == 'kitchen'}">[[#{property.details.kitchen}]]</span>
+                        <span th:if="${amenity == 'air_conditioning'}">[[#{property.details.air-conditioning}]]</span>
+                        <span th:if="${amenity == 'parking'}">[[#{property.details.free-parking}]]</span>
+                        <span th:if="${amenity == 'wifi'}">[[#{property.details.wifi}]]</span>
+                        <span th:if="${amenity == 'pool'}">[[#{property.details.pool}]]</span>
+                        <span th:if="${amenity == 'dryer'}">[[#{property.details.dryer}]]</span>
                     </div>
                 </div>
             </section>
@@ -243,9 +244,9 @@
 
             <section th:if="${propertyOwner.id != authUser.id}" class="details-section">
 
-                <h2>Select dates</h2>
+                <h2>[[#{property.details.select-dates}]]</h2>
 
-                <p class="calendar-subtitle">Add your travel dates for exact pricing</p>
+                <p class="calendar-subtitle">[[#{property.details.select-dates-subtitle}]]</p>
                 <div class="calendar-container">
                     <div class="calendar-header">
                         <button class="calendar-nav-btn" id="prevMonth">‹</button>
@@ -305,7 +306,7 @@
 
 
             <section class="details-section">
-                <h2>Where you'll be</h2>
+                <h2>[[#{property.details.where}]]</h2>
                 <p th:text="${property.location.address} + ', ' + ${property.location.city} + ', ' + ${property.location.country}"
                    class="location-description"></p>
                 <div id="map"  class="property-map"></div>
@@ -318,7 +319,7 @@
                 <div class="reviews-header">
                     <h2>
                         <span class="amenity-icon">⭐</span>
-                        Recent Reviews
+                        [[#{property.details.recent-reviews}]]
                         <span class="amenity-icon">⭐</span>
                     </h2>
                 </div>
@@ -334,7 +335,7 @@
                                  class="reviewer-avatar">
                             <div>
                                 <h4 th:text="${#strings.concat(review.createdFrom.firstName, ' ', review.createdFrom.lastName)}" class="reviewer-name"></h4>
-                                <p th:text="'Joined in ' + ${#temporals.format(review.createdFrom.registeredAt, 'MMMM yyyy' )}" class="reviewer-joined"></p>
+                                <p th:text="#{property.details.user-joined-in} + ' ' + ${#temporals.format(review.createdFrom.registeredAt, 'MMMM yyyy' )}" class="reviewer-joined"></p>
                             </div>
 
                             <form th:if="${review.createdFrom.id == authUser.id}" class="delete-review-form"
@@ -363,7 +364,7 @@
                         <p th:text="${review.comment}" class="review-text"></p>
                     </div>
 
-                    <p th:if="${countReviews == 0}" class="review-text">No reviews yet.</p>
+                    <p th:if="${countReviews == 0}" class="review-text">[[#{property.details.no-reviews-yet}]]</p>
 
                 </div>
 
@@ -374,7 +375,7 @@
 
             <section th:if="${authUser.id != propertyOwner.id}" class="details-section">
 
-                <h2>Leave a review</h2>
+                <h2>[[#{property.details.leave-review}]]</h2>
 
 
                 <form class="review-form" th:action="@{'/reviews/create/' + ${property.id}}" th:method="POST" th:object="${createReviewRequest}">
@@ -384,7 +385,7 @@
 
                     <div class="review-rating-input">
 
-                        <label>Your rating</label>
+                        <label>[[#{property.details.your-rating}]]</label>
                         <div class="star-rating-input">
                             <span class="star-input" data-rating="1">☆</span>
                             <span class="star-input" data-rating="2">☆</span>
@@ -392,16 +393,16 @@
                             <span class="star-input" data-rating="4">☆</span>
                             <span class="star-input" data-rating="5">☆</span>
                         </div>
-                        <p th:if="${#fields.hasErrors('rating')}" class="alert-warning">We need your rating</p>
+                        <p th:if="${#fields.hasErrors('rating')}" class="alert-warning">[[#{property.details.need-rating}]]</p>
                     </div>
 
                     <div class="form-group">
-                        <label for="review-text">Your review</label>
-                        <textarea th:field="*{comment}" id="review-text" rows="5" placeholder="Share your experience at this property..."></textarea>
+                        <label for="review-text">[[#{property.details.your-review}]]</label>
+                        <textarea th:field="*{comment}" id="review-text" rows="5" th:placeholder="#{property.details.share-exp}"></textarea>
                         <p th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" class="alert-warning"></p>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg">Submit Review</button>
+                    <button type="submit" class="btn btn-primary btn-lg">[[#{property.details.submit-review}]]</button>
                 </form>
 
             </section>
@@ -410,7 +411,7 @@
 
 
             <section class="details-section">
-                <h2>Meet your host</h2>
+                <h2>[[#{property.details.meet-host}]]</h2>
 
                 <div class="host-card">
 
@@ -419,7 +420,7 @@
 
                         <div class="host-info">
                             <h3 th:text="${propertyOwner.username}"></h3>
-                            <p th:text="'Joined in ' + ${#temporals.format(propertyOwner.registeredAt, 'MMMM yyyy' )}"
+                            <p th:text="#{property.details.user-joined-in} + ' ' + ${#temporals.format(propertyOwner.registeredAt, 'MMMM yyyy' )}"
                                class="host-joined"></p>
                         </div>
 
@@ -429,19 +430,19 @@
 
                         <div class="host-detail-item">
                             <span class="host-detail-icon">💬</span>
-                            <span>Response rate: 100%</span>
+                            <span>[[#{property.details.host-response-rate}]]</span>
                         </div>
 
                         <div class="host-detail-item">
                             <span class="host-detail-icon">⚡</span>
-                            <span>Response time: within an hour</span>
+                            <span>[[#{property.details.host-response-time}]]</span>
                         </div>
 
                     </div>
 
                     <p th:text="'Hello, everyone! I am ' + ${#strings.concat(propertyOwner.firstName, ' ',propertyOwner.lastName)} + '. It is nice to meet you! 😁. Please feel free, if you have any questions, to contact me at:  ' + ${propertyOwner.email}" class="host-description"></p>
 
-                    <a th:if="${propertyOwner.id != authUser.id}" th:href="@{/notifications/contact-host(propertyId=${property.id})}" class="btn btn-outline btn-lg">Contact host</a>
+                    <a th:if="${propertyOwner.id != authUser.id}" th:href="@{/notifications/contact-host(propertyId=${property.id})}" class="btn btn-outline btn-lg">[[#{property.details.contact-host}]]</a>
                 </div>
             </section>
         </div>
@@ -455,53 +456,53 @@
                 <div >
                     <div class="booking-price">
                         <span id="pricePerNight" th:data-price="${property.pricePerNight}" th:text="'€' + ${property.pricePerNight}" class="price-amount"></span>
-                        <span class="price-period">/ night</span>
+                        <span class="price-period">[[#{manage.properties.per-night}]]</span>
                     </div>
                     <div class="booking-rating">
                         <span class="rating-star">★</span>
                         <span th:text="${property.averageRating}" class="rating-value"></span>
-                        <span th:text="'(' + ${countReviews} + ' reviews)'" class="rating-count"></span>
+                        <span th:text="'(' + ${countReviews} + ' ' + #{property.details.reviews-count} + ')'" class="rating-count"></span>
                     </div>
 
                     <div class="booking-dates">
                         <div class="booking-date-input">
-                            <label>CHECK-IN</label>
+                            <label>[[#{property.details.reservation.check-in}]]</label>
                             <input style="background: var(--card-bg)"  th:field="*{startDate}" id="checkInInput" type="text">
                             <p class="alert-warning" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></p>
                         </div>
                         <div class="booking-date-input">
-                            <label>CHECKOUT</label>
+                            <label>[[#{property.details.reservation.check-out}]]</label>
                             <input style="background: var(--card-bg)" th:field="*{endDate}" id="checkOutInput" type="text">
                             <p class="alert-warning" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></p>
                         </div>
                     </div>
 
 
-                    <button class="btn btn-primary btn-lg btn-block">Reserve</button>
-                    <p class="booking-notice">Additional information:</p>
+                    <button class="btn btn-primary btn-lg btn-block">[[#{property.details.reserve}]]</button>
+                    <p class="booking-notice">[[#{property.details.reserve-additional-info}]]</p>
 
                     <div class="booking-breakdown">
                         <div class="booking-line-item">
                         <span id="priceBreakdown">
-                            €0 x 0 nights
+                            [[#{property.details.0x0-nights}]]
                         </span>
                             <span id="subtotal">€0</span>
                         </div>
                         <div class="booking-line-item">
-                            <span>Cleaning fee</span>
+                            <span>[[#{property.details.fee-1}]]</span>
                             <span id="cleaningFee"
                                   th:text="'€' + 150"
                                   th:data-fee="150"></span>
                         </div>
                         <div class="booking-line-item">
-                            <span>Service fee</span>
+                            <span>[[#{property.details.fee-2}]]</span>
                             <span id="serviceFee"
                                   th:text="'€' + 100"
                                   th:data-fee="100"></span>
                         </div>
                         <div class="section-divider"></div>
                         <div class="booking-line-item booking-total">
-                            <span>Total</span>
+                            <span>[[#{property.details.total-price}]]</span>
                             <input th:field="*{totalPrice}" type="hidden" id="totalPriceHidden">
                             <span id="totalPrice">€0</span>
                             <p th:if="${#fields.hasErrors('totalPrice')}" th:errors="*{totalPrice}"></p>
