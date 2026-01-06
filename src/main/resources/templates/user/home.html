@@ -104,51 +104,209 @@
     </nav>
 </header>
 
-<section class="welcome-section">
-    <div class="container">
-        <h2 class="welcome-message" th:text="'Welcome back, ' + ${user.username} + '! ' + 'Ready for your next stay? '"></h2>
-        <span>✈️🧳</span>
-    </div>
+<!-- Hero Section -->
+<section class="hero-banner">
+    <div class="hero-bg-image" style="background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1920&q=80');"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-banner-content">
+        <h1 class="hero-main-title">
+            Find Your Perfect <span class="text-gradient">Getaway</span>
+        </h1>
+        <p class="hero-main-subtitle">
+            Discover unique stays and experiences around the world. From cozy apartments to luxury villas, find your home away from home.
+        </p>
 
+        <!-- Search Box -->
+        <div class="search-box">
+            <div class="search-field">
+                <i class="fas fa-map-marker-alt"></i>
+                <input type="text" placeholder="Where are you going?">
+            </div>
+            <div class="search-divider"></div>
+            <div class="search-field">
+                <i class="fas fa-calendar"></i>
+                <input type="text" placeholder="Check-in">
+            </div>
+            <div class="search-divider"></div>
+            <div class="search-field">
+                <i class="fas fa-calendar"></i>
+                <input type="text" placeholder="Check-out">
+            </div>
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+                <span>Search</span>
+            </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-number">10K+</span>
+                <span class="stat-label">Properties</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Cities</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-number">50K+</span>
+                <span class="stat-label">Happy Guests</span>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- Main Content -->
-<main class="main-content">
-    <!-- Properties Slider Section -->
-    <section class="slider-section">
+<!-- Featured Properties Section -->
+<section class="section-padded" id="properties">
+    <div class="container">
+        <div class="section-header-flex">
+            <div class="section-title-group">
+                <span class="section-badge">Featured</span>
+                <h2 class="section-title">Handpicked Properties</h2>
+                <p class="section-subtitle">Explore our curated selection of the finest stays around the world</p>
+            </div>
+            <div class="section-nav-arrows">
+                <button class="nav-arrow-btn" id="prev-property">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-arrow-btn" id="next-property">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
 
-        <div class="container">
-
-            <h2 class="section-title">Featured Properties</h2>
-
-            <div th:unless="${featuredProperties.isEmpty()}" class="slider-wrapper">
-
-                <div class="slider">
-
-                    <a th:each="property : ${featuredProperties}" th:href="@{'/properties/' + ${property.id}}"
-                       class="property-card">
-
-                        <img th:src="${property.images[0].imageURL}" class="property-image"></img>
-
-                        <div class="property-info">
-                            <h3 th:text="${property.title}" class="property-title"></h3>
-                            <p th:text="${#strings.concat(property.location.city, ', ', property.location.country )}" class="property-location"></p>
-                            <p th:text="'€' + ${property.pricePerNight} + ' / night'" class="property-price"></p>
+        <div class="properties-slider">
+            <!-- Property Card 1 -->
+            <div class="property-card-new">
+                <div class="property-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800" alt="Modern Loft">
+                    <button class="favorite-btn" data-id="1">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <span class="property-badge superhost">Superhost</span>
+                </div>
+                <div class="property-content">
+                    <div class="property-location-tag">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>New York, USA</span>
+                    </div>
+                    <h3 class="property-card-title">Modern Loft in Manhattan</h3>
+                    <div class="property-features">
+                        <span><i class="fas fa-users"></i> 4 guests</span>
+                    </div>
+                    <div class="property-footer">
+                        <div class="property-rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.9</span>
+                            <span class="reviews">(128)</span>
                         </div>
-
-                    </a>
-
+                        <div class="property-price-tag">
+                            <span class="price">€189</span>
+                            <span class="period">/night</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <p th:if="${featuredProperties.isEmpty()}">No available properties yet.</p>
+            <!-- Property Card 2 -->
+            <div class="property-card-new">
+                <div class="property-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800" alt="Beachfront Villa">
+                    <button class="favorite-btn" data-id="2">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <span class="property-badge featured">Featured</span>
+                </div>
+                <div class="property-content">
+                    <div class="property-location-tag">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Malibu, USA</span>
+                    </div>
+                    <h3 class="property-card-title">Beachfront Villa with Pool</h3>
+                    <div class="property-features">
+                        <span><i class="fas fa-users"></i> 8 guests</span>
+                    </div>
+                    <div class="property-footer">
+                        <div class="property-rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.8</span>
+                            <span class="reviews">(96)</span>
+                        </div>
+                        <div class="property-price-tag">
+                            <span class="price">€450</span>
+                            <span class="period">/night</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Property Card 3 -->
+            <div class="property-card-new">
+                <div class="property-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800" alt="Mountain Retreat">
+                    <button class="favorite-btn" data-id="3">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <span class="property-badge new">New</span>
+                </div>
+                <div class="property-content">
+                    <div class="property-location-tag">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Aspen, USA</span>
+                    </div>
+                    <h3 class="property-card-title">Cozy Mountain Retreat</h3>
+                    <div class="property-features">
+                        <span><i class="fas fa-users"></i> 6 guests</span>
+                    </div>
+                    <div class="property-footer">
+                        <div class="property-rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.9</span>
+                            <span class="reviews">(84)</span>
+                        </div>
+                        <div class="property-price-tag">
+                            <span class="price">€320</span>
+                            <span class="period">/night</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Property Card 4 -->
+            <div class="property-card-new">
+                <div class="property-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800" alt="City Apartment">
+                    <button class="favorite-btn" data-id="4">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="property-content">
+                    <div class="property-location-tag">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Paris, France</span>
+                    </div>
+                    <h3 class="property-card-title">Charming Parisian Apartment</h3>
+                    <div class="property-features">
+                        <span><i class="fas fa-users"></i> 2 guests</span>
+                    </div>
+                    <div class="property-footer">
+                        <div class="property-rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.7</span>
+                            <span class="reviews">(156)</span>
+                        </div>
+                        <div class="property-price-tag">
+                            <span class="price">€165</span>
+                            <span class="period">/night</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
-
-    </section>
+    </div>
+</section>
 
     <!-- Popular Destinations Slider Section -->
     <section style="padding-top: 10px;" class="slider-section">
@@ -238,8 +396,42 @@
         </div>
     </section>
 
-    <footer th:insert="fragments/footer :: footer"></footer>
-</main>
+<footer class="footer" style="margin-top: 0">
+    <div class="container">
+        <div class="footer-content">
+            <!-- Description -->
+            <div class="footer-section">
+                <h3 class="footer-title">StayConnected</h3>
+                <p class="footer-description">[[#{footer.description}]]</p>
+            </div>
+
+            <!-- Social Media -->
+            <div class="footer-section">
+                <h3 class="footer-title">[[#{footer.follow-us-text}]]</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link">Instagram</a>
+                    <a href="#" class="social-link">GitHub</a>
+                </div>
+            </div>
+
+            <!-- Legal Information -->
+            <div class="footer-section">
+                <h3 class="footer-title">Legal</h3>
+                <div class="footer-links">
+                    <a th:href="@{/terms-and-condition}" target="_blank" class="footer-link">Terms & Conditions</a>
+                </div>
+                <div class="footer-links">
+                    <a th:href="@{/settings/about}" class="footer-link">About</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-bottom">
+            <p class="footer-copyright">© 2025 StayConnected</p>
+        </div>
+    </div>
+</footer>
 
 <script src="/js/darkmode.js"></script>
 </body>
