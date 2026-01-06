@@ -219,7 +219,7 @@
                      th:style="'width:' + ${percentageActiveUsers} + '%'"></div>
             </div>
 
-            <p th:text="${percentageActiveUsers} + '%' + ' of total users'"
+            <p th:text="${percentageActiveUsers} + '%' + ' ' + #{stats.of-total-users}"
                class="secondary-stat-description"></p>
         </div>
 
@@ -240,7 +240,7 @@
                      th:style="'width: ' + ${percentageBookedReservations} + '%'"></div>
             </div>
 
-            <p th:text="${percentageBookedReservations} + '%' + ' of total bookings'"
+            <p th:text="${percentageBookedReservations} + '%' + ' ' +  #{stats.of-total-bookings}"
                class="secondary-stat-description"></p>
         </div>
 
@@ -259,15 +259,15 @@
             <p th:if="${averageTransactionGrowth == null}"
                class="secondary-stat-description">[[#{stats.no-previous-data}]]</p>
 
-            <p      th:if="${averageTransactionGrowth != null} and ${averageTransactionAmount < 0}"
-                    th:text="${#numbers.formatDecimal(averageTransactionGrowth, 1, 2)} + '%' + ' from last week'"
-                    class="secondary-stat-description" style="color : #f11717">
-            </p>
+<!--            <p      th:if="${averageTransactionGrowth != null} and ${averageTransactionAmount < 0}"-->
+<!--                    th:text="${#numbers.formatDecimal(averageTransactionGrowth, 1, 2)} + '%' + ' from last week'"-->
+<!--                    class="secondary-stat-description" style="color : #f11717">-->
+<!--            </p>-->
 
-            <p      th:if="${averageTransactionGrowth != null} and ${averageTransactionAmount > 0}"
-                    th:text="'+' + ${#numbers.formatDecimal(averageTransactionGrowth, 1, 2)} + '%' + ' from last week'"
-                    class="secondary-stat-description" style="color : #12b212">
-            </p>
+<!--            <p      th:if="${averageTransactionGrowth != null} and ${averageTransactionAmount > 0}"-->
+<!--                    th:text="'+' + ${#numbers.formatDecimal(averageTransactionGrowth, 1, 2)} + '%' + ' from last week'"-->
+<!--                    class="secondary-stat-description" style="color : #12b212">-->
+<!--            </p>-->
 
         </div>
 

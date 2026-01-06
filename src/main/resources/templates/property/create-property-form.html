@@ -216,44 +216,44 @@
 
                 <label class="checkbox-card">
                     <input th:field="*{amenities}" type="checkbox" name="amenities" value="wifi">
-                    <span>WiFi</span>
+                    <span>[[#{property.details.wifi}]]</span>
                 </label>
 
                 <label class="checkbox-card">
                     <input th:field="*{amenities}" type="checkbox" name="amenities" value="kitchen">
-                    <span>Kitchen</span>
+                    <span>[[#{property.details.kitchen}]]</span>
                 </label>
                 <label class="checkbox-card">
                     <input th:field="*{amenities}" type="checkbox" name="amenities" value="air_conditioning">
-                    <span>Air Conditioning</span>
+                    <span>[[#{property.details.air-conditioning}]]</span>
                 </label>
                 <label class="checkbox-card">
                     <input th:field="*{amenities}" type="checkbox" name="amenities" value="heating">
-                    <span>Heating</span>
+                    <span>[[#{property.details.heating}]]</span>
                 </label>
                 <label class="checkbox-card">
                     <input th:field="*{amenities}" type="checkbox" name="amenities" value="washer">
-                    <span>Washer</span>
+                    <span>[[#{property.details.washer}]]</span>
                 </label>
                 <label class="checkbox-card">
                     <input th:field="*{amenities}" type="checkbox" name="amenities" value="dryer">
-                    <span>Dryer</span>
+                    <span>[[#{property.details.dryer}]]</span>
                 </label>
                 <label class="checkbox-card">
                     <input th:field="*{amenities}" type="checkbox" name="amenities" value="parking">
-                    <span>Free Parking</span>
+                    <span>[[#{property.details.free-parking}]]</span>
                 </label>
                 <label class="checkbox-card">
                     <input th:field="*{amenities}" type="checkbox" name="amenities" value="pool">
-                    <span>Pool</span>
+                    <span>[[#{property.details.pool}]]</span>
                 </label>
                 <label class="checkbox-card">
                     <input th:field="*{amenities}" type="checkbox" name="amenities" value="hot_tub">
-                    <span>Hot Tub</span>
+                    <span>[[#{property.details.hot-tub}]]</span>
                 </label>
                 <label class="checkbox-card">
                     <input th:field="*{amenities}" type="checkbox" name="amenities" value="gym">
-                    <span>Gym</span>
+                    <span>[[#{property.details.gym}]]</span>
                 </label>
 
                 <p th:if="${#fields.hasErrors('amenities')}" th:errors="*{amenities}" class="alert-warning"></p>
