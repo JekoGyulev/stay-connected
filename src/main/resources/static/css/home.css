@@ -613,6 +613,7 @@
 .property-card-new:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-hover);
+    cursor: pointer;
 }
 
 .property-image-wrapper {
