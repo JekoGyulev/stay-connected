@@ -478,10 +478,47 @@
                     </div>
 
 
+                    <div class="reservation-guests-section">
+                        <label class="reservation-label">GUESTS</label>
+
+                        <div class="guests-selector">
+                            <div class="guests-dropdown-trigger" id="guestsDropdownTrigger">
+                                <div class="guests-display">
+                                    <span class="guests-icon">👥</span>
+                                    <span class="guests-count" id="guestsCount">1 guest</span>
+                                </div>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+
+                            <div class="guests-dropdown" id="guestsDropdown">
+                                <!-- Guests -->
+                                <div class="guest-type-row">
+                                    <div class="guest-type-info">
+                                        <span class="guest-type-label">Guests</span>
+                                    </div>
+                                    <div class="guest-counter">
+                                        <button type="button" class="counter-btn minus" data-type="adults" disabled>−</button>
+                                        <span class="counter-value" id="hiddenGuestsCount">1</span>
+                                        <button type="button" class="counter-btn plus" data-type="adults">+</button>
+                                    </div>
+                                </div>
+
+                                <!-- Max Guests Info -->
+                                <div class="max-guests-info">
+                                    <span class="info-icon">ℹ️</span>
+                                    <span>This place has a maximum of <strong th:text="${property.countGuests}"></strong> guests.</span>
+                                </div>
+
+                                <button type="button" class="guests-close-btn" id="guestsCloseBtn">Close</button>
+                            </div>
+                        </div>
+
+                        <!-- Hidden inputs for form submission -->
+                        <input type="hidden" id="guestsInput" value="1">
+                    </div>
+
+
                     <button class="btn btn-primary btn-lg btn-block">[[#{property.details.reserve}]]</button>
-                    
-
-
 
                     <p class="booking-notice">[[#{property.details.reserve-additional-info}]]</p>
 
@@ -527,6 +564,7 @@
 <script src="/js/highlightStars.js"></script>
 <script src="/js/calendar.js"></script>
 <script src="/js/darkmode.js"></script>
+<script src="/js/reservation-guests-count.js"></script>
 <script>
     let deleteButton = document.querySelector(".delete-property-btn");
 
