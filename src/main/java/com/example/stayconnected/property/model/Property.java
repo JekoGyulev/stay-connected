@@ -46,6 +46,8 @@ public class Property {
     private BigDecimal averageRating;
     @ElementCollection
     private List<String> amenities = new ArrayList<>();
+    @Column(name = "count_guests", nullable = false)
+    private int countGuests;
 
 
     public String getTitle() {
@@ -134,5 +136,13 @@ public class Property {
 
     public void setAverageRating(BigDecimal averageRating) {
         this.averageRating = averageRating;
+    }
+
+    public int getCountGuests() {
+        return countGuests;
+    }
+
+    public void setCountGuests(int countGuests) {
+        this.countGuests = countGuests;
     }
 }

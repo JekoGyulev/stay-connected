@@ -29,8 +29,10 @@ public class CreatePropertyRequest {
     @Valid
     private LocationRequest location;
     @NotNull(message = "Please enter price")
-    @Positive(message = "Price must not be negative")
+    @Positive(message = "Cannot be negative")
     private BigDecimal pricePerNight;
+    @NotNull(message = "Please enter count of guests")
+    private Integer countGuests;
     @NotEmpty(message = "At least one amenity must be selected")
     private List<String> amenities;
     @NotEmpty(message = "Please upload at least one image")

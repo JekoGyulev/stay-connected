@@ -75,6 +75,7 @@ public class PropertyServiceImpl implements PropertyService {
                 .categoryType(createPropertyRequest.getCategory())
                 .location(location)
                 .pricePerNight(createPropertyRequest.getPricePerNight())
+                .countGuests(createPropertyRequest.getCountGuests())
                 .owner(owner)
                 .amenities(createPropertyRequest.getAmenities())
                 .createDate(LocalDateTime.now())

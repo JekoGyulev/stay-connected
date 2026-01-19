@@ -36,6 +36,7 @@
 
 .icon {
     font-size: 1.25rem;
+    color: var(--primary-glow);
 }
 
 .form-group {
