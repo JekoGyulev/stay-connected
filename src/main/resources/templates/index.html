@@ -25,37 +25,29 @@
 
                 <div class="language-selector">
                     <button class="language-trigger">
-                        <img th:src="
-                        @{
-                                ${  #locale.language == 'de' ? 'https://flagcdn.com/w40/de.png' :
-                                    #locale.language == 'es' ? 'https://flagcdn.com/w40/es.png' :
-                                    #locale.language == 'bg' ? 'https://flagcdn.com/w40/bg.png'
-                                    : 'https://flagcdn.com/w40/gb.png'
-                                 }
-                        }"
-                             alt="Current language" class="language-flag">
-                        <span th:text="${#locale.language.toUpperCase()}"></span>
+                        <img id="currentLanguageFlag" alt="Current language" class="language-flag">
+                        <span id="languageCodeUppercase"></span>
                         <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
                     <div class="language-dropdown">
-                        <a th:href="@{'?lang=en'}" class="language-option" th:classappend="${#locale.language == 'en' ? 'active' : ''}">
+                        <a class="language-option" >
                             <img src="https://flagcdn.com/w40/gb.png" alt="English" class="language-flag">
                             <span class="language-name">English</span>
                             <span class="language-code">EN</span>
                         </a>
-                        <a th:href="@{'?lang=de'}" class="language-option" th:classappend="${#locale.language == 'de' ? 'active' : ''}">
+                        <a class="language-option" >
                             <img src="https://flagcdn.com/w40/de.png" alt="German" class="language-flag">
                             <span class="language-name">Deutsch</span>
                             <span class="language-code">DE</span>
                         </a>
-                        <a th:href="@{'?lang=bg'}" class="language-option" th:classappend="${#locale.language == 'bg' ? 'active' : ''}">
+                        <a  class="language-option" >
                             <img src="https://flagcdn.com/w40/bg.png" alt="Bulgarian" class="language-flag">
                             <span class="language-name">Bulgarian</span>
                             <span class="language-code">BG</span>
                         </a>
-                        <a th:href="@{'?lang=es'}" class="language-option" th:classappend="${#locale.language == 'es' ? 'active' : ''}">
+                        <a  class="language-option" >
                             <img src="https://flagcdn.com/w40/es.png" alt="Spanish" class="language-flag">
                             <span class="language-name">Español</span>
                             <span class="language-code">ES</span>
@@ -122,10 +114,48 @@
 <footer th:insert="fragments/footer :: footer"></footer>
 
 <script>
-    const activeOption = document.querySelector(".language-option.active");
+    const anchors = document.querySelectorAll('.language-option');
 
-    const languageCode = activeOption.querySelector(".language-code").textContent.toLowerCase();
-    localStorage.setItem("preferredLanguageCode", languageCode);
+
+    anchors.forEach(anchor => {
+        anchor.addEventListener('click', () => {
+            const languageCode = anchor.querySelector('.language-code').textContent.toLowerCase();
+            localStorage.setItem("preferredLanguageCode", languageCode);
+            window.location.href = `?lang=${languageCode}`;
+        });
+    });
+
+    const preferredLanguageCode = localStorage.getItem("preferredLanguageCode") || "en";
+
+
+    anchors.forEach(anchor => {
+        anchor.classList.remove('active');
+        if (anchor.querySelector('.language-code').textContent.toLowerCase() === preferredLanguageCode) {
+            anchor.classList.add('active');
+        }
+    });
+
+    const flags = {
+        en: "https://flagcdn.com/w40/gb.png",
+        de: "https://flagcdn.com/w40/de.png",
+        bg: "https://flagcdn.com/w40/bg.png",
+        es: "https://flagcdn.com/w40/es.png"
+    };
+
+    const languageCodeUppercase = document.getElementById("languageCodeUppercase");
+    const currentLanguageFlag = document.getElementById("currentLanguageFlag");
+
+    currentLanguageFlag.src = flags[preferredLanguageCode];
+    languageCodeUppercase.textContent = preferredLanguageCode.toUpperCase();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const langParam = urlParams.get('lang');
+
+    if (!langParam || langParam !== preferredLanguageCode) {
+        window.location.href = `?lang=${localStorage.getItem("preferredLanguageCode") || "en"}`;
+    }
+
+
 </script>
 </body>
 </html>
