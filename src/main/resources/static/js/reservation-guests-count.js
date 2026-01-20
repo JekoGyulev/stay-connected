@@ -4,7 +4,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeBtn = document.getElementById('guestsCloseBtn');
     const guestsCountDisplay = document.getElementById('guestsCount');
 
-    const maxGuests = parseInt(document.querySelector('.max-guests-info strong')?.textContent);
+    const maxGuests = parseInt(document.getElementById("maxGuests")?.value);
+
+    const translations = {
+        en : {
+            'property.details.reservations.guest-1' : '1 guest',
+            'property.details.reservations.guests-plural-lowercase' : 'guests'
+        },
+        de : {
+            'property.details.reservations.guest-1' : '1 Gast',
+            'property.details.reservations.guests-plural-lowercase' : 'Gäste'
+        },
+        bg : {
+            'property.details.reservations.guest-1' : '1 гост',
+            'property.details.reservations.guests-plural-lowercase' : 'гости'
+        },
+        es : {
+            'property.details.reservations.guest-1' : '1 huésped',
+            'property.details.reservations.guests-plural-lowercase' : 'huéspedes'
+        }
+    }
+
+    // Get current language
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const currentLanguage = urlParams.get('lang') || 'en';
+    const currentLanguage = localStorage.getItem('preferredLanguageCode');
+
 
     let guests = 1;
 
@@ -46,11 +71,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update hidden inputs
         document.getElementById("hiddenGuestsCount").textContent = guests;
 
-
-
         let displayText = '';
         const guestCount = guests;
-        displayText = guestCount === 1 ? '1 guest' : `${guestCount} guests`;
+
+        displayText = getGuestsCountText(guestCount);
+
 
         guestsCountDisplay.textContent = displayText;
 
@@ -78,4 +103,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById("guestsInput").value = guestCount;
     }
+
+    function getGuestsCountText(guestCount) {
+        const key = guestCount === 1
+            ? 'property.details.reservations.guest-1'
+            : 'property.details.reservations.guests-plural-lowercase';
+
+
+        return guestCount === 1
+            ? `${translations[currentLanguage][key]}`
+            :  `${guestCount} ${translations[currentLanguage][key]}`;
+    }
+
+
 });

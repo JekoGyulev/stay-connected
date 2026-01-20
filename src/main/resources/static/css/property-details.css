@@ -641,6 +641,7 @@
     align-items: baseline;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
+    font-weight: bold;
 }
 
 .booking-rating {
@@ -927,7 +928,7 @@
 /* Max Guests Info */
 .max-guests-info {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 8px;
     padding: 12px;
     background: var(--accent-bg);
