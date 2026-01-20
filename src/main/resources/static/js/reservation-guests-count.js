@@ -43,12 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function updateDisplay() {
-        // Update counter displays
-        document.getElementById("guestsCount").textContent = guests;
-
         // Update hidden inputs
         document.getElementById("hiddenGuestsCount").textContent = guests;
-
 
 
 
