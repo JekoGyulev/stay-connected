@@ -158,6 +158,7 @@
 
 .language-option:hover {
     background: var(--accent-bg);
+    cursor: pointer;
 }
 
 .language-option.active {

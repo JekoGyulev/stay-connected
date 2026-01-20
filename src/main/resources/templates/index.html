@@ -34,7 +34,7 @@
                                  }
                         }"
                              alt="Current language" class="language-flag">
-                        <span th:text="${#locale.language.toUpperCase()}">EN</span>
+                        <span th:text="${#locale.language.toUpperCase()}"></span>
                         <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                         </svg>
@@ -120,5 +120,12 @@
 </main>
 
 <footer th:insert="fragments/footer :: footer"></footer>
+
+<script>
+    const activeOption = document.querySelector(".language-option.active");
+
+    const languageCode = activeOption.querySelector(".language-code").textContent.toLowerCase();
+    localStorage.setItem("preferredLanguageCode", languageCode);
+</script>
 </body>
 </html>
