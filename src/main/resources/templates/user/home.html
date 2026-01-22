@@ -435,5 +435,15 @@
 
 <script src="/js/darkmode.js"></script>
 <script src="/js/swiper-properties.js"></script>
+<script>
+
+    document.querySelectorAll(".favorite-btn")
+        .forEach(button => {
+            button.addEventListener("click", () => {
+                button.classList.toggle("active");
+            })
+        });
+
+</script>
 </body>
 </html>
