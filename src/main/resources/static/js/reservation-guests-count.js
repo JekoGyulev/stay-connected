@@ -25,9 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Get current language
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const currentLanguage = urlParams.get('lang') || 'en';
     const currentLanguage = localStorage.getItem('preferredLanguageCode');
 
 
