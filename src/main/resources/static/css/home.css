@@ -608,6 +608,9 @@
     overflow: hidden;
     box-shadow: var(--shadow-soft);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    display: flex;
+    flex-direction: column;
 }
 
 .property-card-new:hover {
@@ -701,6 +704,9 @@
 
 .property-content {
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .property-location-tag {
@@ -750,6 +756,7 @@
     align-items: center;
     padding-top: 1rem;
     border-top: 1px solid var(--card-border);
+    margin-top: auto;
 }
 
 .property-rating {
