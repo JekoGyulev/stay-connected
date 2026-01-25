@@ -49,6 +49,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @LogCreation(entity = "review")
+    @Transactional
     public Review addReview(UUID userId, UUID propertyId, CreateReviewRequest request) {
 
         User user = this.userRepository.findById(userId)
@@ -89,14 +90,15 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @LogDeletion(entity = "review")
+    @Transactional
     public void deleteReview(Review review) {
 
         Property property = review.getProperty();
 
         this.reviewRepository.delete(review);
+        property.getReviews().remove(review);
 
         BigDecimal newAverageRating = getAverageRatingForProperty(property.getId());
-
         property.setAverageRating(newAverageRating);
         this.propertyRepository.save(property);
     }

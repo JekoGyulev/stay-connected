@@ -157,8 +157,6 @@ public class ReviewServiceImplUTest {
 
         verify(reviewRepository).save(any(Review.class));
     }
-
-
     @Test
     void whenThereAreReviewsForProperty_andDeleteThemAll_thenDeleteAllReviews () {
 

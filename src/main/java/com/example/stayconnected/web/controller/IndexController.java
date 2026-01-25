@@ -43,7 +43,7 @@ public class IndexController {
 
         List<CityStatsDTO> mostPopularDestinations = this.locationService.get4MostPopularDestinations();
 
-        // Make boolean flags : isSuperhost, isNew, isFeatured (see the table) and then put them in as models
+        // Make boolean flags : isSuperhost
 
 
         ModelAndView modelAndView = new ModelAndView();

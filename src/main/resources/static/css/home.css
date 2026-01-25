@@ -602,7 +602,7 @@
 
 /* New Property Card Styles */
 .property-card-new {
-    flex: 0 0 320px;
+    flex: 0 0 335px;
     background: var(--card-bg);
     border-radius: 20px;
     overflow: hidden;
@@ -616,7 +616,6 @@
 .property-card-new:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-hover);
-    cursor: pointer;
 }
 
 .property-image-wrapper {
@@ -670,6 +669,21 @@
 
 .favorite-btn.active i {
     font-weight: 900;
+}
+
+.favorite-btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--foreground);
+    transition: all 0.3s ease;
+}
+
+.favorite-btn:hover svg {
+    color: var(--primary);
+}
+
+.eye-btn {
+    right: 4.5rem;
 }
 
 .property-badge {
