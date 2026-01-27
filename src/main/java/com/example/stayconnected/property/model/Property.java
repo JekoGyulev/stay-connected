@@ -49,7 +49,7 @@ public class Property {
     private List<String> amenities = new ArrayList<>();
     @Column(name = "count_guests", nullable = false)
     private int countGuests;
-    @OneToMany(mappedBy = "property", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "property", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Review> reviews = new ArrayList<>();
 
 

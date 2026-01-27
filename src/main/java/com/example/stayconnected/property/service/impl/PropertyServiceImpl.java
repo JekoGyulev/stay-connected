@@ -9,7 +9,6 @@ import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.repository.PropertyRepository;
 import com.example.stayconnected.property.service.PropertyImageService;
 import com.example.stayconnected.property.service.PropertyService;
-import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.utils.exception.PropertyDoesNotExist;
 import com.example.stayconnected.web.dto.location.LocationRequest;
@@ -37,14 +36,12 @@ public class PropertyServiceImpl implements PropertyService {
 
     private final LocationService locationService;
     private final PropertyImageService  propertyImageService;
-    private final ReviewService reviewService;
 
     @Autowired
-    public PropertyServiceImpl(PropertyRepository propertyRepository, LocationService locationService, PropertyImageService propertyImageService, ReviewService reviewService) {
+    public PropertyServiceImpl(PropertyRepository propertyRepository, LocationService locationService, PropertyImageService propertyImageService) {
         this.propertyRepository = propertyRepository;
         this.locationService = locationService;
         this.propertyImageService = propertyImageService;
-        this.reviewService = reviewService;
     }
 
     @Override
@@ -127,7 +124,6 @@ public class PropertyServiceImpl implements PropertyService {
     @CacheEvict(value = "properties", allEntries = true)
     @LogDeletion(entity = "property")
     public void deleteProperty(Property property) {
-        this.reviewService.deleteAllReviewsForProperty(property.getId());
         this.propertyRepository.deleteById(property.getId());
     }
 

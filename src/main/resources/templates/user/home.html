@@ -191,10 +191,12 @@
                         </svg>
                     </a>
 
-                    <!--TODO: APPLY LOGIC FOR THIS!-->
-                    <span class="property-badge superhost">Superhost</span>
-                    <span th:if="${property.averageRating > 4}" class="property-badge featured">Featured</span>
-                    <span th:if="${property.createDate.isAfter(T(java.time.LocalDateTime).now().minusDays(7))}" class="property-badge new">New</span>
+                    <th:block th:switch="${true}">
+                        <span th:case="${property.averageRating >= 4.5 and property.reviews.size() >= 10}" class="property-badge superhost">Superhost</span>
+                        <span th:case="${property.averageRating >= 4 and property.reviews.size() >= 3}" class="property-badge featured">Featured</span>
+                        <span th:case="${property.createDate.isAfter(T(java.time.LocalDateTime).now().minusDays(7))}" class="property-badge new">New</span>
+                    </th:block>
+
                 </div>
                 <div class="property-content">
                     <div class="property-location-tag">
