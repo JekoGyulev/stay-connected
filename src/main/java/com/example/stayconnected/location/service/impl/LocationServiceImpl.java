@@ -36,7 +36,7 @@ public class LocationServiceImpl implements LocationService {
                     .country(locationRequest.getCountry())
                     .address(locationRequest.getAddress()).build();
 
-            this.locationRepository.save(location);
+            return this.locationRepository.save(location);
         }
 
         return optionalLocation.get();
