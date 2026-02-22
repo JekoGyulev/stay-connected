@@ -117,26 +117,29 @@
         </p>
 
         <!-- Search Box -->
-        <div class="search-box">
-            <div class="search-field">
-                <i class="fas fa-map-marker-alt"></i>
-                <input type="text" placeholder="Where are you going?">
+        <form th:object="${homeSearchProperty}" th:action="@{/properties/search}" th:method="GET">
+            <div class="search-box">
+                <div class="search-field">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input th:field="*{country}" type="text" placeholder="Country">
+                </div>
+                <div class="search-divider"></div>
+                <div class="search-field">
+                    <i class="fas fa-calendar"></i>
+                    <input th:field="*{checkIn}" id="dateCheckInInput" type="text" placeholder="Check-in">
+                </div>
+                <div class="search-divider"></div>
+                <div class="search-field">
+                    <i class="fas fa-calendar"></i>
+                    <input th:field="*{checkOut}" id="dateCheckOutInput" type="text" placeholder="Check-out">
+                </div>
+                <button class="search-btn" type="submit" id="searchPropertyBtn">
+                    <i class="fas fa-search"></i>
+                    <span>Search</span>
+                </button>
             </div>
-            <div class="search-divider"></div>
-            <div class="search-field">
-                <i class="fas fa-calendar"></i>
-                <input type="text" placeholder="Check-in">
-            </div>
-            <div class="search-divider"></div>
-            <div class="search-field">
-                <i class="fas fa-calendar"></i>
-                <input type="text" placeholder="Check-out">
-            </div>
-            <button class="search-btn">
-                <i class="fas fa-search"></i>
-                <span>Search</span>
-            </button>
-        </div>
+        </form>
+
 
         <!-- Stats -->
         <div class="hero-stats">
@@ -366,6 +369,48 @@
                 button.classList.toggle("active");
             })
         });
+
+
+    const checkInInput = document.getElementById("dateCheckInInput");
+    const checkOutInput = document.getElementById("dateCheckOutInput");
+
+    function maskInput(value, pattern) {
+        let i = 0;
+        return pattern.replace(/#/g, () => value[i++] || '');
+    }
+
+    checkInInput.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+
+        if (!value) {
+            e.target.value = '';
+            return;
+        }
+
+
+        e.target.value = maskInput(value, "##/##/####");
+    });
+
+    checkOutInput.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+
+        if (!value) {
+            e.target.value = '';
+            return;
+        }
+
+        e.target.value = maskInput(value, "##/##/####");
+    });
+
+
+    const searchPropertyBtn = document.getElementById("searchPropertyBtn");
+    searchPropertyBtn.addEventListener("click", (e) => {
+        if (checkInInput.value === '' || checkOutInput.value === '') {
+            e.preventDefault();
+        }
+    })
+
+
 
 </script>
 </body>

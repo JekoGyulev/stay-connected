@@ -7,6 +7,7 @@ import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.security.UserPrincipal;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.user.service.UserService;
+import com.example.stayconnected.web.dto.property.HomeSearchPropertyRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -51,6 +52,7 @@ public class IndexController {
         modelAndView.addObject("user", user);
         modelAndView.addObject("featuredProperties", featuredProperties);
         modelAndView.addObject("mostPopularDestinations", mostPopularDestinations);
+        modelAndView.addObject("homeSearchProperty", new HomeSearchPropertyRequest());
 
         return modelAndView;
     }

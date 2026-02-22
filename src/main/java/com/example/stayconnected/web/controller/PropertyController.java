@@ -14,6 +14,7 @@ import com.example.stayconnected.web.dto.DtoMapper;
 import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
 import com.example.stayconnected.web.dto.property.EditPropertyRequest;
 import com.example.stayconnected.web.dto.property.FilterPropertyRequest;
+import com.example.stayconnected.web.dto.property.HomeSearchPropertyRequest;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +81,26 @@ public class PropertyController {
         modelAndView.addObject("properties", filteredProperties);
         modelAndView.addObject("countries", allCountries);
         modelAndView.addObject("filterPropertyRequest", filterPropertyRequest);
+
+        return modelAndView;
+    }
+
+    @GetMapping("/search")
+    public ModelAndView getPropertiesMatchSearch(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                 HomeSearchPropertyRequest homeSearchPropertyRequest) {
+
+        User user = this.userService.getUserById(userPrincipal.getId());
+        FilterPropertyRequest filterPropertyRequest = new FilterPropertyRequest("", homeSearchPropertyRequest.getCountry());
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("property/properties");
+        modelAndView.addObject("authUser", user);
+        modelAndView.addObject("countries",  this.locationService.getAllDistinctCountries());
+        modelAndView.addObject("filterPropertyRequest", filterPropertyRequest);
+
+
+        // TODO: create method that will fetch properties based on homeSearchPropertyRequest's country, checkIn, checkOut
+        modelAndView.addObject("properties", List.of());
 
         return modelAndView;
     }
