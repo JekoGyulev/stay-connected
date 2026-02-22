@@ -121,7 +121,7 @@
             <div class="search-box">
                 <div class="search-field">
                     <i class="fas fa-map-marker-alt"></i>
-                    <input th:field="*{country}" type="text" placeholder="Country">
+                    <input th:field="*{country}" id="countryInput" type="text" placeholder="Country">
                 </div>
                 <div class="search-divider"></div>
                 <div class="search-field">
@@ -404,11 +404,13 @@
 
 
     const searchPropertyBtn = document.getElementById("searchPropertyBtn");
+    const countryInput = document.getElementById("countryInput");
+
     searchPropertyBtn.addEventListener("click", (e) => {
-        if (checkInInput.value === '' || checkOutInput.value === '') {
+        if (checkInInput.value === '' || checkOutInput.value === '' || countryInput.value === '') {
             e.preventDefault();
         }
-    })
+    });
 
 
 
