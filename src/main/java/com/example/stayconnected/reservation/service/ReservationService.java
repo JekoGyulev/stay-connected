@@ -6,6 +6,7 @@ import com.example.stayconnected.reservation.client.dto.ReservationResponse;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,4 +23,6 @@ public interface ReservationService {
     void cancel(UUID reservationId, UUID userId);
 
     void create(CreateReservationRequest createReservationRequest, UUID ownerId);
+
+    List<UUID> getUnavailableToBookPropertyIds(LocalDate startDate, LocalDate endDate);
 }

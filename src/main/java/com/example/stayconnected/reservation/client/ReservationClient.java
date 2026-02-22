@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,9 @@ public interface ReservationClient {
 
     @GetMapping("/total")
     ResponseEntity<Long> getTotalReservationsByStatus(@RequestParam(value = "status") String status);
+
+    @GetMapping("/unavailable-to-book")
+    ResponseEntity<List<UUID>> getUnavailableToBookPropertyIds(@RequestParam(value = "checkIn") LocalDate startDate, @RequestParam(value = "checkOut") LocalDate endDate);
 
     @GetMapping
     PageResponse<ReservationResponse> getReservationHistoryForUser(

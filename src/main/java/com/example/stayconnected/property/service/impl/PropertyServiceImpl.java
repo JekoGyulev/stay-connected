@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -161,6 +162,11 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public List<Property> getFeaturedProperties() {
         return this.propertyRepository.findTop4ByOrderByAverageRatingDesc();
+    }
+
+    @Override
+    public List<Property> getAvailableToBookProperties(List<UUID> propertyIdsNotAvailable, String country) {
+        return this.propertyRepository.findAllAvailableProperties(propertyIdsNotAvailable, country);
     }
 
 }

@@ -26,4 +26,6 @@ public interface PropertyService {
     List<Property> getPropertiesByAdminId(UUID adminId);
 
     List<Property> getFeaturedProperties();
+
+    List<Property> getAvailableToBookProperties(List<UUID> propertyIdsNotAvailable, String country);
 }
