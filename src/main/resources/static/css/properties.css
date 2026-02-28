@@ -283,6 +283,45 @@
     font-size: 0.875rem;
     color: var(--muted);
 }
+.property-view-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.4rem;
+
+    padding: 0.55rem 1.2rem;
+    border-radius: 999px;
+
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+
+    color: #fff;
+    background: var(--gradient-primary);
+    border: none;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    box-shadow: 0 6px 18px -6px rgba(255, 56, 92, 0.35);
+
+    transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            filter 0.2s ease;
+}
+
+.property-view-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -8px rgba(255, 56, 92, 0.45);
+    filter: brightness(1.05);
+}
+
+.property-view-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px -6px rgba(255, 56, 92, 0.3);
+}
+
 
 
 

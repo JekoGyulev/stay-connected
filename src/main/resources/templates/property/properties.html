@@ -176,24 +176,23 @@
                     </div>
                 </div>
 
-                <div style="display: flex; flex-direction: column">
-                    <div class="property-footer">
-                        <div class="property-rating">
-                            <i class="fas fa-star"></i>
-                            <span th:text="${property.averageRating}"></span>
-                            <span th:text="${#strings.concat('(', property.reviews.size(), ')')}" class="reviews"></span>
-                        </div>
-                        <div class="property-price-tag">
+                <div class="property-footer">
+                    <div class="property-rating">
+                        <i class="fas fa-star"></i>
+                        <span th:text="${property.averageRating}"></span>
+                        <span th:text="${#strings.concat('(', property.reviews.size(), ')')}" class="reviews"></span>
+                    </div>
+                    <div class="property-price-tag">
                             <span th:text="${#strings.concat('€', #numbers.formatDecimal(property.pricePerNight, 1,0))}"
                                   class="price"></span>
-                            <span class="period">[[#{manage.properties.per-night}]]</span>
-                        </div>
+                        <span class="period">[[#{manage.properties.per-night}]]</span>
                     </div>
-
-                    <a th:href="@{'/properties/' + ${property.id}}"
-                       style="margin-top: 2rem"
-                       class="btn btn-primary">[[#{transaction.table.view}]]</a>
                 </div>
+
+                <a th:href="@{'/properties/' + ${property.id}}"
+                   class="property-view-btn">
+                    [[#{transaction.table.view}]]
+                </a>
             </div>
 
 
