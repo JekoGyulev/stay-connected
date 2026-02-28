@@ -505,10 +505,19 @@
 .settings-actions {
     display: flex;
     justify-content: flex-end;
+    opacity: 0;
+    max-height: 0;
     gap: 12px;
     margin-top: 32px;
     padding-top: 16px;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--card-border);
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+    overflow: hidden;
+}
+
+.settings-actions.visible {
+    opacity: 1;
+    max-height: 100px;
 }
 
 .btn {
