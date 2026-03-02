@@ -128,13 +128,17 @@
 
 
         <div class="property-meta">
-            <div class="property-rating">
-                <span class="rating-star">★</span>
-                <span th:text="${property.averageRating}" class="rating-value"></span>
-                <span th:text="'(' + ${countReviews} + ' ' + #{property.details.reviews-count} + ')'" class="rating-count"></span>
-            </div>
             <span th:text="'📍' + ${property.location.city} + ', ' + ${property.location.country}"
                   class="property-location-link"></span>
+
+            <div class="property-rating">
+                <i class="fas fa-star" style="color: #FFB800; font-size: 0.875rem;"></i>
+                <span th:text="${property.averageRating}" class="rating-value"></span>
+                <a href="#preReviewsSectionDivider"
+                   class="rating-count"
+                   th:text="'(' + ${countReviews} + ' ' + #{property.details.reviews-count} + ')'">
+                </a>
+            </div>
         </div>
     </div>
 
@@ -312,7 +316,7 @@
                 <div id="map"  class="property-map"></div>
             </section>
 
-            <div class="section-divider"></div>
+            <div class="section-divider" id="preReviewsSectionDivider"></div>
 
 
             <section class="details-section">
@@ -568,13 +572,28 @@
 <script src="/js/darkmode.js"></script>
 <script src="/js/reservation-guests-count.js"></script>
 <script>
-    let deleteButton = document.querySelector(".delete-property-btn");
 
-    deleteButton.addEventListener("click", function(event) {
-        if (!confirm("Are you sure you want to delete this property?")) {
-            event.preventDefault();
-        }
+    document.addEventListener("DOMContentLoaded", () => {
+
+
+        const deleteButton = document.querySelector(".delete-property-btn");
+        deleteButton.addEventListener("click", function(event) {
+            if (!confirm("Are you sure you want to delete this property?")) {
+                event.preventDefault();
+            }
+        });
+
+
     });
+
+
+
+
+
+
+
+
+
 </script>
 </body>
 </html>
