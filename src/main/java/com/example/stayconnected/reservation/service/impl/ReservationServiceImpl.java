@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -43,6 +44,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public BigDecimal getAveragePercentageOfReservationsByStatus(String status) {
         return this.reservationClient.getAveragePercentageOfReservationsByStatus(status).getBody();
+    }
+
+    @Override
+    public List<UUID> getUnavailableToBookPropertyIds(LocalDate startDate, LocalDate endDate) {
+        return this.reservationClient.getUnavailableToBookPropertyIds(startDate, endDate).getBody();
     }
 
     @Override

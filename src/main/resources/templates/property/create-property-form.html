@@ -205,6 +205,24 @@
             </div>
         </section>
 
+        <!--Count Of Guests-->
+        <section class="form-section">
+            <h2 class="section-title">
+                <span><i class="fas fa-users icon"></i></span>
+                [[#{create.property.max-guests}]]
+            </h2>
+
+            <div class="form-group">
+                <label for="guests">[[#{create.property.guests}]]</label>
+                <div class="input-with-icon">
+                    <input th:field="*{countGuests}" type="number" id="guests" name="guests" placeholder="2" min="1"
+                           style="padding-left: 30px">
+                </div>
+
+                <p th:if="${#fields.hasErrors('countGuests')}" th:errors="*{countGuests}" class="alert-warning"></p>
+            </div>
+        </section>
+
         <!-- Amenities -->
         <section class="form-section">
             <h2 class="section-title">
@@ -287,7 +305,7 @@
 
         <!-- Submit Buttons -->
         <div class="form-actions">
-            <a th:href="@{/properties/my-properties}" type="button" class="btn btn-outline">[[#{profile.edit-cancel}]]</a>
+            <a th:href="@{/properties/my-properties}" type="button" class="cancel-property-button">[[#{profile.edit-cancel}]]</a>
             <button type="submit" class="btn btn-primary">[[#{create.button}]]</button>
         </div>
     </form>

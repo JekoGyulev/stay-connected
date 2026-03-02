@@ -2,6 +2,7 @@ package com.example.stayconnected.property.model;
 
 import com.example.stayconnected.location.model.Location;
 import com.example.stayconnected.property.enums.CategoryType;
+import com.example.stayconnected.review.model.Review;
 import com.example.stayconnected.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,6 +47,10 @@ public class Property {
     private BigDecimal averageRating;
     @ElementCollection
     private List<String> amenities = new ArrayList<>();
+    @Column(name = "count_guests", nullable = false)
+    private int countGuests;
+    @OneToMany(mappedBy = "property", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Review> reviews = new ArrayList<>();
 
 
     public String getTitle() {
@@ -134,5 +139,21 @@ public class Property {
 
     public void setAverageRating(BigDecimal averageRating) {
         this.averageRating = averageRating;
+    }
+
+    public int getCountGuests() {
+        return countGuests;
+    }
+
+    public void setCountGuests(int countGuests) {
+        this.countGuests = countGuests;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 }

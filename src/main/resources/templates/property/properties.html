@@ -146,40 +146,58 @@
     </form>
 
     <div th:if="${!properties.isEmpty()}" class="properties-grid">
+        <div class="property-card-new" th:each="property : ${properties}">
+            <div class="property-image-wrapper">
+                <img th:src="${property.images[0].imageURL}" alt="Modern Loft">
+                <button class="favorite-btn" data-id="1">
+                    <i class="far fa-heart"></i>
+                </button>
 
-        <article class="property-card" th:each="property : ${properties}">
+                <th:block th:switch="${true}">
+                    <span th:case="${property.averageRating >= 4.5 and property.reviews.size() >= 10}" class="property-badge superhost">Superhost</span>
+                    <span th:case="${property.averageRating >= 4 and property.reviews.size() >= 3}" class="property-badge featured">Featured</span>
+                    <span th:case="${property.createDate.isAfter(T(java.time.LocalDateTime).now().minusDays(7))}" class="property-badge new">New</span>
+                </th:block>
 
-            <div class="property-image">
-                <img th:src="${property.images[0].imageURL}" alt="Modern beachfront villa with ocean views">
             </div>
-
             <div class="property-content">
-
-                <div class="property-header">
-
-                    <h2 th:text="${property.title}" class="property-title"></h2>
-
-                    <div class="property-rating">
-                        <span class="rating-star" th:each="i : ${#numbers.sequence(1, 5)}"
-                              th:text="${i <= (property.averageRating.doubleValue()) ? '★' : '☆'}">
-                        </span>
-                    </div>
-
+                <div class="property-location-tag">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span th:text="${#strings.concat(property.location.city, ', ', property.location.country)}"></span>
                 </div>
-
-                <p th:text="${property.location.city} + ', ' + ${property.location.country}" class="property-location"></p>
+                <h3 th:text="${property.title}" class="property-card-title"></h3>
+                <div class="property-features">
+                    <div style="display: flex; gap: 0.25rem; align-items: center">
+                        <div style="display: flex; gap: 0.5rem; align-items: center">
+                            <i class="fas fa-users"></i>
+                            <span th:text="${property.countGuests}"></span>
+                        </div>
+                        <span> guests</span>
+                    </div>
+                </div>
 
                 <div class="property-footer">
-                    <div class="property-price">
-                        <span th:text="'€' + ${property.pricePerNight}" class="price-amount"></span>
-                        <span class="price-period">[[#{manage.properties.per-night}]]</span>
+                    <div class="property-rating">
+                        <i class="fas fa-star"></i>
+                        <span th:text="${property.averageRating}"></span>
+                        <span th:text="${#strings.concat('(', property.reviews.size(), ')')}" class="reviews"></span>
                     </div>
-                    <a th:href="@{'/properties/' + ${property.id}}" class="btn btn-primary">[[#{transaction.table.view}]]</a>
+                    <div class="property-price-tag">
+                            <span th:text="${#strings.concat('€', #numbers.formatDecimal(property.pricePerNight, 1,0))}"
+                                  class="price"></span>
+                        <span class="period">[[#{manage.properties.per-night}]]</span>
+                    </div>
                 </div>
 
+                <a th:href="@{'/properties/' + ${property.id}}"
+                   class="property-view-btn">
+                    [[#{transaction.table.view}]]
+                </a>
             </div>
 
-        </article>
+
+
+        </div>
     </div>
 
     <p style="text-align: center" th:if="${properties.isEmpty()}">[[#{properties.not-found}]]</p>
@@ -188,5 +206,6 @@
 <footer th:insert="/fragments/footer :: footer"></footer>
 
 <script src="/js/darkmode.js"></script>
+<script src="/js/toggleLikeButton.js"></script>
 </body>
 </html>

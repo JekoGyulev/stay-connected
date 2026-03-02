@@ -128,13 +128,17 @@
 
 
         <div class="property-meta">
-            <div class="property-rating">
-                <span class="rating-star">★</span>
-                <span th:text="${property.averageRating}" class="rating-value"></span>
-                <span th:text="'(' + ${countReviews} + ' ' + #{property.details.reviews-count} + ')'" class="rating-count"></span>
-            </div>
             <span th:text="'📍' + ${property.location.city} + ', ' + ${property.location.country}"
                   class="property-location-link"></span>
+
+            <div class="property-rating">
+                <i class="fas fa-star" style="color: #FFB800; font-size: 0.875rem;"></i>
+                <span th:text="${property.averageRating}" class="rating-value"></span>
+                <a href="#preReviewsSectionDivider"
+                   class="rating-count"
+                   th:text="'(' + ${countReviews} + ' ' + #{property.details.reviews-count} + ')'">
+                </a>
+            </div>
         </div>
     </div>
 
@@ -228,7 +232,7 @@
                         <span th:if="${amenity == 'hot_tub'}">[[#{property.details.hot-tub}]]</span>
                         <span th:if="${amenity == 'heating'}">[[#{property.details.heating}]]</span>
                         <span th:if="${amenity == 'gym'}">[[#{property.details.gym}]]</span>
-                        <span th:if="${amenity == 'washer'}">[[#{property.details.washer]]</span>
+                        <span th:if="${amenity == 'washer'}">[[#{property.details.washer}]]</span>
                         <span th:if="${amenity == 'kitchen'}">[[#{property.details.kitchen}]]</span>
                         <span th:if="${amenity == 'air_conditioning'}">[[#{property.details.air-conditioning}]]</span>
                         <span th:if="${amenity == 'parking'}">[[#{property.details.free-parking}]]</span>
@@ -312,7 +316,7 @@
                 <div id="map"  class="property-map"></div>
             </section>
 
-            <div class="section-divider"></div>
+            <div class="section-divider" id="preReviewsSectionDivider"></div>
 
 
             <section class="details-section">
@@ -478,7 +482,50 @@
                     </div>
 
 
+                    <div class="reservation-guests-section">
+                        <label class="reservation-label">[[#{property.details.reservations.guests}]]</label>
+
+                        <div class="guests-selector">
+                            <div class="guests-dropdown-trigger" id="guestsDropdownTrigger">
+                                <div class="guests-display">
+                                    <span class="guests-icon">👥</span>
+                                    <span class="guests-count" id="guestsCount">[[#{property.details.reservations.guest-1}]]</span>
+                                </div>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+
+                            <div class="guests-dropdown" id="guestsDropdown">
+                                <!-- Guests -->
+                                <div class="guest-type-row">
+                                    <div class="guest-type-info">
+                                        <span class="guest-type-label">[[#{property.details.reservations.guests-lc}]]</span>
+                                    </div>
+                                    <div class="guest-counter">
+                                        <button type="button" class="counter-btn minus" data-type="adults" disabled>−</button>
+                                        <span class="counter-value" id="hiddenGuestsCount">1</span>
+                                        <button type="button" class="counter-btn plus" data-type="adults">+</button>
+                                    </div>
+                                </div>
+
+                                <!-- Max Guests Info -->
+                                <div class="max-guests-info">
+                                    <span class="info-icon">ℹ️</span>
+                                    <span th:if="${property.countGuests == 1}" th:text="#{max.guests.info.one(${property.countGuests})}"></span>
+                                    <span th:if="${property.countGuests > 1}" th:text="#{max.guests.info.other(${property.countGuests})}"></span>
+                                </div>
+
+                                <button type="button" class="guests-close-btn" id="guestsCloseBtn">[[#{property.details.reservations.guests-close}]]</button>
+                            </div>
+                        </div>
+
+                        <!-- Hidden inputs for form submission -->
+                        <input type="hidden" id="guestsInput" value="1">
+                        <input type="hidden" id="maxGuests" th:value="${property.countGuests}">
+                    </div>
+
+
                     <button class="btn btn-primary btn-lg btn-block">[[#{property.details.reserve}]]</button>
+
                     <p class="booking-notice">[[#{property.details.reserve-additional-info}]]</p>
 
                     <div class="booking-breakdown">
@@ -523,14 +570,30 @@
 <script src="/js/highlightStars.js"></script>
 <script src="/js/calendar.js"></script>
 <script src="/js/darkmode.js"></script>
+<script src="/js/reservation-guests-count.js"></script>
 <script>
-    let deleteButton = document.querySelector(".delete-property-btn");
 
-    deleteButton.addEventListener("click", function(event) {
-        if (!confirm("Are you sure you want to delete this property?")) {
-            event.preventDefault();
-        }
+    document.addEventListener("DOMContentLoaded", () => {
+
+
+        const deleteButton = document.querySelector(".delete-property-btn");
+        deleteButton.addEventListener("click", function(event) {
+            if (!confirm("Are you sure you want to delete this property?")) {
+                event.preventDefault();
+            }
+        });
+
+
     });
+
+
+
+
+
+
+
+
+
 </script>
 </body>
 </html>

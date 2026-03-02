@@ -112,80 +112,86 @@
 
     <div th:if="${!properties.isEmpty()}" class="properties-grid">
 
-        <article class="property-card" th:each="property : ${properties}">
+        <div class="property-card-new" th:each="property : ${properties}">
+            <div class="property-image-wrapper">
+                <img th:src="${property.images[0].imageURL}" alt="Modern Loft">
+                <button class="favorite-btn" data-id="1">
+                    <i class="far fa-heart"></i>
+                </button>
 
-            <div class="property-image">
-                <img th:src="${property.images[0].imageURL}" alt="Modern beachfront villa with ocean views">
+                <th:block th:switch="${true}">
+                    <span th:case="${property.averageRating >= 4.5 and property.reviews.size() >= 10}" class="property-badge superhost">Superhost</span>
+                    <span th:case="${property.averageRating >= 4 and property.reviews.size() >= 3}" class="property-badge featured">Featured</span>
+                    <span th:case="${property.createDate.isAfter(T(java.time.LocalDateTime).now().minusDays(7))}" class="property-badge new">New</span>
+                </th:block>
+
             </div>
-
             <div class="property-content">
-
-                <div class="property-header">
-
-                    <h2 th:text="${property.title}" class="property-title"></h2>
-
-                    <div class="property-rating">
-                        <span class="rating-star" th:each="i : ${#numbers.sequence(1, 5)}"
-                              th:text="${i <= (property.averageRating.doubleValue()) ? '★' : '☆'}">
-                        </span>
-                    </div>
-
+                <div class="property-location-tag">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span th:text="${#strings.concat(property.location.city, ', ', property.location.country)}"></span>
                 </div>
-
-                <p th:text="${property.location.city} + ', ' + ${property.location.country}" class="property-location"></p>
-
+                <h3 th:text="${property.title}" class="property-card-title"></h3>
+                <div class="property-features">
+                    <div style="display: flex; gap: 0.25rem; align-items: center">
+                        <div style="display: flex; gap: 0.5rem; align-items: center">
+                            <i class="fas fa-users"></i>
+                            <span th:text="${property.countGuests}"></span>
+                        </div>
+                        <span> guests</span>
+                    </div>
+                </div>
                 <div class="property-footer">
-                    <div class="property-price">
-                        <span th:text="'€' + ${property.pricePerNight}" class="price-amount"></span>
-                        <span class="price-period">[[#{manage.properties.per-night}]]</span>
+                    <div class="property-rating">
+                        <i class="fas fa-star"></i>
+                        <span th:text="${property.averageRating}"></span>
+                        <span th:text="${#strings.concat('(', property.reviews.size(), ')')}" class="reviews"></span>
                     </div>
-
+                    <div class="property-price-tag">
+                            <span th:text="${#strings.concat('€', #numbers.formatDecimal(property.pricePerNight, 1,0))}"
+                                  class="price"></span>
+                        <span class="period">[[#{manage.properties.per-night}]]</span>
+                    </div>
                 </div>
-
-                <p style="margin-top: 20px; font-size: 13px" class="property-location" th:text="${#temporals.format(property.createDate ,'dd MMMM yyyy')}"></p>
-
-
-                <div class="property-actions-footer">
-
-
-                        <a th:href="@{'/properties/' + ${property.id}}" class="action-btn view-btn" title="View property">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-                                <circle cx="12" cy="12" r="3"/>
-                            </svg>
-                        </a>
-
-
-
-                        <a th:href="@{'/properties/' + ${property.id} + '/edit'}" class="action-btn edit-btn" title="Edit property">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                                <path d="m15 5 4 4"/>
-                            </svg>
-                        </a>
-
-
-                    <form th:action="@{'/properties/' + ${property.id} + '/delete'}" th:method="DELETE">
-
-                        <button type="submit" class="action-btn delete-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 6h18"/>
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                                <line x1="10" x2="10" y1="11" y2="17"/>
-                                <line x1="14" x2="14" y1="11" y2="17"/>
-                            </svg>
-                        </button>
-
-                    </form>
-
-                </div>
-
-
 
             </div>
 
-        </article>
+            <div class="property-actions-footer">
+
+
+                <a th:href="@{'/properties/' + ${property.id}}" class="action-btn view-btn" title="View property">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </a>
+
+
+
+                <a th:href="@{'/properties/' + ${property.id} + '/edit'}" class="action-btn edit-btn" title="Edit property">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                        <path d="m15 5 4 4"/>
+                    </svg>
+                </a>
+
+
+                <form th:action="@{'/properties/' + ${property.id} + '/delete'}" th:method="DELETE">
+
+                    <button type="submit" class="action-btn delete-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6h18"/>
+                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                            <line x1="10" x2="10" y1="11" y2="17"/>
+                            <line x1="14" x2="14" y1="11" y2="17"/>
+                        </svg>
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
 
         <form class="property-block new-property" th:method="GET" th:action="@{/properties/create}">
             <button type="submit"></button>
@@ -201,5 +207,6 @@
 <footer th:insert="/fragments/footer :: footer"></footer>
 
 <script src="/js/darkmode.js"></script>
+<script src="/js/toggleLikeButton.js"></script>
 
 </html>

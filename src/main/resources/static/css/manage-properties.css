@@ -25,8 +25,7 @@
 .property-actions-footer {
     display: flex;
     gap: 2rem;
-    padding: 1rem;
-    border-top: 1px solid var(--card-border);
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
     align-items: center;
     justify-content: center;
 }
@@ -46,6 +45,9 @@
     align-items: center;
     justify-content: center;
 }
+.action-btn:hover {
+    transform: translateY(-2px);
+}
 .amount-cell {
     font-weight: 700;
     font-size: 0.9375rem;
@@ -63,9 +65,8 @@
 }
 
 .edit-btn:hover {
-    background: var(--foreground);
-    color: var(--background);
-    border-color: var(--foreground);
+    background: transparent;
+    color: var(--muted);
 }
 
 .delete-btn {

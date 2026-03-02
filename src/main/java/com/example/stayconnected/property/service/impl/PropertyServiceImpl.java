@@ -9,7 +9,6 @@ import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.repository.PropertyRepository;
 import com.example.stayconnected.property.service.PropertyImageService;
 import com.example.stayconnected.property.service.PropertyService;
-import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.user.model.User;
 import com.example.stayconnected.utils.exception.PropertyDoesNotExist;
 import com.example.stayconnected.web.dto.location.LocationRequest;
@@ -24,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -37,14 +37,12 @@ public class PropertyServiceImpl implements PropertyService {
 
     private final LocationService locationService;
     private final PropertyImageService  propertyImageService;
-    private final ReviewService reviewService;
 
     @Autowired
-    public PropertyServiceImpl(PropertyRepository propertyRepository, LocationService locationService, PropertyImageService propertyImageService, ReviewService reviewService) {
+    public PropertyServiceImpl(PropertyRepository propertyRepository, LocationService locationService, PropertyImageService propertyImageService) {
         this.propertyRepository = propertyRepository;
         this.locationService = locationService;
         this.propertyImageService = propertyImageService;
-        this.reviewService = reviewService;
     }
 
     @Override
@@ -75,6 +73,7 @@ public class PropertyServiceImpl implements PropertyService {
                 .categoryType(createPropertyRequest.getCategory())
                 .location(location)
                 .pricePerNight(createPropertyRequest.getPricePerNight())
+                .countGuests(createPropertyRequest.getCountGuests())
                 .owner(owner)
                 .amenities(createPropertyRequest.getAmenities())
                 .createDate(LocalDateTime.now())
@@ -126,7 +125,6 @@ public class PropertyServiceImpl implements PropertyService {
     @CacheEvict(value = "properties", allEntries = true)
     @LogDeletion(entity = "property")
     public void deleteProperty(Property property) {
-        this.reviewService.deleteAllReviewsForProperty(property.getId());
         this.propertyRepository.deleteById(property.getId());
     }
 
@@ -164,6 +162,11 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public List<Property> getFeaturedProperties() {
         return this.propertyRepository.findTop4ByOrderByAverageRatingDesc();
+    }
+
+    @Override
+    public List<Property> getAvailableToBookProperties(List<UUID> propertyIdsNotAvailable, String country) {
+        return this.propertyRepository.findAllAvailableProperties(propertyIdsNotAvailable, country);
     }
 
 }

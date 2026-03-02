@@ -5,6 +5,7 @@ import com.example.stayconnected.property.model.Property;
 import com.example.stayconnected.property.model.PropertyImage;
 import com.example.stayconnected.property.service.PropertyService;
 import com.example.stayconnected.reservation.client.dto.CreateReservationRequest;
+import com.example.stayconnected.reservation.service.ReservationService;
 import com.example.stayconnected.review.model.Review;
 import com.example.stayconnected.review.service.ReviewService;
 import com.example.stayconnected.security.UserPrincipal;
@@ -14,6 +15,7 @@ import com.example.stayconnected.web.dto.DtoMapper;
 import com.example.stayconnected.web.dto.property.CreatePropertyRequest;
 import com.example.stayconnected.web.dto.property.EditPropertyRequest;
 import com.example.stayconnected.web.dto.property.FilterPropertyRequest;
+import com.example.stayconnected.web.dto.property.HomeSearchPropertyRequest;
 import com.example.stayconnected.web.dto.review.CreateReviewRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +40,15 @@ public class PropertyController {
     private final ReviewService reviewService;
     private final UserService userService;
     private final LocationService locationService;
+    private final ReservationService reservationService;
 
     @Autowired
-    public PropertyController(PropertyService propertyService, ReviewService reviewService, UserService userService, LocationService locationService) {
+    public PropertyController(PropertyService propertyService, ReviewService reviewService, UserService userService, LocationService locationService, ReservationService reservationService) {
         this.propertyService = propertyService;
         this.reviewService = reviewService;
         this.userService = userService;
         this.locationService = locationService;
+        this.reservationService = reservationService;
     }
 
     @GetMapping
@@ -80,6 +84,27 @@ public class PropertyController {
         modelAndView.addObject("properties", filteredProperties);
         modelAndView.addObject("countries", allCountries);
         modelAndView.addObject("filterPropertyRequest", filterPropertyRequest);
+
+        return modelAndView;
+    }
+
+    @GetMapping("/search")
+    public ModelAndView getPropertiesMatchSearch(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                 HomeSearchPropertyRequest homeSearchPropertyRequest) {
+
+        User user = this.userService.getUserById(userPrincipal.getId());
+        FilterPropertyRequest filterPropertyRequest = new FilterPropertyRequest("", homeSearchPropertyRequest.getCountry());
+
+        List<UUID> unavailableToBookPropertyIds = this.reservationService.getUnavailableToBookPropertyIds(homeSearchPropertyRequest.getCheckIn(), homeSearchPropertyRequest.getCheckOut());
+
+        List<Property> availableToBookProperties = this.propertyService.getAvailableToBookProperties(unavailableToBookPropertyIds, homeSearchPropertyRequest.getCountry());
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("property/properties");
+        modelAndView.addObject("authUser", user);
+        modelAndView.addObject("countries", this.locationService.getAllDistinctCountries());
+        modelAndView.addObject("filterPropertyRequest", filterPropertyRequest);
+        modelAndView.addObject("properties", availableToBookProperties);
 
         return modelAndView;
     }

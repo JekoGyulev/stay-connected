@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -49,6 +50,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @LogCreation(entity = "review")
+    @Transactional
     public Review addReview(UUID userId, UUID propertyId, CreateReviewRequest request) {
 
         User user = this.userRepository.findById(userId)
@@ -90,14 +92,25 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @LogDeletion(entity = "review")
     public void deleteReview(Review review) {
-
         Property property = review.getProperty();
+        property.getReviews().remove(review);
 
-        this.reviewRepository.delete(review);
+        BigDecimal newAverageRating = BigDecimal.ZERO;
 
-        BigDecimal newAverageRating = getAverageRatingForProperty(property.getId());
+        if (!property.getReviews().isEmpty()) {
+
+            BigDecimal sumRating = BigDecimal.valueOf(property.getReviews()
+                    .stream()
+                    .map(Review::getRating)
+                    .reduce(0, Integer::sum));
+
+            BigDecimal countReviewsForProperty = BigDecimal.valueOf(property.getReviews().size());
+
+            newAverageRating = sumRating.divide(countReviewsForProperty, 2, RoundingMode.HALF_UP);
+        }
 
         property.setAverageRating(newAverageRating);
+
         this.propertyRepository.save(property);
     }
     @Override

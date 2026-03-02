@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -27,13 +28,18 @@ public class LocationServiceImpl implements LocationService {
     @Override
     @LogCreation(entity = "location")
     public Location createLocation(LocationRequest locationRequest) {
-        Location location = Location.builder().city(locationRequest.getCity())
-                .country(locationRequest.getCountry())
-                .address(locationRequest.getAddress()).build();
 
-        this.locationRepository.save(location);
+        Optional<Location> optionalLocation = this.locationRepository.findByCountryAndCityAndAddress(locationRequest.getCountry(), locationRequest.getCity(), locationRequest.getAddress());
 
-        return location;
+        if (optionalLocation.isEmpty()) {
+            Location location = Location.builder().city(locationRequest.getCity())
+                    .country(locationRequest.getCountry())
+                    .address(locationRequest.getAddress()).build();
+
+            return this.locationRepository.save(location);
+        }
+
+        return optionalLocation.get();
     }
 
     @Override
