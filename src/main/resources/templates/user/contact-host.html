@@ -32,7 +32,9 @@
         <div class="nav-content">
             <!-- Logo and Title -->
             <div class="logo-section">
-                <h1 class="logo-title">StayConnected</h1>
+                <a th:href="@{/home}" style="text-decoration: none" class="logo-title">
+                    StayConnected
+                </a>
             </div>
 
             <!-- Navigation Menu -->
@@ -101,30 +103,6 @@
 
 <main class="contact-host-page">
     <div class="contact-host-container">
-        <!-- Property Info Card -->
-        <div class="property-info-card">
-            <div class="property-thumbnail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                    <polyline points="9,22 9,12 15,12 15,22"/>
-                </svg>
-            </div>
-            <div class="property-details">
-
-                <h3 th:text="${property.title}" class="property-name"></h3>
-
-                <p class="property-location">
-
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
-                        <circle cx="12" cy="10" r="3"/>
-                    </svg>
-
-                    <span th:text="${#strings.concat(property.location.address, ', ', property.location.city, ', ', property.location.country)}"></span>
-                </p>
-
-            </div>
-        </div>
 
         <!-- Host Info -->
         <div class="host-info-card">
