@@ -122,7 +122,7 @@ async function dateClick(day) {
 
 
         if (blocked) {
-            alert("You cannot select through disabled/booked days!");
+            alert("You cannot select through booked days!");
             return;
         }
 
