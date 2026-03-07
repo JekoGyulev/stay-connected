@@ -306,6 +306,14 @@
     border-radius: 0;
 }
 
+.calendar-day.disabled {
+    color: #bbb;
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    text-decoration: line-through;
+}
+
 /* Map */
 .property-map {
     width: 100%;
