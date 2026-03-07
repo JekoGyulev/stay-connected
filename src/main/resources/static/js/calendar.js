@@ -103,6 +103,31 @@ async function dateClick(day) {
 
 
     if (date > checkIn) {
+
+        let blocked = false;
+
+        const daysOfMonth = document.querySelectorAll(".calendar-day");
+
+        for (let day of daysOfMonth) {
+
+            if (day.classList.contains("empty")) continue;
+
+            const dayDate = new Date(day.dataset.date);
+
+            if (dayDate > checkIn && dayDate < date && day.classList.contains("disabled")) {
+                blocked = true;
+                break;
+            }
+        }
+
+
+        if (blocked) {
+            alert("You cannot select through disabled/booked days!");
+            return;
+        }
+
+
+
         checkOut = date;
         updateInputs();
         updatePrice();
