@@ -4,8 +4,10 @@ let checkOut = null;
 const calendar = document.getElementById("calendar");
 const monthLabel = document.getElementById("currentMonth");
 
+
 const checkInInput = document.getElementById("checkInInput");
 const checkOutInput = document.getElementById("checkOutInput");
+
 
 const totalPriceEl = document.getElementById("totalPrice");
 const totalPriceHidden = document.getElementById("totalPriceHidden");
@@ -16,12 +18,18 @@ const cleaningFee = parseFloat(document.getElementById("cleaningFee").dataset.fe
 const serviceFee = parseFloat(document.getElementById("serviceFee").dataset.fee);
 
 
-
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
 let currentMonth = today.getMonth();
 let currentYear = today.getFullYear();
+
+
+const request = async (url) => {
+    const response = await fetch(url);
+    return await response.json();
+}
+
 
 function renderCalendar() {
     calendar.innerHTML = "";
@@ -41,6 +49,7 @@ function renderCalendar() {
 
     for (let day = 1; day <= lastDay; day++) {
         const date = new Date(currentYear, currentMonth, day);
+
         let classes = "calendar-day";
 
         if (date < today) {
@@ -56,7 +65,9 @@ function renderCalendar() {
             classes += " in-range";
         }
 
-        calendar.innerHTML += `<div class="${classes}" onclick="dateClick(${day})">${day}</div>`;
+        let formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+        calendar.innerHTML += `<div class="${classes}" data-date="${formattedDate}"  onclick="dateClick(${day})">${day}</div>`;
     }
 }
 
@@ -68,25 +79,25 @@ function sameDate(a, b) {
 
 function format(date) {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // months are 0-indexed
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${day}/${month}/${year}`;
 }
 
-
-function dateClick(day) {
+async function dateClick(day) {
     const date = new Date(currentYear, currentMonth, day);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     if (date < today) return;
 
-
     if (!checkIn || (checkIn && checkOut)) {
         checkIn = date;
         checkOut = null;
         updateInputs();
         renderCalendar();
+        await loadBookedDays();
+
         return;
     }
 
@@ -96,6 +107,7 @@ function dateClick(day) {
         updateInputs();
         updatePrice();
         renderCalendar();
+        await loadBookedDays();
         return;
     }
 
@@ -104,6 +116,7 @@ function dateClick(day) {
     checkOut = null;
     updateInputs();
     renderCalendar();
+    await loadBookedDays();
 }
 
 function updateInputs() {
@@ -138,6 +151,31 @@ function updatePrice() {
     totalPriceHidden.value = total.toFixed(2);
 }
 
+
+async function loadBookedDays() {
+    const currentPropertyId = window.location.pathname.split("/")[2];
+
+    const listOfBookedDatesForProperty =
+        await request(`http://localhost:8081/api/v1/reservations/${currentPropertyId}/booked-dates`);
+
+    const allDaysOfCurrentMonth = document.querySelectorAll(".calendar-day");
+
+    for (let bookingDateObject of listOfBookedDatesForProperty) {
+
+        const checkIn = bookingDateObject.checkIn;
+        const checkOut = bookingDateObject.checkOut;
+
+        for (let day of allDaysOfCurrentMonth) {
+            let currentDate = day.dataset.date;
+
+            if (currentDate >= checkIn && currentDate <= checkOut) {
+                day.classList.add("disabled");
+            }
+        }
+    }
+
+}
+
 document.getElementById("nextMonth").onclick = () => {
     currentMonth++;
     if (currentMonth > 11) {
@@ -157,3 +195,8 @@ document.getElementById("prevMonth").onclick = () => {
 };
 
 renderCalendar();
+loadBookedDays();
+
+
+
+

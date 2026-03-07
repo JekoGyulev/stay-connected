@@ -291,6 +291,7 @@
     background: var(--accent-bg);
 }
 
+/*TODO: Use those classes when marking days as disabled*/
 .calendar-day.empty {
     cursor: default;
 }
@@ -304,6 +305,15 @@
     background: var(--accent-bg);
     color: var(--primary);
     border-radius: 0;
+}
+
+.calendar-day.disabled {
+    /* Think of this background color : would it look better without it or with it */
+    background-color: var(--accent-bg);
+    color: #bbb;
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* Map */
