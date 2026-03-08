@@ -208,6 +208,7 @@ document.getElementById("nextMonth").onclick = () => {
         currentYear++;
     }
     renderCalendar();
+    loadBookedDays();
 };
 
 document.getElementById("prevMonth").onclick = () => {
@@ -217,6 +218,7 @@ document.getElementById("prevMonth").onclick = () => {
         currentYear--;
     }
     renderCalendar();
+    loadBookedDays();
 };
 
 renderCalendar();
