@@ -59,7 +59,7 @@ This approach combines the simplicity of a monolith with the flexibility of micr
 │                                                                      │
 │   Spring Security • Thymeleaf • Spring Data JPA • Spring Validation  │
 │   • Spring Boot • Spring Cache • Spring Web • MySQL • Testing        │
-│   • Spring Cloud (OpenFeign) • H2 (in-memory DB) • Apache Kafka         │
+│   • Spring Cloud (OpenFeign) • H2 (in-memory DB) • Apache Kafka      │
 │   • OAuth2 • Lombok • More...                                        │
 └───────────────────────────────┬──────────────────────────────────────┘
                                 │
