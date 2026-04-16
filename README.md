@@ -385,5 +385,5 @@ Contributions, issues, and feature requests are welcome!
 ---
 
 <p align="center">
-  Built with ❤️ using Spring Boot · Thymeleaf · Apache Kafka · MySQL
+  Built with ❤️ using Spring Boot
 </p>
