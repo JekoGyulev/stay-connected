@@ -254,7 +254,7 @@ Make sure you have the following installed before running the application:
 - **Java 17+** — [Download](https://openjdk.org/projects/jdk/17/)
 - **Apache Maven 3.8+** (or use the included `./mvnw` wrapper)
 - **MySQL 8.0+** — [Download](https://dev.mysql.com/downloads/mysql/)
-- **Apache Kafka** (with ZooKeeper or KRaft) — [Quickstart Guide](https://kafka.apache.org/quickstart)
+- **Apache Kafka** (with  KRaft) — [Quickstart Guide](https://kafka.apache.org/quickstart)
 - **Git**
 
 ### Installation
@@ -300,45 +300,45 @@ spring.jpa.hibernate.ddl-auto=update
 # Kafka
 spring.kafka.bootstrap-servers=localhost:9092
 
-# Email (Gmail SMTP)
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.username=${SPRING_EMAIL_USERNAME}
-spring.mail.password=${SPRING_EMAIL_PASSWORD}
+# JSON Serializer (for sending)
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
 
 # OAuth2 (Google)
 spring.security.oauth2.client.registration.google.client-id=${GOOGLE_CLIENT_ID}
 spring.security.oauth2.client.registration.google.client-secret=${GOOGLE_CLIENT_SECRET}
 
-# Booking Service URL (OpenFeign)
-booking.service.url=http://localhost:8081
+# OAuth2 (GitHub)
+spring.security.oauth2.client.registration.github.client-id=${GITHUB_CLIENT_ID}
+spring.security.oauth2.client.registration.github.client-secret=${GITHUB_CLIENT_SECRET}
+spring.security.oauth2.client.registration.github.scope=user:email
+
 ```
 
 #### 3. Set Required Environment Variables
 
 ```bash
-export SPRING_EMAIL_USERNAME="your-gmail-address@gmail.com"
-export SPRING_EMAIL_PASSWORD="your-gmail-app-password"
 export GOOGLE_CLIENT_ID="your-google-oauth2-client-id"
 export GOOGLE_CLIENT_SECRET="your-google-oauth2-client-secret"
+export GITHUB_CLIENT_ID="your-github-client-id"
+export GITHUB_CLIENT_SECRET="your-github-secret"
 ```
 
-> **Tip:** For Gmail, use an [App Password](https://support.google.com/accounts/answer/185833) rather than your account password. For Google OAuth2, create credentials in the [Google Cloud Console](https://console.cloud.google.com/).
+> **Tip:** For Gmail (when configuring the microservice `stay-connected-email-svc`, use an [App Password](https://support.google.com/accounts/answer/185833) rather than your account password. For Google OAuth2, create credentials in the [Google Cloud Console](https://console.cloud.google.com/).
 
 ### Running the Application
 
-Start Kafka first, then launch each service:
+Start Kafka first with Docker as container, then launch each service:
 
 ```bash
-# 1. Start ZooKeeper (if not using KRaft)
-zookeeper-server-start.sh config/zookeeper.properties
+# 1. Pull Kafka Image from Docker Registry (DockerHub)
+docker pull apache/kafka:3.9.0 (with KRaft) 
 
-# 2. Start Kafka Broker
-kafka-server-start.sh config/server.properties
-
-# 3. Run the monolith
-cd stay-connected
-./mvnw spring-boot:run
+# 2. Start a container from this pulled image
+docker run -d --name kafka \
+-p 9092:9092 \
+-e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 \
+apache/kafka:3.9.0
 ```
 
 The main application will be available at: **http://localhost:8080**
@@ -351,7 +351,7 @@ For the complete platform to work, all three services must be running simultaneo
 
 | Step | Service | Default Port | Command |
 |---|---|---|---|
-| 1 | Apache Kafka | `9092` | `kafka-server-start.sh config/server.properties` |
+| 1 | Apache Kafka | `9092` | (via Docker) |
 | 2 | Booking Service | `8081` | `./mvnw spring-boot:run` (in booking-service dir) |
 | 3 | Email Service | `8082` | `./mvnw spring-boot:run` (in email-svc dir) |
 | 4 | StayConnected (Monolith) | `8080` | `./mvnw spring-boot:run` (in stay-connected dir) |
@@ -360,7 +360,6 @@ For the complete platform to work, all three services must be running simultaneo
 
 Once the services are running, you can explore their REST APIs via Swagger UI:
 
-- **Booking Service API:** http://localhost:8081/swagger-ui.html
 - **Email Service API:** http://localhost:8082/swagger-ui.html
 
 ### Health Checks
